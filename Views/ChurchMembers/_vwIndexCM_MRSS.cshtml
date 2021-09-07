@@ -1,0 +1,174 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.CBMemRollModel
+
+
+@if (Model != null)
+{
+    <table id="tabDataCM_MRSS" class="table table-bordered table-striped" style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: small">
+        <thead>
+            <tr>
+                <th style="vertical-align: middle; "> Congregation </th>
+
+                @if (Model.taskIndex == 2)
+                {
+                    <th style="vertical-align: middle; text-align:center; border-right: 1px solid deepskyblue"> Members </th>
+                }
+
+                <th style="vertical-align: middle; text-align:center"> M </th>
+                <th style="vertical-align: middle; text-align:center"> F </th>
+                <th style="vertical-align: middle; text-align:center"> O </th>
+                <th style="vertical-align: middle; text-align:center; border-left: 1px solid deepskyblue"> C </th>
+                <th style="vertical-align: middle; text-align:center"> Y </th>
+
+                @if (Model.taskIndex == 1)
+                {
+                    <th style="vertical-align: middle; text-align:center"> YA </th>
+                    <th style="vertical-align: middle; text-align:center"> MA </th>
+                    <th style="vertical-align: middle; text-align:center"> AA </th>
+                }
+                else if (Model.taskIndex == 2)
+                {
+                    <th style="vertical-align: middle; text-align:center"> GA </th>
+                }
+
+                @if (Model.taskIndex == 1)
+                {
+                    <th style="vertical-align: middle; text-align:center; border-left: 1px solid deepskyblue"> Total </th>
+                }
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lsCBMemRollModels)
+            {
+            <tr>
+                <td style="vertical-align: middle">
+                    @{ var strDesc = '"' + item.oChurchBody?.Name + '"'; }
+                    @if (item.oChurchBody?.OrgType != "CN")
+                    {
+                        <a href="#" data-backdrop="static" onclick="ReloadCurrPageCM_MRSS(@item.oCBMemberRollBal?.ChurchBodyId, @Model.taskIndex, @strDesc)">
+                            @item.strChurchBody
+                        </a>
+                    }
+                    else
+                    {
+                        <a data-backdrop="static" asp-controller="ChurchMembers" asp-action="IndexCM_SUM" asp-route-oCBid="@item.oCBMemberRollBal?.ChurchBodyId">
+                            @item.strChurchBody
+                        </a>
+                    }
+
+                </td>
+
+                @if (Model.taskIndex == 2)
+                {
+                    <td style="vertical-align: middle; text-align:center; border-right: 1px solid deepskyblue">
+                        @item.strTotRoll
+                    </td>
+                }
+
+                <td style="vertical-align: middle; text-align:center">
+                    @item.strTot_M
+                </td>
+                <td style="vertical-align: middle; text-align:center">
+                    @item.strTot_F
+                </td>
+                <td style="vertical-align: middle; text-align:center">
+                    @item.strTot_O
+                </td>
+                <td style="vertical-align: middle; text-align:center; border-left: 1px solid deepskyblue">
+                    @item.strTot_C
+                </td>
+                <td style="vertical-align: middle; text-align:center">
+                    @item.strTot_Y
+                </td>
+
+                @if (Model.taskIndex == 1)
+                {
+                    <td style="vertical-align: middle; text-align:center">
+                        @item.strTot_YA
+                    </td>
+                    <td style="vertical-align: middle; text-align:center">
+                        @item.strTot_MA
+                    </td>
+                    <td style="vertical-align: middle; text-align:center">
+                        @item.strTot_AA
+                    </td>
+                }
+                else if (Model.taskIndex == 2)
+                {
+                    <td style="vertical-align: middle; text-align:center">
+                        @item.strTot_GA
+                    </td>
+                }
+
+                @if (Model.taskIndex == 1)
+                {
+                    <td style="vertical-align: middle; text-align:center; border-left: 1px solid deepskyblue">
+                        @item.strTotRoll
+                    </td>
+                }
+
+            </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr class="text-bold">
+                <td style="vertical-align: middle">
+                    Grand Total
+                </td>
+
+                @if (Model.taskIndex == 2)
+                {
+                    <td style="vertical-align: middle; text-align:center; border-right: 1px solid deepskyblue">
+                        @Model.strGrandTotRoll
+                    </td>
+
+                }
+
+                <td style="vertical-align: middle; text-align:center">
+                    @Model.strGrandTot_M
+                </td>
+                <td style="vertical-align: middle; text-align:center">
+                    @Model.strGrandTot_F
+                </td>
+                <td style="vertical-align: middle; text-align:center">
+                    @Model.strGrandTot_O
+                </td>
+                <td style="vertical-align: middle; text-align:center; border-left: 1px solid deepskyblue">
+                    @Model.strGrandTot_C
+                </td>
+                <td style="vertical-align: middle; text-align:center">
+                    @Model.strGrandTot_Y
+                </td>
+
+                @if (Model.taskIndex == 1)
+                {
+                    <td style="vertical-align: middle; text-align:center">
+                        @Model.strGrandTot_YA
+                    </td>
+                    <td style="vertical-align: middle; text-align:center">
+                        @Model.strGrandTot_MA
+                    </td>
+                    <td style="vertical-align: middle; text-align:center">
+                        @Model.strGrandTot_AA
+                    </td>
+                }
+                else if (Model.taskIndex == 2)
+                {
+                    <td style="vertical-align: middle; text-align:center">
+                        @Model.strGrandTot_GA
+                    </td>
+                }
+
+                @if (Model.taskIndex == 1)
+                {
+                    <td style="vertical-align: middle; text-align:center; border-left: 1px solid deepskyblue">
+                        @Model.strGrandTotRoll
+                    </td>
+
+                }
+
+            </tr>
+        </tfoot>
+    </table>
+
+}

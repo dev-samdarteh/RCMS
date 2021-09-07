@@ -1,0 +1,285 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.ChurchAttendanceModel
+
+@{
+    //var strA = "'" + Model.strAttendeeTypeCode + "'";
+    var strL = "'" + Model.strAttnLongevity + "'";
+
+    var strDescChkinRaw = "Church Attendance: " + (!string.IsNullOrEmpty(Model.strAttendeeName) ? Model.strAttendeeName : (Model.oChurchAttendee.Id == 0 ? "[New] Check-in" : "[Editing]")) +
+                                                   (!string.IsNullOrEmpty(Model.strAttendeeTypeDesc) ? " (" + Model.strAttendeeTypeDesc + ")" : "");
+    var strDescChkin = '"' + strDescChkinRaw + '"';
+    Model.strDescChkinRaw = strDescChkinRaw;
+
+    ///(Model.oChurchAttendee.Id == 0 ? "[New] Check-in" : "[Editing]")
+    
+}
+
+
+
+@if (Model.oChurchAttendee != null)
+{
+
+    <div class="row rounded shadow-none ">
+        @* style="background-color:gainsboro" style="max-width:300px"*@
+        <div class="col-sm-3">
+            <div class="card box-profile card-light border-0 shadow-none text-sm m-0 p-0">                
+                <div class="card-header text-bold text-sm text-black-50 border-bottom">
+                    @{ var strListHdr = "";
+                        if (Model.oChurchAttendee.AttendeeType == "C") { strListHdr = "Choose Congregant"; }
+                        else { strListHdr = "Attendance History"; }
+                    }
+
+                    <i class="fas fa-users text-black-50 mr-1"></i>
+                    @strListHdr
+                </div>
+
+                <div class="card-body mt-1 border-0 bg-transparent" id="_divInPersonList">
+                    @if (Model.oChurchAttendee.AttendeeType == "C" && Model.lsChurchMemberModel_MemHdr != null)
+                    {
+                        <div id="_divInPersonMemList" class="p-0 m-0">
+                            <ul class="list-group list-group-unbordered ">
+                                @if (Model.lsChurchMemberModel_MemHdr.Count > 0)
+                                {
+                                    @* list the events on the calendar ... recent ... late *@
+                                    @foreach (var oCurrItem in Model.lsChurchMemberModel_MemHdr)
+                                    {
+                                <li class="list-group-item mb-0 pb-0">
+                                    <a class="text-sm mb-1" href="#"
+                                       id="_btnReloadAttendMem_chkinOneCAA" @*onclick="fn_LoadMemberInfo1()" >*@
+                                       @{ var _strMemCode = '"' + oCurrItem.oChurchMember.GlobalMemberCode + '"'; var _strMemName = '"' + oCurrItem.strMemFullName + '"'; var _strGen = '"' + oCurrItem.strGender + '"'; var _strNation = '"' + oCurrItem.strNationality + '"'; var _strLoc = '"' + oCurrItem.strLocation + '"'; var _strPho = '"' + oCurrItem.strPhone + '"'; var _strMemPhoto = '"' + oCurrItem.oChurchMember.PhotoUrl + '"'; var _strStat = '"' + oCurrItem.strMemGeneralStatus + '"'; }
+                                       onclick="fn_LoadMemberInfo(@oCurrItem.oChurchMemberId, @_strMemCode , @_strMemName, @_strGen, @_strNation, @_strLoc, @_strPho, @_strMemPhoto, @_strStat)">
+                                                                                 
+                                        <span>
+                                            @oCurrItem.strMemFullName
+                                            <span class="text-xs text-black-50 mb-0 pb-0" style="display: block"> 
+                                                <i class="fas fa-fingerprint text-black-50 fa-sm mr-1"></i>
+                                                @oCurrItem.oChurchMember.GlobalMemberCode 
+                                            </span>
+                                       </span>
+                                    </a> 
+                                </li>
+                                    }
+                                }
+                                else
+                                { <li><span class="text-muted"> No Member Data </span></li> }
+                            </ul>
+                        </div>
+                    }
+
+                    else if (Model.oChurchAttendee.AttendeeType == "V" && Model.lsChurchAttendanceModels_VisHdr != null)
+                    {
+                        <div id="_divInPersonVisList" class="p-0 m-0">
+                            <ul class="list-group list-group-unbordered">
+                                @if (Model.lsChurchAttendanceModels_VisHdr.Count > 0)
+                                {
+                                    @* list the events on the calendar ... recent ... late *@
+                                    @foreach (var oCurrItem in Model.lsChurchAttendanceModels_VisHdr)
+                                    {
+                                        <li class="list-group-item">
+                                            <a class="text-sm mb-1"
+                                               onclick="AddOrEditCurrCAA_CheckinOne(@Model.oChurchBodyId, 0, @oCurrItem.oChurchAttendee.Id, @Model.f_oEventCLId, @Model.oChurchAttendee.ChurchEventDetailId,
+                                                    @Model.oChurchAttendee.DateAttended, @Model.oChurchAttendee.AttendeeType, @strDescChkin, 1, 1)">
+
+                                                <i class="fas fa-history text-black-50 fa-sm mr-1"></i>
+                                                @oCurrItem.strCurrTaskDesc
+                                            </a>
+                                        </li>
+                                    }
+                                }
+
+                                else
+                                {
+                                    <li><span class="text-muted"> No Guest /Visitor History </span></li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+
+
+        @*<section class="col-lg col-8"></section>*@
+
+        <div class="col-sm border-top-0 border-bottom-0 border-right-0 border-left">
+            <div class="card-header card-light text-bold text-sm text-black-50 border-bottom">
+                <i class="fas fa-th text-black-50 mr-1"></i> Attendance Details
+            </div>
+            <div class="card-body mt-1">
+                <form needs-validation novalidate method="post" enctype="multipart/form-data" class="form-group bg-transparent mt-0"
+                      id="currFormCAA_CheckinOne" asp-action="AddOrEditCAA_CheckinOne">
+
+                    <input type="hidden" asp-for="oChurchAttendee.Id" id="_hdnCurrId" />
+                    <input type="hidden" asp-for="oChurchAttendee.AppGlobalOwnerId" id="_hdnAGOId" />
+                    <input type="hidden" asp-for="oChurchAttendee.ChurchBodyId" id="_hdnChuBodyId" />
+
+                    <input type="hidden" asp-for="oEventCBId" id="_oEventCBId" />
+                    <input type="hidden" asp-for="oAttendRefId" id="_oAttendRefId" />
+                    <input type="hidden" asp-for="currAttnVw" id="_currAttnVw" />
+                    <input type="hidden" asp-for="@Model.strDescChkinRaw" id="_strDescChkin" />
+                    @*<input type="hidden" value="@strDescChkinRaw" id="_strDescChkin" />*@
+
+                    <input type="hidden" asp-for="oChurchAttendee.Created" />
+                    <input type="hidden" asp-for="oChurchAttendee.CreatedByUserId" />
+                    <input type="hidden" asp-for="oChurchAttendee.LastMod" />
+                    <input type="hidden" asp-for="oChurchAttendee.LastModByUserId" />
+
+
+                    <div id="_divAlertUser" class="alert alert-success alert-dismissible text-sm fade show" role="alert" hidden>
+                        <strong> Done! </strong> Member (Visitor) checked-in.
+                    </div>
+
+
+                    <div class="row mb-0 ">
+                        <div class="col-sm">
+                            @*<div class="col-sm">
+                <small class="font-weight-normal" asp-for="oChurchAttendee.AttendeeType"> Attendee Type | Target Church Level </small>*@
+                            <div class="input-group">
+                                <select id="_AttendeeType" class="form-control text-sm bg-light col-sm-3" asp-for="oChurchAttendee.AttendeeType" asp-items="@Model.lkpAttendeeTypes">
+                                    <option selected disabled value=""> Attendee Type </option>
+                                </select>
+
+                                <select id="_oEventCLId" class="form-control text-sm col-sm bg-light w-100" asp-for="oEventCLId" asp-items="Model.lkpChurchLevels">
+                                    <option selected disabled value=""> Church Level </option>
+                                </select>
+                                <input id="_DateAttended" asp-for="oChurchAttendee.DateAttended" class="form-control text-sm bg-light col-sm-4" placeholder="Event Date"
+                                       onchange="popChurchEvents(this.value, 1);" />
+
+                                @*<button type="button" class="btn btn-outline-primary border shadow-sm mr-1 ml-1 float-right"
+                            onclick="AddOrEditCurrCAA_CheckinOne(@Model.oChurchBodyId, @Model.oChurchAttendee.Id, @Model.f_oAttendRefId, @Model.oChurchAttendee.ChurchEventId,
+                                        @Model.oChurchAttendee.DateAttended, @Model.oChurchAttendee.AttendeeType, @strDescChkin, 1, @Model.currAttnVw)">
+                        <i class="fas fa-refresh fa-xs mr-1 text-black-50"></i>
+                    </button>*@
+
+                                <button id="_btnReloadAttend_chkinOneCAA" type="button" class="btn btn-default border border-left-0 float-right" data-toggle="tooltip"
+                                        data-placement="bottom" title="Reload">
+                                    @*onclick ="AddOrEditCurrCAA_CheckinOne(@Model.oChurchBodyId, @Model.oChurchAttendee.Id, @Model.f_oAttendRefId, @Model.f_oEventCLId, @Model.oChurchAttendee.ChurchEventId,
+                        @Model.oChurchAttendee.DateAttended, @Model.oChurchAttendee.AttendeeType, @strDescChkin, 1, @Model.currAttnVw)">*@
+                                    <i class="fas fa-refresh fa-xs text-black-50"></i>
+                                </button>
+                            </div>
+                            @*</div>*@
+                        </div>
+                    </div>
+
+                    <div class="row mb-1 ">
+                        <div class="col-sm">
+                            @*<small asp-for="oChurchAttendee.ChurchEventId" class="control-label"> Church Event  </small>*@
+                            <div class="input-group">
+
+                                <select id="_ChurchEventDetailId" asp-for="oChurchAttendee.ChurchEventDetailId" class="form-control text-sm col-sm bg-light w-100" asp-items="@Model.lkpChuCalEvents">
+                                    <option value="" selected disabled> Church Event </option>
+                                </select>
+                                <input type="hidden" asp-for="oChurchAttendee.ChurchEventDetailId" id="_hdnChurchEventDetailId" />
+
+                                <button type="button" class="btn btn-default border border-left-0 float-right" id="basic-addon-mms" data-toggle="tooltip" data-placement="bottom" title="Filter"
+                                        onclick="popChurchEvents(null, 1);">
+                                    <i class="fas fa-filter fa-xs text-black-50"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*<hr class="cus-div" style="width:100%; border: 1px inset white;" />*@
+
+                    @if (Model.oChurchAttendee.AttendeeType == "C")
+                    {
+                        <div id="divTabDataAttendCheckinOneMem_CAA" class="overlay-wrapper pt-3">
+                            @*<div class="se-pre-con"></div>*@
+
+                            @{ await Html.RenderPartialAsync("_vwAttendCheckinOneMem_CAA", Model); }
+                        </div>
+
+                    }
+                    else if (Model.oChurchAttendee.AttendeeType == "V")
+                    {
+                        <div id="divTabDataAttendCheckinOneVis_CAA" class="overlay-wrapper pt-3">
+                            @*<div class="se-pre-con"></div>*@
+
+                            @{ await Html.RenderPartialAsync("_vwAttendCheckinOneVis_CAA", Model); }
+                        </div>
+                    }
+
+                    <hr class="cus-div" style="width:100%; border: 1px inset white;" />
+
+                    <div class="form-row mb-3">
+                        <div class="col-sm-4 mb-3">
+                            <small asp-for="oChurchAttendee.TempCelc" class="control-label"> Body Temperature (°C) </small>
+                            <input asp-for="oChurchAttendee.TempCelc" class="form-control text-sm" />
+
+                            @*Body temperature levels  ... source: medlineplus.gov
+                Normal body temperature varies by person, age, activity, and time of day. The average normal body temperature is generally accepted as 98.6°F (37°C).
+                Some studies have shown that the "normal" body temperature can have a wide range, from 97°F (36.1°C) to 99°F (37.2°C).
+                A temperature over 100.4°F (38°C) most often means you have a fever caused by an infection or illness.*@
+                        </div>
+                        <div class="col-sm-4 mb-3">
+                            <small asp-for="oChurchAttendee.PersKgWt" class="control-label"> Body Weight (Kg) </small>
+                            <input asp-for="oChurchAttendee.PersKgWt" class="form-control text-sm" />
+                        </div>
+                        <div class="col-sm-4 mb-3 ">
+                            <small asp-for="oChurchAttendee.PersBPMax" class="control-label"> BP: Systolic /Diastolic </small>
+                            <div class="input-group">
+                                @* later:- insert meanings of the BP values ... client/instant >>> chk below *@
+                                <input id="_PersBPMax" asp-for="oChurchAttendee.PersBPMax" class="form-control text-sm" />
+                                <input id="_PersBPMin" asp-for="oChurchAttendee.PersBPMin" class="form-control text-sm" />
+
+                                @*Blood Pressure Levels  ... source: cdc.gov
+                    Normal	systolic: less than 120 mm Hg diastolic: less than 80 mm Hg
+                    At Risk (prehypertension)	systolic: 120–139 mm Hg diastolic: 80–89 mm Hg
+                    High Blood Pressure (hypertension)	systolic: 140 mm Hg or higher diastolic: 90 mm Hg or higher*@
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row mb-2">
+                        <div class="col-md">
+                            <small class="font-weight-normal" asp-for="oChurchAttendee.Notes"> Notes </small>
+                            <textarea maxlength="200" asp-for="oChurchAttendee.Notes" class="form-control text-sm" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <div class="col-sm-2">
+            <div class="card card-light box-profile border-0 shadow-none p-0 m-0"> 
+                <div class="card-header card-light  text-bold text-sm text-black-50 border-bottom">
+                    <i class="fas fa-history text-black-50 mr-1"></i> Past Visits
+                </div>
+                <div class="card-body bg-transparent border-0 shadow-none" id="_divInPersonAttendHistList">
+                    <ul class="list-group list-group-unbordered bg-transparent">
+                        <li class="list-group-item">
+                            <a class="text-sm mb-1" href="#" onclick="fn_LoadMemberInfo()">
+                                Week <span class="text-black-50 fa-sm ml-1"> (@Model.num_f_CHCF_TotAttend_Wk) </span>
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="text-sm mb-1" href="#" onclick="fn_LoadMemberInfo()">
+                                Month <span class="text-black-50 fa-sm ml-1"> (@Model.num_f_CHCF_TotAttend_Mon) </span>
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="text-sm mb-1" href="#" onclick="fn_LoadMemberInfo()">
+                                Quarter <span class="text-black-50 fa-sm ml-1"> (@Model.num_f_CHCF_TotAttend_Qtr) </span>
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="text-sm mb-1" href="#" onclick="fn_LoadMemberInfo()">
+                                Semester <span class="text-black-50 fa-sm ml-1"> (@Model.num_f_CHCF_TotAttend_Sem) </span>
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="text-sm mb-1" href="#" onclick="fn_LoadMemberInfo()">
+                                Year <span class="text-black-50 fa-sm ml-1"> (@Model.num_f_CHCF_TotAttend_Yr) </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+}

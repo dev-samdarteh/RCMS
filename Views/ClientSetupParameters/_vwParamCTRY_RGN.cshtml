@@ -1,0 +1,146 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.CountryRegionModel
+
+@*<div id="tabSectionMod_CTRY_RGN" class="card-footer bg-white mb-2">
+        <div class="float-right">
+            <button type="button" class="btn btn-info text-light border" onclick="AddEditCurrData_CTRY_RGN(0, '[New] Country Region')">
+                <i class="fas fa-plus"></i> <span class="text-sm"> Add New </span>
+            </button>
+            <button type="button" class="btn btn-light text-primary border " onclick="ReloadCurrPage_CTRY_RGN(7, 2, @Model.currCountryCode)">
+                <i class="fa fa-refresh"></i>
+            </button>
+        </div>
+    </div>
+    <hr />*@
+
+    @*<div class="row">
+        <div class="col-md">
+            <small class="font-weight-normal" asp-for="currCountryCode"> Country of Region</small>
+            <select id="_currCountryCode_CTRY_RGN" class="form-control text-sm" asp-for="currCountryCode" asp-items="Model.lkpCountries" aria-describedby="fd_currCountryCode" required>
+                <option selected value="">Select country</option>
+            </select>
+            <div class="invalid-feedback" id="fd_currCountryCode"> Select the country </div>
+        </div>
+        <div class="col-md">
+            <div class="btn-group" role="group" aria-label="Basic outlined example">
+                <button type="button" class="btn btn-ino text-info border" onclick="ReloadCurrPage_CTRY_RGN(7, 2, @Model.currCountryCode)"> <i class="fa fa-refresh"></i></button>
+                <button type="button" class="btn btn-info text-light border" onclick="AddEditCurrData_CTRY_RGN(0, '[New] Country Region')"><i class="fas fa-plus"></i> <span class="text-sm"> Add New </span></button>
+            </div>
+        </div>
+    </div>*@
+
+
+    <table id="tabData_CTRY_RGN" class="table table-bordered table-striped ">
+        <thead>
+            <tr>
+                <th> Name of Region </th>
+                @*<th> Regional Code </th>*@
+                <th width="50px" style="text-align:center; vertical-align: middle"><i class="fa fa-info text-dark"></i> </th>
+                <th width="50px" style="text-align:center; vertical-align: middle" class="btn-light text-secondary p-1"> 
+                    <a href="#" class="text-success" data-backdrop="static" onclick="ReloadCurrPage_CTRY_RGN(7, 2, '')">
+                        <i class="fa fa-refresh text-success"></i>
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lsCountryRegionModels)
+            {
+                if (item.oCountryRegion != null)
+                {
+                    var strDesc = '"' + item.strCountryRegion + '"';
+
+                    <tr>
+                        <td>
+                            <span>
+                                <i class="fas fa-ellipsis-v fa-sm"></i>
+                                <i class="fas fa-ellipsis-v fa-sm"></i>
+                            </span>
+
+                            <span class="text font-weight-normal ml-1"> @item.strCountryRegion </span>
+                            <span class="badge badge-warning text-center ml-2"> <i class="far fa-ellipsis-h"></i> @item.oCountryRegion.RegCode </span>                             
+                        </td>
+
+                        @*<td style="text-align:center; vertical-align: middle">
+                            <span class="badge badge-warning text-center"> <i class="far fa-ellipsis-h"></i> @item.oCountryRegion.RegCode </span>
+                        </td>*@
+                    <td width="50px" style="text-align:center; vertical-align: middle">
+                        @if (item.strOwnershipStatus == "Owned")
+                        {<span class="badge badge-success text-center  text-light font-weight-normal border"> <i class="fas fa-cog fa-sm"></i>  @item.strOwnershipStatus </span> }
+                        else if (item.strOwnershipStatus == "Inherited")
+                        { <span class="badge badge-secondary text-center text-light font-weight-normal border"> <i class="fas fa-download fa-sm"></i>  @item.strOwnershipStatus </span> }
+                        else
+                        { <span class="badge text-center font-weight-normal border"> <i class="fas fa-info fa-sm"></i> @item.strOwnershipStatus </span>}
+                    </td>
+                    <td width="70px" class="p-0" style="text-align:center; vertical-align: middle">
+                        <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-ellipsis-v text-gray text-lg"></i>
+                        </button>
+                        <div class="dropdown-menu p-1">
+                            <ul class="m-0 p-0" style="list-style-type: none;">
+                                <li>
+                                    <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                       onclick="AddEditCurrData_CTRY_RGN(@item.oCountryRegion.Id, @strDesc, 0)"> 
+                                        <i class="fa fa-eye"></i><span class="text-md-left ml-3"> View </span>
+                                    </a>
+                                </li>
+                                @if (item.oCountryRegion.OwnedByChurchBodyId == Model.oChurchBodyId_Logged)
+                                {
+                                    <li>
+                                        <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                           onclick="AddEditCurrData_CTRY_RGN(@item.oCountryRegion.Id, @strDesc, 2)">
+                                            <i class="fa fa-edit"></i><span class="text-md-left ml-3"> Edit </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a role="button" class="btn btn-light text-danger text-left w-100 border-0"
+                                           onclick="DeleteCurrData_CTRY_RGN(@item.oCountryRegion.Id, false, '')">
+                                            <i class="fa fa-trash"></i><span class="text-md-left ml-3" style="color:#000"> Delete </span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div> 
+                    </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+
+    @*<div id="divTabData_CTRY_RGN">
+         
+        @{ 
+            if (Model.lsCountryRegionModels.Count > 0)
+            {
+                foreach (var item in Model.lsCountryRegionModels)
+                {
+                    <ul class="todo-list" data-widget="todo-list">
+                        <li>
+                            <span class="handle">
+                                <i class="fas fa-ellipsis-v fa-sm"></i>
+                                <i class="fas fa-ellipsis-v fa-sm"></i>
+                            </span>
+                            <span class="text font-weight-normal border-right"> @item.strCountryRegion </span>
+                            <span class="text font-weight-normal border-right"> @item.strCountry </span>
+                            <span class="badge badge-warning text-center"> <i class="far fa-ellipsis-h"></i> @item.oCountryRegion.RegCode </span>
+
+                            <div class="tools">
+                                <i class="fas fa-edit" onclick="AddEditCurrData_CTRY_RGN(@item.oCountryRegion.Id, @item.strCountryRegion)"></i>
+                                <i class="fas fa-trash-o" onclick="DeleteCurrData_CTRY_RGN(@item.oCountryRegion.Id, false, '')"></i>
+                            </div>
+                        </li>
+                    </ul>
+                }
+            }
+            else
+            {
+                <div class="alert alert-light text-center">
+                    <span> No country region available </span>
+                </div>
+            }
+        }
+    </div>*@
+
+
+

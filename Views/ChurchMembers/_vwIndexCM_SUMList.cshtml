@@ -1,0 +1,160 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.ChurchMemberSummaryModel
+
+
+@if (Model != null)
+{
+    <div id="divTabList_CM">
+        <table id="tabDataCM_BD" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th> Member Name </th>
+                    @*<th width="25px" style="text-align:center; vertical-align: middle"> <i class="fas transgender-alt fa-sm"></i> </th>*@
+                    <th width="120px" style="vertical-align: middle"> Member Code </th>
+                    <th style="vertical-align: middle"> Location </th>
+                    <th width="80px" style="text-align:center; vertical-align: middle"> Type </th>
+                    <th width="80px" style="text-align:center; vertical-align: middle"> Status </th>
+
+                    @*<th width="100px" style="vertical-align: middle"> Lead Role </th>*@
+                    <th width="80px" style="text-align:center; vertical-align: middle"> Profile </th>
+                    <th class="justify-content-center" style="vertical-align: middle; text-align: center; width: 50px ">
+                        <button type="button" class="btn btn-default w-100 h-100 border-0" onclick="ReloadCurrPageCM_BD(@Model.oChurchBodyId)">
+                            <i class="fa fa-refresh fa-secondary"></i>
+                        </button>
+
+                        @*<a href="#" id="btnAddEditCM_BD" data-remote="false" class="btn btn-default text-success border-0"
+                                   data-backdrop="static" onclick="ReloadCurrPageCM_BD(14, 1)"> onclick="AddEditCurrDataCM_BD(0, @Model.oChurchMember.Id, '[New Member]')"
+                                <i class="fa fa-refresh fa-secondary"></i>
+                            </a>*@
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.lsChurchMemberSummaryModels)
+                {
+                    if (item.oChurchMember != null)
+                    {
+                        <tr>
+                            <td style="vertical-align: middle">
+                                <span>
+                                    @if (item.oChurchMember.Gender == "M")
+                                    {<i class="fas fa-mars text-primary text-center" style="width: 20px"></i> }
+                                    else if (item.oChurchMember.Gender == "F")
+                                    { <i class="fas fa-venus text-pink text-center" style="width: 20px"></i> }
+                                    else
+                                    { <i class="fas fa-neuter text-secondary text-center" style="width: 20px"></i>}
+                                </span>
+                                @item.strMemberFullName
+                            </td>
+                            @*<td style="text-align: center; vertical-align: middle">
+                                    @item.oChurchMember.Gender
+                                </td>*@
+                            <td style="vertical-align: middle">
+                                @*@item.oChurchMember.GlobalMemberCode*@
+                                <a role="button" id="btnAddEdit" data-remote="false" class="text-left w-100 border-0" data-backdrop="static"
+                                   onclick="AddEditCurrDataCM_MPC(@Model.oChurchBodyId, @item.oChurchMember.Id, @Model.setIndex)">
+                                    <i class="fas fa-folder-open fa-sm text-black-50 mr-1"></i>@item.oChurchMember.GlobalMemberCode
+                                </a>
+                            </td>
+                            <td style="vertical-align: middle">
+                                @item.strLocation
+                            </td>
+                            <td style="text-align: center; vertical-align: middle">
+                                @if (string.Compare(item.strMemRank, "Unassigned", true) != 0)
+                                {<span class="badge badge-info text-center font-weight-normal border"> @item.strMemRank </span> }
+                            else
+                            { <span class="badge badge-light text-center font-weight-normal border"> @item.strMemUnitRole </span>}
+
+                            </td>
+                            <td style="text-align: center; vertical-align: middle">
+                                @if (item.bl_MemberStatusAvail == true)
+                                {<span class="badge badge-success text-center text-light font-weight-normal border"> <i class="fas fa-check fa-sm text-light"></i> @item.strMemStatus </span> }
+                            else
+                            { <span class="badge badge-light text-center font-weight-normal border"> <i class="fas fa-times fa-sm"></i> @item.strMemStatus </span>}
+                            </td>
+
+                            @*<td style="vertical-align: middle">
+                                    @if (string.Compare(item.strMemUnitRole, "None", true) != 0)
+                                    { <span class="badge badge-primary text-center text-light font-weight-normal border"> @item.strMemUnitRole </span> }
+                                    else
+                                    { <span class="badge badge-light text-center font-weight-normal border"> @item.strMemUnitRole </span> }
+                                </td>*@
+                            <td style="text-align: center; vertical-align: middle">
+
+                                @if (item.oChurchMember.Status == "A")
+                                {
+                                    <span class="badge badge-success text-center font-weight-normal border"> @item.strAccountStatus </span>
+                                }
+                                else if (item.oChurchMember.Status == "T")
+                                {
+                                    <span class="badge badge-info text-center font-weight-normal border"> @item.strAccountStatus </span>
+                                }
+                                else if (item.oChurchMember.Status == "H")
+                                {
+                                    <span class="badge badge-warning text-center font-weight-normal border"> @item.strAccountStatus </span>
+                                }
+                                else if (item.oChurchMember.Status == "D")
+                                {
+                                    <span class="badge badge-danger text-center font-weight-normal border"> @item.strAccountStatus </span>
+                                }
+                                else if (item.oChurchMember.Status == "X")
+                                {
+                                    <span class="badge badge-secondary text-center font-weight-normal border"> @item.strAccountStatus </span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-light text-center font-weight-normal border"> @item.strAccountStatus </span>
+                                }
+                            </td>
+
+                            <td class="p-1" style="vertical-align: middle; text-align:center ">
+                                @{ var strDesc = '"' + item.strMemDisplayName + '"'; var strMemTypeCode = "'" + item.strMemTypeCode + "'";}
+                                <div class="btn-group ">
+
+                                    <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="overflow:auto">
+                                        <i class="fa fa-ellipsis-v text-gray text-lg"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right p-1" role="menu">
+                                        <ul class="m-0 p-0" style="list-style-type: none;">
+                                            <li>
+                                                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                                   onclick="AddEditCurrDataCM_MPC(@Model.oChurchBodyId, @item.oChurchMember.Id, @Model.setIndex)">
+                                                    <span><i class="fas fa-folder-open" style="width:20px"></i></span> <span class="text-md-left text-bold ml-1"> Open Profile </span>
+                                                </a>
+                                            </li>
+                                            <li> <div class="dropdown-divider mt-1"></div></li>
+                                            <li>
+                                                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                                   onclick="AddEditCurrDataCM_BD(@Model.oChurchBodyId, @item.oChurchMember.Id, @strMemTypeCode, @strDesc, -1)">
+                                                    <span><i class="fa fa-eye" style="width:20px"></i></span><span class="text-md-left ml-1"> View </span>
+                                                </a>
+                                            </li>
+                                            @if (item.oChurchMember.ChurchBodyId == Model.oChurchBodyId_Logged)
+                                            {
+                                                <li>
+                                                    <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                                       onclick="AddEditCurrDataCM_BD(@Model.oChurchBodyId, @item.oChurchMember.Id, @strMemTypeCode, @strDesc)">
+                                                        <span><i class="fa fa-edit" style="width:20px"></i></span><span class="text-md-left ml-1"> Edit </span>
+                                                    </a>
+                                                </li>
+                                                @if (Model.isUserRoleAdmin_Logged)
+                                                {
+                                                    <li>
+                                                        <a role="button" class="btn btn-light text-danger text-left w-100 border-0"
+                                                           onclick="DeleteCurrDataCM_BD(@item.oChurchBodyId, @item.oChurchMember.Id, false, '')">
+                                                            <span><i class="fa fa-trash" style="width:20px"></i></span><span class="text-md-left ml-1" style="color:#000"> Delete </span>
+                                                        </a>
+                                                    </li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+}

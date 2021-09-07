@@ -1,0 +1,183 @@
+﻿
+@model RhemaCMS.Models.ViewModels.vm_app_ven.UserProfileModel
+
+
+<div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center w-75" style="margin: 0 auto 0 auto ; padding:0;  ">            
+    <form needs-validation bg-transparent p-2" novalidate id="currForm_CL_UP" method="post" enctype="multipart/form-data" asp-action="AddOrEdit_CL_UP" class=" form-group bg-transparent"
+          style="margin-top:0px; padding-left: 3px; padding-right:3px;">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="oUserProfile.Id" id="_hdnCurrId_CL_UP" />
+        <input type="hidden" asp-for="oUserProfile.ChurchBodyId" id="_ChurchBodyId" />
+        <input type="hidden" asp-for="oUserProfile.AppGlobalOwnerId" id="_AppGlobalOwnerId" />
+
+        @*<input type="hidden" asp-for="oUserProfile.oCBChurchLevelId" />*@
+        <input type="hidden" asp-for="oUserProfile.strChurchCode_CB" />
+        <input type="hidden" asp-for="oUserProfile.ProfileScope" />
+        @*<input type="hidden" asp-for="oUserProfile.ProfileLevel" />*@
+        <input type="hidden" asp-for="oUserProfile.UserScope" />
+        <input type="hidden" asp-for="oUserProfile.IsChurchMember" />
+        @*<input type="hidden" asp-for="oUserProfile.UserId" />*@
+        <input type="hidden" asp-for="oUserProfile.OwnerUserId" />
+
+        @* retain details ... pwd stuff has diff view *@
+        <input type="hidden" asp-for="oUserProfile.UserKey" />
+        <input type="hidden" asp-for="oUserProfile.Pwd" />
+        <input type="hidden" asp-for="oUserProfile.PwdExpr" />
+        <input type="hidden" asp-for="oUserProfile.PwdSecurityQue" />
+        <input type="hidden" asp-for="oUserProfile.PwdSecurityAns" />
+        @*<input type="hidden" asp-for="oUserProfile.ResetPwdOnNextLogOn" />*@
+
+        <input type="hidden" asp-for="oUserProfile.Created" />
+        <input type="hidden" asp-for="oUserProfile.LastMod" />
+        <input type="hidden" asp-for="oUserProfile.CreatedByUserId" />
+        <input type="hidden" asp-for="oUserProfile.LastModByUserId" />
+
+        @*<input type="hidden" asp-for="@Model.numCLIndex" id="_numCLIndex" />*@
+        <input type="hidden" asp-for="@Model.oCBLevelCount" id="_oCBLevelCount" />
+        <input type="hidden" asp-for="@Model.setIndex" id="_setIndex" />
+        <input type="hidden" asp-for="@Model.subSetIndex" id="_subSetIndex" />
+
+        <input type="hidden" asp-for="@Model.oChurchBodyId_Logged" id="_oChurchBodyId_Logged" />
+        <input type="hidden" asp-for="@Model.oAppGloOwnId_Logged" id="_oAppGloOwnId_Logged" />
+        <input type="hidden" asp-for="@Model.oUserId_Logged" id="_oUserId_Logged" />
+
+
+        <br />
+
+        @if (Model.oUserProfile != null)
+        {
+
+            <div class="form-row">
+                <div class="col-md mb-3">
+                    <small class="font-weight-normal" asp-for="strChurchBody"> @Model.strChurchLevel </small>
+                    <input class="form-control text-sm" type="text" asp-for="strChurchBody" readonly>
+                </div>
+            </div>
+
+            <hr class="cus-div" style="width:100%; border: 1px inset #000;" />
+
+            @if (Model.oUserProfile.UserPhoto != null)
+            {
+                var photoPath = "~/img_db/" + (Model.oUserProfile.UserPhoto ?? "df_user_p.png");
+                <div class="row justify-content-center mb-3">
+                    <div class="form-group ">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <img class="card-img-top" style="min-width: 100px; min-height: 100px; max-width: 100px; max-height: 100px"
+                                     src="@photoPath" asp-append-version="true" alt="User photo" id="imgFile" />
+
+                                @*<img class="profile-user-img img-fluid img-circle" style="min-width: 150px; min-height:150px; max-width: 150px; max-height:150px;"
+                                src="@Url.Content(imgUrl_ClientLogo)" alt="Church logo">*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="form-group  mb-3">
+                    <input type="file" class="form-control-file" value="Choose unit logo" asp-for="oUserProfile.UserPhoto">
+                    <input type="hidden" asp-for="oUserProfile.UserPhoto" id="_hdnCurrUserPhotoId" />
+                </div>*@
+
+                <div class="form-group  mb-3">
+                    <input type="file" class="form-control-file" value="Choose photo" asp-for="UserPhotoFile">
+                    <input type="hidden" asp-for="oUserProfile.UserPhoto" id="_hdnCurrLogoId" />
+                </div>
+            }
+
+
+            <div class="form-row mb-3">
+                <div class="col-md">
+                    <small asp-for="oUserProfile.UserDesc " class="control-label">Name of User</small>
+                    @if (Model.subSetIndex != 1 && Model.subSetIndex != 2)@*(string.Compare(Model.oUserProfile.Username, "sys", true) != 0 && string.Compare(Model.oUserProfile.Username, "supadmin", true) != 0)*@
+                    {<input asp-for="oUserProfile.UserDesc" class="form-control text-sm" autocomplete="off" />}
+                    else
+                    { <input asp-for="oUserProfile.UserDesc" class="form-control text-sm" autocomplete="off" disabled /> <input type="hidden" asp-for="oUserProfile.UserDesc" />}
+                    <span asp-validation-for="oUserProfile.UserDesc" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row  mb-3">
+                <div class="col-md">
+                    <small asp-for="oUserProfile.Email " class="control-label">Email</small>
+                    <input asp-for="oUserProfile.Email" class="form-control text-sm" autocomplete="off" required />
+                    <span asp-validation-for="oUserProfile.Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row mb-3">
+                <div class="col-md">
+                    <small asp-for="oUserProfile.Username " class="control-label">Username</small>
+                    @if (Model.subSetIndex != 1 && Model.subSetIndex != 2)@*(string.Compare(Model.oUserProfile.Username, "sys", true) != 0 && string.Compare(Model.oUserProfile.Username, "supadmin", true) != 0)*@
+                    {
+                        <input asp-for="oUserProfile.Username" class="form-control text-sm" autocomplete="off" required />
+                    }
+                    else
+                    {
+                        <input asp-for="oUserProfile.Username" class="form-control text-sm" autocomplete="off" disabled />
+                        <input type="hidden" asp-for="oUserProfile.Username" />
+                    }
+                    <span asp-validation-for="oUserProfile.Username" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row mb-3">
+                <div class="col-md">
+                    <small asp-for="oUserProfile.Strt " class="control-label">Effective</small>
+                    <input asp-for="oUserProfile.Strt" class="form-control text-sm" autocomplete="off" />
+                    <span asp-validation-for="oUserProfile.Strt" class="text-danger"></span>
+                </div>
+
+                @if (!(string.Compare(Model.oUserProfile.Username, "sys", true) == 0 || string.Compare(Model.oUserProfile.Username, "supadmin", true) == 0))
+                {
+                    <div class="col-md">
+                        <small asp-for="oUserProfile.Expr " class="control-label"> Expires </small>
+                        <input asp-for="oUserProfile.Expr" class="form-control text-sm" autocomplete="off" />
+                        <span asp-validation-for="oUserProfile.Expr" class="text-danger"></span>
+                    </div>
+                }
+            </div>
+
+            <div class="form-row mb-3">
+                <div class="col-md-8 mb-3">
+                    <small class="font-weight-normal" asp-for="oUserProfile.ProfileLevel"> Mininum Role Level </small>
+                    <select id="_ProfileLevel" class="form-control text-sm" asp-for="oUserProfile.ProfileLevel" asp-items="Model.lkpUserProfileLevels" aria-describedby="fd_ParentUnitId">
+                        <option selected disabled value=""> Select Role </option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <small asp-for="oUserProfile.UserStatus" class="control-label">Status</small>
+                    <select class="form-control text-sm" asp-for="oUserProfile.UserStatus" asp-items="Model.lkpStatuses"></select>
+                    <span asp-validation-for="oUserProfile.UserStatus" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row ">
+                <div class="col-md mb-3" id="_divResetPwdOnNextLogOn">
+                    <small asp-for="oUserProfile.ResetPwdOnNextLogOn" class="control-label">&nbsp;</small>
+                    <label class="chk_container text-sm font-weight-normal">
+                        <span> Reset Password on next logon </span>
+                        <input id="chk_ResetPwdOnNextLogOn" type="checkbox" asp-for="oUserProfile.ResetPwdOnNextLogOn" />
+                        <span class="checkmark"></span>
+                    </label>
+                </div> 
+            </div>
+
+            @if (Model.oUserProfile.UserPhoto == null)
+            {
+                @*<div class="form-group">
+                    <small class="font-weight-normal" asp-for="oUserProfile.UserPhoto"> Unit logo (if any) </small>
+                    <input type="file" class="form-control-file" value="Choose unit logo" asp-for="oUserProfile.UserPhoto">
+                    <input type="hidden" asp-for="oUserProfile.UserPhoto" id="_hdnCurrUnitLogoId" />
+                </div>*@
+
+                <div class="form-group">
+                    <small class="font-weight-normal" asp-for="oUserProfile.UserPhoto"> User Photo </small>
+                    <input type="file" class="form-control-file" value="Choose photo" asp-for="UserPhotoFile">
+                    <input type="hidden" asp-for="oUserProfile.UserPhoto" id="_hdnCurrLogoId" />
+                </div>
+            }
+        }
+
+    </form>
+</div>

@@ -1,0 +1,303 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.ChurchAttendanceModel
+
+
+@if (Model != null)
+{
+    <table id="tabDataAttendList_CAA" class="table table-sm table-bordered table-striped table-responsive-sm table-hover" cellspacing="0" style="border: 1px solid #2c2f5b; font-size: 10pt">
+        <thead>
+            <tr style="text-align: left; ">
+                <th style=" vertical-align: middle">
+
+                @{ var strName = "Attendee"; if (Model.f_strAttendeeTypeCode == "C") { strName = "Member Name"; } else if (Model.f_strAttendeeTypeCode == "V") { strName = "Name of Guest /Visitor"; } }
+                    <span>@strName  </span>
+                </th>
+
+                @*<th width="30px" align="center" style="vertical-align: middle">
+                    GDR
+                </th>
+                <th style="vertical-align: middle">
+                    Age Group
+                </th>
+                <th style="vertical-align: middle">
+                    Location
+                </th>
+                <th style="text-align: center; vertical-align: middle">
+                    Phone
+                </th>*@
+
+                @*<th width="80px"  align="right" class="pl-3" style="vertical-align: middle">
+                    Date
+                </th>*@
+                <th style="vertical-align: middle">
+                    Church Event /Activity &amp; Date
+                </th>
+                <th width="60px" style="text-align: center; vertical-align: middle">
+                    Status
+                </th>
+
+                @*@if (Model.f_strAttendeeTypeCode == null)
+                {
+                    <th class="pl-3" style="vertical-align: middle">
+                        Status
+                    </th>
+                }*@
+
+                <th width="30px"  style="text-align: center; vertical-align: middle">
+                    @*@if (Model.oChurchBody.Id == Model.oLoggedChurchBody.Id)
+                    {
+                        var strA = "'" + Model.f_strAttendeeTypeCode + "'";
+                        var strL = "'" + Model.strAttnLongevity + "'";
+                        var strTypeDesc = Model.f_strAttendeeTypeCode == "V" ? "Check-in visitor or edit" : "Check-in members or edit"; 
+
+                        <div class="btn-group dropright">
+                            <button type="button" class="btn btn-light dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    data-placement="top" title="Record attendance">
+                                <i class="fas fa-user-edit"></i>&nbsp;
+                            </button>
+                            <div class="dropdown-menu ">
+
+                                @if (Model.f_strAttendeeTypeCode == null || Model.f_strAttendeeTypeCode == "C")
+                                { 
+                                    <a href="#" class="dropdown-item " onclick="AddEditCurr_Attendee(2, @Model.oChurchBody.Id, @strA, @strL, 0, null, null, false, false )"
+                                        data-toggle="tooltip" data-placement="top" title="Record member attendance">
+                                        <i class="fas fa-user-check" style=" color: darkseagreen; "></i>  &nbsp; @strTypeDesc
+                                    </a>
+
+                                    if (Model.f_strAttendeeTypeCode == null)
+                                    { <div class="dropdown-divider"></div>}
+                                }
+
+                                @if (Model.f_strAttendeeTypeCode == null || Model.f_strAttendeeTypeCode == "V")
+                                {
+                                    <a href="#" class="dropdown-item " onclick="AddEditCurr_Attendee(@Model.currAttendTask, @Model.oChurchBody.Id, @strA, @strL, 0, null, null, false, false)"
+                                       data-toggle="tooltip" data-placement="top" title="Record visitor (guest) attendance">
+                                        <i class="fas fa-user-clock " style=" color: deepskyblue; "></i>  &nbsp; Check-in visitors or edit
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    }*@
+
+                    <a class="btn btn-light btn-sm " data-backdrop="static" data-keyboard="false"  data-toggle="tooltip" data-placement="bottom" title="Reload data"
+                       onclick="">
+                        <i class="fas fa-refresh text-black-50"></i>
+                    </a>
+
+                    @*@{ var strHist = "H";}
+                    <a class="btn btn-light btn-sm " asp-controller="ChurchAttendance" asp-action="Index_Attendees" asp-route-reqChurchBodyId="@Model.oChurchBody.Id" asp-route-strAttendee="@Model.f_strAttendeeTypeCode" asp-route-strLongevity="@strHist" data-backdrop="static" data-keyboard="false"
+                       data-toggle="tooltip" data-placement="bottom" title="Visitors history">
+                        <i class="fas fa-history" style="color:#000 "></i>
+                    </a>*@
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lsChurchAttendanceModels)
+            {
+                <tr style="text-align:left">
+                    @*<td class="row-hide" width="0" hidden>@Html.HiddenFor(modelItem => item.oAttend_Id)</td>*@
+
+                    <td style="vertical-align: middle">
+                        @*<div class="checkbox "></div>
+        &nbsp;
+        <i class="fas fa-user" style="color:deepskyblue"></i>
+        &nbsp;*@
+                        @*@if (item.oChurchAttendee.AttendeeType == "C")
+                        {
+                            <a asp-controller="ChurchMembers" asp-action="AddOrEdit" asp-route-id="@item.oChurchMemberId" asp-route-reqChurchBodyId="@item.oChurchBodyId">
+                                @Html.DisplayFor(modelItem => item.strAttendeeName)
+                            </a>
+                        }
+                        else
+                        { @Html.DisplayFor(modelItem => item.strAttendeeName)}*@
+
+
+                        @item.strAttendeeName
+
+                    </td>
+
+                    @*<td align="center" style="vertical-align: middle">
+                        @{ var strG = item.strGender; if (item.strGender.Length > 0) { strG = item.strGender.Substring(0, 1); }}
+                        @Html.DisplayFor(modelItem => strG)
+                    </td>
+                    <td style="vertical-align: middle">
+                        @Html.DisplayFor(modelItem => item.strAgeGroup)
+                    </td>
+                    <td style="vertical-align: middle">
+                        @{
+                            var strLocDesc = item.strResidenceLoc;
+                            if (!string.IsNullOrEmpty(item.strResidenceLoc) && !string.IsNullOrEmpty(item.strNationality))
+                            { strLocDesc += ", "; }
+                            strLocDesc += item.strNationality;
+                        }
+                        @Html.DisplayFor(modelItem => strLocDesc)
+                    </td>
+                    <td align="center" style="vertical-align: middle">
+                        @Html.DisplayFor(modelItem => item.strPhone)
+                    </td>*@
+
+                    @*<td class="pr-3" align="right" style="vertical-align: middle">
+                        @Html.DisplayFor(modelItem => item.strDateAttended)
+                    </td>*@
+
+                    <td class="pr-3" style="vertical-align: middle">
+                        @Html.DisplayFor(modelItem => item.strChurchEventDesc)
+                    </td>
+                  
+                    <td class="pr-3" align="right" style="vertical-align: middle">
+                        <span class="badge badge-primary text-center font-weight-normal border">
+
+                        @if (item.f_strAttendeeTypeCode == "C")
+                        { <i class="fas fa-user fa-sm"></i>  }
+                        else if (item.f_strAttendeeTypeCode == "N")
+                        { <i class="fas fa-user-clock fa-sm"></i> }
+                        else if (item.f_strAttendeeTypeCode == "V")
+                        {  <i class="fas fa-times fa-user-alt-slash"></i> } 
+
+                         @item.strAttendeeTypeDesc  
+                        </span>
+                    </td>
+
+                    <td class="p-1" style="vertical-align: middle; text-align:center ">
+                        @{
+                            //var _strAttnType = "'" + item.oChurchAttendee.AttendeeType + "'";
+                            //var strL = "'" + Model.strAttnLongevity + "'";
+                            var strDesc = '"' + "Church Attendance: " + item.strAttendeeName + '"';
+                            var oAttendRefId = item.oChurchAttendee.AttendeeType == "C" ? item.oChurchAttendee.ChurchMemberId :
+                                item.oChurchAttendee.AttendeeType == "V" ? item.oChurchAttendee.Id : (int?)null;
+
+                            ///
+                            var strAttnType = '"' + item.oChurchAttendee.AttendeeType + '"';
+                            string dtEvAttn = null;
+                            if (item.oChurchAttendee.DateAttended != null)
+                            {
+                                var dtEv = item.oChurchAttendee.DateAttended.Value;
+                                dtEvAttn = '"' + dtEv.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss") + '"';
+                            }
+                        }
+                        <div class="btn-group ">
+                            <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-ellipsis-v text-gray text-lg"></i>
+                            </button>
+                            <div class="dropdown-menu p-1">
+                                <ul class="m-0 p-0" style="list-style-type: none;">
+
+                                    @*@if (item.oChurchAttendee.AttendeeType == "C")
+        {
+            <li>
+                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                   onclick="AddOrEditCurrCAA_CheckinOne(@Model.oChurchBodyId, @item.oAttend_Id, @oAttendRefId, @item.oChurchAttendee.ChurchEventId,
+                                                                @item.oChurchAttendee.DateAttended, @item.oChurchAttendee.AttendeeType, @strDesc, -1)">
+                    <span><i class="fa fa-eye" style="width:25px"></i></span><span class="text-md-left ml-1"> View </span>
+                </a>
+            </li>
+        }
+
+        else if (item.oChurchAttendee.AttendeeType == "V")
+        {
+            <li>
+                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                   onclick="SaveCurr_AddAttendeeAsNC(@Model.oChurchBodyId, @item.oChurchAttendee.Id)">
+                    <span><i class="fas fa-user-clock" style="width:25px"></i></span> <span class="text-sm-left ml-1"> Add as New Convert </span>
+                </a>
+            </li>
+            <li> <div class="dropdown-divider mt-1"></div></li>
+            <li>
+                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                   onclick="AddOrEditCurrCAA_CheckinOne(@Model.oChurchBodyId, @item.oAttend_Id, @_oAttendRefId, @item.oChurchAttendee.ChurchEventId,
+                                                                @item.oChurchAttendee.DateAttended, @item.oChurchAttendee.AttendeeType, @strDesc, -1)">
+                    <span><i class="fa fa-eye" style="width:25px"></i></span><span class="text-md-left ml-1"> View </span>
+                </a>
+            </li>
+        }*@
+
+                                    <li>
+                                        <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                            onclick="AddOrEditCurrCAA_CheckinOne(@Model.oChurchBodyId, @item.oAttend_Id, @oAttendRefId, null, @item.oChurchAttendee.ChurchEventDetailId,
+                                                                                 @dtEvAttn, @strAttnType, @strDesc, 0, -1)">
+
+                                           @*onclick="AddOrEditCurrCAA_CheckinOne(@Model.oChurchBodyId, @item.oAttend_Id, @_oAttendRefId, @item.oChurchAttendee.ChurchEventDetailId,
+                                                                                            @item.oChurchAttendee.DateAttended, @_strAttnType, @strDesc, -1)">*@
+                                            <span><i class="fa fa-eye" style="width:25px"></i></span><span class="text-md-left ml-1"> View </span>
+                                        </a>
+                                    </li>
+
+                                    @if (item.oChurchBodyId == Model.oChurchBodyId_Logged)
+                                    {
+                                        <li>
+                                            <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                               onclick="AddOrEditCurrCAA_CheckinOne(@Model.oChurchBodyId, @item.oAttend_Id, @oAttendRefId, null, @item.oChurchAttendee.ChurchEventDetailId,
+                                                                                 @dtEvAttn, @strAttnType, @strDesc, 0, 2)">
+                                                <span><i class="fa fa-edit" style="width:25px"></i></span><span class="text-sm-left ml-1"> Edit </span>
+                                            </a>
+                                        </li>
+
+                                        @*  && item.oChurchAttendee.CreatedByUserId == Model.oUserId_Logged *@
+                                        @if (item.isUserRoleAdmin_Logged || (item.oChurchBodyId == Model.oChurchBodyId_Logged))
+                                        {
+                                            <li>
+                                                <a role="button" class="btn btn-light text-danger text-left w-100 border-0"
+                                                   onclick="DeleteCurrDataCAA_CheckinOne(@item.oChurchBodyId, @item.oChurchMemberId, false, '')">
+                                                    <span><i class="fa fa-trash" style="width:25px"></i></span><span class="text-sm-left ml-1" style="color:#000"> Delete </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+
+
+
+
+
+@*@{ var strDesc = '"' + item.strMemDisplayName + '"'; var strMemTypeCode = "'" + item.strMemTypeCode + "'";}
+<div class="btn-group ">
+
+    <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="overflow:auto">
+        <i class="fa fa-ellipsis-v text-gray text-lg"></i>
+    </button>
+    <div class="dropdown-menu dropdown-menu-right p-1" role="menu">
+        <ul class="m-0 p-0" style="list-style-type: none;">
+            <li>
+                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                   onclick="AddEditCurrDataCM_MPC(@Model.oChurchBodyId, @item.oChurchMember.Id, @Model.setIndex)">
+                    <span><i class="fas fa-folder-open" style="width:20px"></i></span> <span class="text-md-left text-bold ml-1"> Open Profile </span>
+                </a>
+            </li>
+            <li> <div class="dropdown-divider mt-1"></div></li>
+            <li>
+                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                   onclick="AddEditCurrDataCM_BD(@Model.oChurchBodyId, @item.oChurchMember.Id, @strMemTypeCode, @strDesc, -1)">
+                    <span><i class="fa fa-eye" style="width:20px"></i></span><span class="text-md-left ml-1"> View </span>
+                </a>
+            </li>
+            @if (item.oChurchMember.ChurchBodyId == Model.oChurchBodyId_Logged)
+            {
+                <li>
+                    <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                       onclick="AddEditCurrDataCM_BD(@Model.oChurchBodyId, @item.oChurchMember.Id, @strMemTypeCode, @strDesc)">
+                        <span><i class="fa fa-edit" style="width:20px"></i></span><span class="text-md-left ml-1"> Edit </span>
+                    </a>
+                </li>
+                @if (Model.isUserRoleAdmin_Logged)
+                {
+                    <li>
+                        <a role="button" class="btn btn-light text-danger text-left w-100 border-0"
+                           onclick="DeleteCurrDataCM_BD(@item.oChurchBodyId, @item.oChurchMember.Id, false, '')">
+                            <span><i class="fa fa-trash" style="width:20px"></i></span><span class="text-md-left ml-1" style="color:#000"> Delete </span>
+                        </a>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+</div>*@

@@ -1,0 +1,106 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.CountryRegionModel
+
+@if (Model.oCountryRegion != null)
+{
+    <div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center w-75" style="margin: 0 auto 0 auto ; padding:0;  ">
+        <form class="needs-validation novalidate bg-transparent p-2" id="currForm_CTRY_RGN" method="post" enctype="multipart/form-data" asp-action="AddOrEdit_CTRY_RGN">
+            @{ var strModelNameTag = Model.oCountryRegion.Name; }
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="oCountryRegion.Id" id="_hdnCurrIdCTRY_RGN" />
+            <input type="hidden" asp-for="oCountryRegion.AppGlobalOwnerId" id="_hdnAppGloOwnId" />
+            <input type="hidden" asp-for="pageIndex" id="_hdnPageIndex" />
+            <input type="hidden" asp-for="oCountryRegion.Created" />
+            <input type="hidden" asp-for="oCountryRegion.LastMod" />
+            <input type="hidden" asp-for="oCountryRegion.CreatedByUserId" />
+            <input type="hidden" asp-for="oCountryRegion.LastModByUserId" />
+            
+            <input type="hidden" asp-for="oCountryRegion.OwnedByChurchBodyId" />
+            <input type="hidden" asp-for="oCountryRegion.SharingStatus" /> 
+
+            <input type="hidden" asp-for="@Model.setIndex" id="_setIndex" />
+            <input type="hidden" asp-for="@Model.setIndex" id="_setIndexTest" />
+            <input type="hidden" asp-for="@Model.subSetIndex" id="_subSetIndex" />
+
+            <input type="hidden" asp-for="@Model.oChurchBodyId_Logged" id="_oChurchBodyId_Logged" />
+            <input type="hidden" asp-for="@Model.oAppGloOwnId_Logged" id="_oAppGloOwnId_Logged" />
+            <input type="hidden" asp-for="@Model.oUserId_Logged" id="_oCurrUserId_Logged" />
+
+
+            <div class="form-row mb-3">
+                <div class="col-md">
+                    <small class="font-weight-normal" asp-for="strCountry"> Country of Region </small>
+                    @if (!string.IsNullOrEmpty(Model.oCountryRegion.CtryAlpha3Code))
+                    {
+                        <input type="text" class="form-control text-sm" asp-for="strCountry" placeholder="Name of Region" readonly>
+                        <input type="hidden" asp-for="oCountryRegion.CtryAlpha3Code" id="_hdnCtryAlpha3Code" />
+                    }
+                    else
+                    {
+                        <select id="_CountryId" class="form-control text-sm" asp-for="oCountryRegion.CtryAlpha3Code" asp-items="Model.lkpCountries" aria-describedby="fd_CountryId" required>
+                            <option selected value="">Select country</option>
+                        </select>
+                        <div class="invalid-feedback" id="fd_CountryId">
+                            Select the country
+                        </div>
+                    }
+                </div> 
+            </div>
+            <div class="form-row mb-3">
+                <div class="col-md">
+                    <small class="font-weight-normal" asp-for="oCountryRegion.Name"> Name of Region </small>
+                    <input type="text" class="form-control text-sm" asp-for="oCountryRegion.Name" placeholder="Name of Region" aria-describedby="fd_Name" required>
+                    <div class="invalid-feedback" id="fd_Name">  Name of region required  </div>
+                </div>
+            </div>
+            <div class="form-row mb-3">
+                <div class="col-md-6">
+                    <small class="font-weight-normal" asp-for="strChurchLevel">Region Code</small>
+                    <input type="text" class="form-control text-sm" asp-for="oCountryRegion.RegCode" placeholder="Region Code">
+                </div>
+            </div>
+            <br />
+            <hr style="border:1px inset #fff" />
+            <br />
+            @if ((Model.oCountryRegion.OwnedByChurchBody?.OrgType == "CR" || Model.oCountryRegion.OwnedByChurchBody?.OrgType == "CH") && Model.oCountryRegion.OwnedByChurchBodyId == Model.oChurchBodyId_Logged)
+            {
+                <div class="form-row mb-3">
+                    <div class="col-md">                        
+                        <div class="input-group mb-3">
+                            <div class="col-md-4">
+                                <small class="font-weight-normal" asp-for="strOwnedByStatus"> Status </small>
+                                <input type="text" class="form-control text-sm" asp-for="strOwnershipStatus" placeholder="Name of Region" readonly>
+                            </div>
+                            <div class="col-md-8">
+                                <small class="font-weight-normal" asp-for="oCountryRegion.SharingStatus"> Scope of Ownership </small>
+                                <select class="form-control text-sm" asp-for="oCountryRegion.SharingStatus" asp-items="Model.lkpSharingStatuses" aria-describedby="fd_SharingStatus" required>
+                                    <option selected value="">Select scope </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="form-row mb-3">
+                    <div class="col-md">                        
+                        <div class="input-group mb-3">
+                            <div class="col-md-4">
+                                <small class="font-weight-normal" asp-for="strOwnedByStatus"> Status </small>
+                                <input type="text" class="form-control text-sm" asp-for="strOwnershipStatus" placeholder="Name of Region" readonly>
+                            </div>
+                            <div class="col-md-8">
+                                @{ var strOwnCB = "Owner" + (!string.IsNullOrEmpty(Model.strChurchLevel_OwnedByCB) ? " (" + Model.strChurchLevel_OwnedByCB + ")" : "");}
+                                <small class="font-weight-normal" asp-for="oCountryRegion.OwnedByChurchBodyId"> @strOwnCB </small>
+                                <input type="text" class="form-control text-sm" asp-for="strOwnedByChurchBody" placeholder="Owned by" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            } 
+
+        </form>
+    </div>
+}
+

@@ -1,0 +1,369 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.AppUtilityNVPModel
+
+@if (Model != null)
+{
+    @if (Model.oAppUtilityNVP != null)
+    {
+        @*<div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center " style="margin: 0 auto 0 auto ; padding: 0">
+            <form needs-validation novalidate class="bg-transparent p-2" id="currForm_NVP" method="post" enctype="multipart/form-data" asp-action="AddOrEdit_NVP">*@
+         
+                <div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center w-75 " style="margin: 0 auto 0 auto ; padding: 0">
+                    <form class="needs-validation bg-transparent p-2" novalidate id="currForm_NVP" method="post" enctype="multipart/form-data" asp-action="AddOrEdit_NVP">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="oAppUtilityNVP.Id" id="_hdnCurrId_AGO" />
+                        <input type="hidden" asp-for="oAppUtilityNVP.AppGlobalOwnerId" />
+                        <input type="hidden" asp-for="oAppUtilityNVP.ChurchBodyId" />
+
+                        @*   <input type="hidden" asp-for="oAppUtilityNVP.NVPSubCode" />
+               <input type="hidden" asp-for="oAppUtilityNVP.CtryAlpha3Code" />
+        <input type="hidden" asp-for="oAppUtilityNVP.IsAvailable" />
+        <input type="hidden" asp-for="oAppUtilityNVP.IsDeceased" />
+        <input type="hidden" asp-for="oAppUtilityNVP.GradeLevel" />
+        <input type="hidden" asp-for="oAppUtilityNVP.ApplyToClergyOnly" />*@
+
+                        <input type="hidden" asp-for="oAppUtilityNVP.NVPStatus" />
+
+                        <input type="hidden" asp-for="oAppUtilityNVP.Created" />
+                        <input type="hidden" asp-for="oAppUtilityNVP.LastMod" />
+                        <input type="hidden" asp-for="oAppUtilityNVP.CreatedByUserId" />
+                        <input type="hidden" asp-for="oAppUtilityNVP.LastModByUserId" />
+
+                        <input type="hidden" asp-for="@Model.setIndex" id="_setIndex" />
+                        <input type="hidden" asp-for="@Model.subSetIndex" id="_subSetIndex" />
+                        <input type="hidden" asp-for="@Model.tempSetIndex" id="_tempSetIndex" />
+
+                        <input type="hidden" asp-for="@Model.oChurchBodyId_Logged" id="_oChurchBody_Logged" />
+                        <input type="hidden" asp-for="@Model.oAppGloOwnId_Logged" id="_oAppGloOwnId_Logged" />
+                        <input type="hidden" asp-for="@Model.oUserId_Logged" id="_oCurrUserId_Logged" />
+
+
+                        <div class="form-row mb-3">
+                            <div class="col-md-8">
+                                <small class="font-weight-normal" asp-for="oAppUtilityNVP.NVPCode">Lookup Parameter</small>
+                                @if (Model.tempSetIndex == 0 || Model.tempSetIndex == 6)
+                                {
+                                    <select id="_NVPCode" class="form-control text-sm" asp-for="oAppUtilityNVP.NVPCode" asp-items="Model.lkpAppParameterTags" aria-describedby="fd_NVPCode" required>
+                                        <option selected disabled value="">Select parameter</option>
+                                    </select>
+                                    <div class="invalid-feedback" id="fd_NVPCode">
+                                        Select lookup parameter
+                                    </div>
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control text-sm" asp-for="@Model.strNVPTag" readonly>
+                                    <input id="_NVPCode" type="hidden" asp-for="oAppUtilityNVP.NVPCode" />
+                                }
+
+                            </div>
+                            <div class="col-md-4">
+                                <small class="font-weight-normal" asp-for="oAppUtilityNVP.NVPCategoryId">Parameter Value Type </small>
+                                <select id="_ValueType" class="form-control text-sm" asp-for="oAppUtilityNVP.ValueType" asp-items="Model.lkpAppValueTypes"></select>
+                            </div>
+                        </div>
+
+                        @* Drill - down instead, so they are auto selected... unlese EDIT/MODIFY *@
+                        @if (Model.tempSetIndex == 18)
+                        {
+                            <div class="form-row mb-3">
+                                <div class="col-md">
+                                    <small class="font-weight-normal" asp-for="oAppUtilityNVP.NVPCategoryId"> Parent Parameter </small>
+                                    <select id="_NVPCategoryId" class="form-control text-sm" asp-for="oAppUtilityNVP.NVPCategoryId" asp-items="Model.lkpNVP_ParentCategories">
+                                        <option selected disabled value=""> Select category </option>
+                                    </select>
+                                </div>
+                            </div>
+                        }
+                        else
+                        { <input type="hidden" asp-for="oAppUtilityNVP.NVPCategoryId" />}
+
+                        <div class="form-row mb-3">
+                            <div id="_NVPValue" class="col-md">
+                                <small class="font-weight-normal" asp-for="oAppUtilityNVP.NVPValue">Parameter Value</small>
+                                <input type="text" class="form-control text-sm" asp-for="oAppUtilityNVP.NVPValue" placeholder="Parameter Value" aria-describedby="fd_NVPValue">
+                                <div class="invalid-feedback" id="fd_NVPValue">
+                                    Parameter value is required
+                                </div>
+                            </div>
+
+                            <div id="_NVPNumVal" class="col-md" hidden>
+                                <small class="font-weight-normal" asp-for="oAppUtilityNVP.NVPNumVal">Parameter Value</small>
+                                <input type="number" class="form-control text-sm" asp-for="oAppUtilityNVP.NVPNumVal" placeholder="Parameter Value" aria-describedby="fd_NVPNumVal">
+                                <div class="invalid-feedback" id="fd_NVPNumVal">
+                                    Parameter value is required
+                                </div>
+                            </div>
+                            <div id="_NVPNumValTo" class="col-md" hidden>
+                                <small class="font-weight-normal" asp-for="oAppUtilityNVP.NVPNumValTo"> Range (To) </small>
+                                <input type="number" class="form-control text-sm" asp-for="oAppUtilityNVP.NVPNumValTo" placeholder="Parameter Value" aria-describedby="fd_NVPNumValTo">
+                                <div class="invalid-feedback" id="fd_NVPNumValTo">
+                                    Parameter value [range] is required
+                                </div>
+                            </div>
+
+                            <div id="_NVPFromDate" class="col-md" hidden>
+                                <small class="font-weight-normal" asp-for="oAppUtilityNVP.NVPFromDate"> From Date </small>
+                                <input type="date" class="form-control text-sm" asp-for="oAppUtilityNVP.NVPFromDate" placeholder="Parameter Value" aria-describedby="fd_NVPFromDate">
+                                <div class="invalid-feedback" id="fd_NVPFromDate">
+                                    Parameter value is required
+                                </div>
+                            </div>
+
+                            <div id="_NVPToDate" class="col-md" hidden>
+                                <small class="font-weight-normal" asp-for="oAppUtilityNVP.NVPToDate">To Date</small>
+                                <input type="date" class="form-control text-sm" asp-for="oAppUtilityNVP.NVPToDate" placeholder="Parameter Value" aria-describedby="fd_NVPToDate">
+                                <div class="invalid-feedback" id="fd_NVPToDate">
+                                    Parameter value is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row mb-3">
+                            <div class="col-md">
+                                <small class="font-weight-normal" asp-for="oAppUtilityNVP.NVPDesc">Description</small>
+                                <input type="text" class="form-control text-sm" asp-for="oAppUtilityNVP.NVPDesc" placeholder="Parameter Value">
+                            </div>
+                        </div>
+
+
+                        @if (Model.tempSetIndex == 11 || Model.tempSetIndex == 12 || Model.tempSetIndex == 17)
+                        {
+                            <div class="form-row mb-3">
+                                <div class="col-md">
+                                    <small class="font-weight-normal" asp-for="oAppUtilityNVP.NVPCategoryId"> Category</small>
+                                    <select class="form-control text-sm" asp-for="oAppUtilityNVP.NVPSubCode" asp-items="Model.lkpNVPCategories">
+                                        <option selected disabled value=""> Select category </option>
+                                    </select>
+                                </div>
+                            </div>
+                        }
+                        else
+                        { <input type="hidden" asp-for="oAppUtilityNVP.NVPSubCode" />}
+
+                        @*@if (Model.setIndex == 18)
+        {
+            <div class="form-row mb-3">
+                <div class="col-md">
+                    <small class="font-weight-normal" asp-for="oAppUtilityNVP.NVPCategoryId">Parent Category</small>
+                    <select class="form-control text-sm" asp-for="oAppUtilityNVP.NVPCategoryId" asp-items="Model.lkpNVP_ParentCategories">
+                        <option selected disabled value=""> Select category </option>
+                    </select>
+                </div>
+            </div>
+        }
+        else
+        { <input type="hidden" asp-for="oAppUtilityNVP.NVPCategoryId" />}*@
+
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <small class="font-weight-normal" asp-for="oAppUtilityNVP.Acronym"> Acronym </small>
+                                <input type="text" class="form-control text-sm" asp-for="oAppUtilityNVP.Acronym" placeholder="Acronym">
+                            </div>
+
+                            @if (Model.tempSetIndex == 18)
+                            {
+                                <div class="col-md-6 mb-3">
+                                    <small class="font-weight-normal" asp-for="oAppUtilityNVP.TargetOccurences"> Occurences </small>
+                                    <div class="input-group">
+                                        <input type="number" min="1" class="form-control text-sm" asp-for="oAppUtilityNVP.TargetOccurences" placeholder="Occurences">
+                                        <select class="form-control text-sm" asp-for="oAppUtilityNVP.OccurFreqCode" asp-items="Model.lkpIntervalFreqs">
+                                            <option selected disabled value=""> Select </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <input type="hidden" asp-for="oAppUtilityNVP.TargetOccurences" />
+                                <input type="hidden" asp-for="oAppUtilityNVP.OccurFreqCode" />
+                            }
+
+
+                            @if (Model.tempSetIndex == 8 || Model.tempSetIndex == 10 || Model.tempSetIndex == 11 || Model.tempSetIndex == 12)  // LSPK, NIDT, INST, CTT
+                            {
+                                <div class="col-md-6 mb-3">
+                                    <small class="font-weight-normal" asp-for="oAppUtilityNVP.CtryAlpha3Code"> Country </small>
+                                    <select class="form-control text-sm" asp-for="oAppUtilityNVP.CtryAlpha3Code" asp-items="Model.lkpCountries">
+                                        <option selected disabled value="">Select country </option>
+                                    </select>
+                                </div>
+                            }
+                            else
+                            { <input type="hidden" asp-for="oAppUtilityNVP.CtryAlpha3Code" />}
+
+
+                            @if (Model.tempSetIndex == 11 || Model.tempSetIndex == 12 || Model.tempSetIndex == 15 || Model.tempSetIndex == 19)  // INST, CTT, CR, CMT
+                            {
+                                <div class="col-md-6 mb-3">
+                                    <small class="font-weight-normal" asp-for="oAppUtilityNVP.GradeLevel">Grade /Level</small>
+                                    <input type="number" min="1" class="form-control text-sm" asp-for="oAppUtilityNVP.GradeLevel" placeholder="Grade /Level">
+                                </div>
+                            }
+                            else
+                            { <input type="hidden" asp-for="oAppUtilityNVP.GradeLevel" />}
+
+                            <div class="col-md-6 mb-3">
+                                <small class="font-weight-normal" asp-for="oAppUtilityNVP.OrderIndex">Order Index</small>
+                                <input type="number" min="1" class="form-control text-sm" asp-for="oAppUtilityNVP.OrderIndex" placeholder="Order Index">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md mb-3">
+                                <label class="chk_container text-sm font-weight-normal">
+                                    <small class="font-weight-normal" asp-for="oAppUtilityNVP.IsAvailable"> Activated </small>
+                                    <input id="chk_NVPStatus_Active" type="checkbox" asp-for="bl_NVPStatus_Active" />
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+
+                            @if (Model.tempSetIndex == 15 || Model.tempSetIndex == 19)  // CMS
+                            {
+                                <div class="col-md mb-3">
+                                    <label class="chk_container text-sm font-weight-normal">
+                                        <small class="font-weight-normal" asp-for="oAppUtilityNVP.IsAvailable"> Apply to Clergy only </small>
+                                        <input id="chk_ApplyToClergyOnly" type="checkbox" asp-for="oAppUtilityNVP.ApplyToClergyOnly" />
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            }
+                            else
+                            { <input type="hidden" asp-for="oAppUtilityNVP.ApplyToClergyOnly" />}
+
+                            @if (Model.tempSetIndex == 20)  // CMS
+                            {
+                                <div class="col-md mb-3">
+                                    <label class="chk_container text-sm font-weight-normal">
+                                        <small class="font-weight-normal" asp-for="oAppUtilityNVP.IsAvailable"> Available </small>
+                                        <input id="chk_IsAvailable" type="checkbox" asp-for="oAppUtilityNVP.IsAvailable" />
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <div class="col-md mb-3">
+                                    <label class="chk_container text-sm font-weight-normal">
+                                        <small class="font-weight-normal" asp-for="oAppUtilityNVP.IsAvailable"> Deceased </small>
+                                        <input id="chk_IsDeceased" type="checkbox" asp-for="oAppUtilityNVP.IsDeceased" />
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <input type="hidden" asp-for="oAppUtilityNVP.IsAvailable" />
+                                <input type="hidden" asp-for="oAppUtilityNVP.IsDeceased" />
+                            }
+
+                            @if (Model.tempSetIndex == 17)  // CLA
+                            {
+                                <div class="col-md mb-3">
+                                    <label class="chk_container text-sm font-weight-normal">
+                                        <small class="font-weight-normal" asp-for="oAppUtilityNVP.IsMainlineActivity"> Mainline Activity </small>
+                                        <input id="chk_IsMainlineActivity" type="checkbox" asp-for="oAppUtilityNVP.IsMainlineActivity" />
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <div class="col-md mb-3">
+                                    <label class="chk_container text-sm font-weight-normal">
+                                        <small class="font-weight-normal" asp-for="oAppUtilityNVP.IsChurchService"> Service-Oriented </small>
+                                        <input id="chk_IsChurchService" type="checkbox" asp-for="oAppUtilityNVP.IsChurchService" />
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <input type="hidden" asp-for="oAppUtilityNVP.IsRequired" />
+                                <input type="hidden" asp-for="oAppUtilityNVP.IsSequenced" />
+                            }
+
+                            @if (Model.tempSetIndex == 18)  // CLARD
+                            {
+                                <div class="col-md mb-3">
+                                    <label class="chk_container text-sm font-weight-normal">
+                                        <small class="font-weight-normal" asp-for="oAppUtilityNVP.IsAvailable"> Step Required </small>
+                                        <input id="chk_IsRequired" type="checkbox" asp-for="oAppUtilityNVP.IsRequired" />
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <div class="col-md mb-3">
+                                    <label class="chk_container text-sm font-weight-normal">
+                                        <small class="font-weight-normal" asp-for="oAppUtilityNVP.IsAvailable"> Sequenced </small>
+                                        <input id="chk_IsSequenced" type="checkbox" asp-for="oAppUtilityNVP.IsSequenced" />
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <input type="hidden" asp-for="oAppUtilityNVP.IsRequired" />
+                                <input type="hidden" asp-for="oAppUtilityNVP.IsSequenced" />
+                            }
+                        </div>
+
+
+                        @if (Model.tempSetIndex == 17)  // CLA
+                        { 
+                            @* ideally.. this should be CHECKs for [New Convert, Affiliate, In Transit, Member]  *@
+                            <div class="form-row mb-3">
+                                <div class="col-md-6">
+                                    <small class="font-weight-normal" asp-for="oAppUtilityNVP.ApplyToMemberStatus"> Apply To (as required activity) </small>
+                                    <select class="form-control text-sm" asp-for="oAppUtilityNVP.ApplyToMemberStatus" asp-items="Model.lkpAttendeeTypes">
+                                        @*<option selected disabled value=""> Apply-To Member Type </option>*@
+                                    </select>
+                                </div>
+                            </div>
+
+                        } 
+
+
+                        <hr style="border:1px inset #fff" />
+
+
+                        @if ((Model.oAppUtilityNVP.OwnedByChurchBody?.OrgType == "CR" || Model.oAppUtilityNVP.OwnedByChurchBody?.OrgType == "CH") && Model.oAppUtilityNVP.OwnedByChurchBodyId == Model.oChurchBodyId_Logged)
+                        {
+                            <div class="form-row mb-3 mt-3">
+                                <div class="col-md m-0 p-0">
+                                    <div class="input-group m-0 p-0">
+                                        <div class="col-md-4">
+                                            <small class="font-weight-normal" asp-for="strOwnedByStatus"> Scope </small>
+                                            <input type="text" class="form-control text-sm" asp-for="strOwnershipStatus" placeholder="Name of Region" readonly>
+                                            <input type="hidden" asp-for="oAppUtilityNVP.OwnedByChurchBodyId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <small class="font-weight-normal" asp-for="oAppUtilityNVP.SharingStatus"> Sharing Status </small>
+                                            <select class="form-control text-sm" asp-for="oAppUtilityNVP.SharingStatus" asp-items="Model.lkpSharingStatuses" aria-describedby="fd_SharingStatus" required>
+                                                <option selected value="">Select scope </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-row mb-3 mt-3">
+                                <div class="col-md m-0 p-0">
+                                    <div class="input-group m-0 p-0">
+                                        <div class="col-md-4">
+                                            <small class="font-weight-normal" asp-for="strOwnershipStatus"> Scope </small>
+                                            <input type="text" class="form-control text-sm" asp-for="strOwnershipStatus" placeholder="Name of Region" readonly>
+                                            <input type="hidden" asp-for="oAppUtilityNVP.SharingStatus" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            @{ var strOwnCB = "Owned by " + (!string.IsNullOrEmpty(Model.strChurchLevel_OwnedByCB) ? "(" + Model.strChurchLevel_OwnedByCB + ")" : "");}
+                                            <small class="font-weight-normal" asp-for="strOwnedByChurchBody"> @strOwnCB </small>
+                                            <input type="text" class="form-control text-sm" asp-for="strOwnedByChurchBody" placeholder="Owned by" readonly>
+                                            <input type="hidden" asp-for="oAppUtilityNVP.OwnedByChurchBodyId" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </form>
+                </div>
+                }
+                }

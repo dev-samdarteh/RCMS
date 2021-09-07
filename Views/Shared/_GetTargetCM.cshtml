@@ -1,0 +1,85 @@
+﻿@model RhemaCMS.Models.Adhoc.TargetCMModel
+
+
+<div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center" style="width:90%; margin: 0 auto 0 auto ; padding:0;  ">
+    <form needs-validation novalidate id="currForm_ReqMT" method="post" enctype="multipart/form-data" asp-action="AddMod_ReqMT" class=" form-group bg-transparent p-3">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @if (Model != null)
+        {
+            <input type="hidden" asp-for="oAppGloOwnId" />
+            <input type="hidden" asp-for="oChurchBodyId" />
+            <input type="hidden" asp-for="oChurchMemberId" />
+
+
+            <input type="hidden" asp-for="oAppGloOwnId" id="_oAppGloOwnId_TCM" />
+            <input type="hidden" asp-for="oChurchBodyId" id="_oChurchBodyId_TCM" />
+
+            @*<input type="hidden" asp-for="oTargetCBId" id="_oTargetCBId_TCM" />
+            <input type="hidden" asp-for="oTargetCLId" id="_oTargetCLId_TCM" />*@
+
+            <input type="hidden" asp-for="numChurchLevel_Index" id="_numCLIndex_TCM" />
+            <input type="hidden" asp-for="oCBLevelCount" id="_oCBLevelCount_TCM" />
+
+            <input type="hidden" asp-for="strTargetCB" />
+            @*<input type="hidden" asp-for="strTargetCL" />*@
+
+            <input type="hidden" asp-for="strId_TCM" id="_strId_TCM" />
+            <input type="hidden" asp-for="strName_TCM" id="_strName_TCM" />
+            <input type="hidden" asp-for="strCLId_TCM" id="_strCLId_TCM" />
+            <input type="hidden" asp-for="strCLName_TCM" id="_strCLName_TCM" />
+            <input type="hidden" asp-for="strCLTag_TCM" id="_strCLTag_TCM" />
+
+            int? _oAGOId = Model.oAppGloOwnId != null ? Model.oAppGloOwnId : -1; //if (Model.oAppGloOwnId != null) { _oAGOId = (int)Model.oChurchBody.AppGlobalOwnerId; };
+            int? _oCBId = Model.oChurchBodyId != null ? Model.oChurchBodyId : -1; //if (Model.oChurchBody.Id != -1) { _oCBId = (int)Model.oChurchBody.Id; }
+
+
+            <div class="form-row  mb-3">
+                <div class="col-md-12">
+                    @{ var strParFromCBLevelTag = !string.IsNullOrEmpty(Model.strTargetCL) ? "Target Congregation (" + Model.strTargetCL + ")" : "Target Congregation"; }
+                    <small id="_lblFromChurchBody_TCM" class="font-weight-normal" asp-for="oChurchBody"> <i class="fas fa-arrow-up text-danger mr-1"></i>  @strParFromCBLevelTag  </small>
+                    <div class="input-group">
+                        <input id="_strFromChurchBody_par_TCM" type="text" class="form-control text-sm text-sm bg-transparent"
+                               asp-for="strTargetCB" aria-describedby="button-addon2" placeholder="Target Congregation" disabled />
+                        <button class="btn btn-light btn-sm border border-left-0" type="button" id="button-addon2"
+                                onclick="ImportTargetCB(@_oAGOId, @_oCBId, '_numFromChurchBodyId_par_TCM', '_strFromChurchBody_par_TCM', '', '_lblFromChurchBody_TCM', 'Parent_Body')">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+
+                    <input id="_numFromChurchBodyId_par_TCM" type="hidden" asp-for="oTargetCBId" />
+                </div>
+            </div>
+
+            <div class="form-row  mb-3" id="divChurchMemberId_TCM">
+                <div class="col-md">
+                    <small asp-for="oChurchMemberId" class="control-label"> Target Member </small>
+                    <div class="input-group">
+                        <select id="_ChurchMemberId_TCM" class="form-control text-sm" asp-for="oChurchMemberId" asp-items="Model.lkpChurchMembers">
+                            <option value="" selected disabled> Select member </option>
+                        </select>
+
+                        @*<button class="btn btn-light btn-sm border border-left-0" type="button" data-toggle="tooltip" data-placement="bottom" title="Lookup Member (more options)"
+                                onclick="LaunchMemberLookup()">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>*@
+                        <button id="_btnPickMembersDirect_TCM" class="btn btn-light btn-sm border border-left-0" type="button" data-toggle="tooltip" data-placement="bottom" title="Load members">
+                            <i class="fa fa-refresh text-black-50"></i>
+                        </button>
+                        @*<button id="_btnViewRelationMBD_TCM" class="btn btn-light btn-sm border border-left-0" type="button" data-toggle="tooltip" data-placement="bottom" title="View profile"
+                                onclick="AddEditCurrDataCM_rtMBD_TCM()">
+                            <i class="fa fa-eye text-black-50"></i>
+                        </button>*@
+
+                        <input id="_hdnChurchMemberId_TCM" type="hidden" asp-for="oChurchMemberId" />
+                    </div>
+                </div>
+            </div>
+
+        }
+
+
+
+    </form>
+</div>

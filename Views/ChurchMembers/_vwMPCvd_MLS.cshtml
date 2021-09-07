@@ -1,0 +1,171 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.MemberLanguageSpokenModel
+
+@if (Model.taskIndex == 0)
+{
+    <table id="tabDataCM_MLS" class="table table-bordered table-striped text-sm">
+        <thead>
+            <tr>
+                <th> Language </th> 
+                <th style="vertical-align: middle"> Country </th> 
+                <th width="80px" style="text-align:center; vertical-align: middle">Proficiency</th>
+                <th class="justify-content-center" style="vertical-align: middle; text-align: center; width: 50px ">
+                    <button type="button" class="btn btn-default w-100 h-100 border-0" 
+                            onclick="AddEditCurrDataCM_MPC(@Model.oChurchBodyId, @Model.oChurchMemberId, -1, 3, true)" >
+                        <i class="fa fa-refresh fa-secondary"></i>
+                    </button> 
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lsMemberLanguageSpokenModels)
+            {
+                if (item.oMemberLanguageSpoken != null)
+                {
+                    <tr> 
+                        <td style="vertical-align: middle">
+                            @item.strLanguageSpoken
+                            @if (item.oMemberLanguageSpoken.IsPrimaryLanguage)
+                            {<small class="badge badge-info text-center ml-1 "> <i class="fas fa-check fa-sm text-light mr-1"></i> Primary </small>} 
+                        </td>
+                        <td style="vertical-align: middle">
+                            @item.strLanguageCountry
+                        </td>  
+                        <td style="text-align: center; vertical-align: middle">
+                            @if (item.oMemberLanguageSpoken.ProficiencyLevel >= 5)
+                            {<span class="badge badge-success text-center text-light font-weight-normal border"> <i class="fas fa-check-double fa-sm text-light"></i> @item.strProficiencyLevel </span> }
+                            else if (item.oMemberLanguageSpoken.ProficiencyLevel <= 1)
+                            { <span class="badge badge-secondary text-center text-light font-weight-normal border"> <i class="fas fa-ellipsis-h fa-sm"></i> @item.strProficiencyLevel </span>}
+                             else  
+                            { <span class="badge badge-warning text-center text-dark font-weight-normal border"> <i class="fas fa-ellipsis-v fa-sm"></i><i class="fas fa-ellipsis-v fa-sm"></i> @item.strProficiencyLevel </span>}
+                        </td>
+
+                        <td class="p-1" style="vertical-align: middle; text-align:center ">
+                            @{ var strDesc = '"' + item.strLanguageSpoken + '"'; }
+                            <div class="btn-group ">
+                                <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-ellipsis-v text-gray text-lg"></i>
+                                </button>
+                                <div class="dropdown-menu  dropdown-menu-right p-1" role="menu">
+                                    <ul class="m-0 p-0" style="list-style-type: none;">
+                                        @*
+                                        <li>
+                                            <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                               onclick="AddEditCurrDataCM_MPC(@Model.oChurchBodyId, @item.oChurchMemberId, @Model.setIndex)">
+                                                <span><i class="fas fa-file-archive-o " style="width:25px"></i></span> <span class="text-md-left text-primary text-bold ml-1"> Open Profile </span>
+                                            </a>
+                                        </li>
+                                        <li> <div class="dropdown-divider mt-1"></div></li>*@
+
+                                        <li>
+                                            <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static" 
+                                               onclick="AddEditCurrDataCM_moMPC(@Model.oChurchBodyId, @item.oChurchMemberId, @item.oMemberLanguageSpoken.Id, -1, @strDesc, 3, 0, -1)">
+                                                <span><i class="fa fa-eye" style="width:25px"></i></span><span class="text-md-left ml-1"> View </span>
+                                            </a>
+                                        </li>
+                                        @if (item.oChurchBodyId == Model.oChurchBodyId_Logged)
+                                        {
+                                            <li>
+                                                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                                   onclick="AddEditCurrDataCM_moMPC(@Model.oChurchBodyId, @Model.oChurchMemberId, @item.oMemberLanguageSpoken.Id, -1, @strDesc, 3, 0, 2)">
+                                                    <span><i class="fa fa-edit" style="width:25px"></i></span><span class="text-md-left ml-1"> Edit </span>
+                                                </a>
+                                            </li>
+                                            @if (item.isUserRoleAdmin_Logged || 
+                                                (item.oChurchBodyId == Model.oChurchBodyId_Logged && item.oMemberLanguageSpoken.CreatedByUserId == Model.oUserId_Logged))
+                                            {
+                                                <li>
+                                                    <a role="button" class="btn btn-light text-danger text-left w-100 border-0"
+                                                       onclick="DeleteCurrDataCM_moMPC(@item.oChurchBodyId, @item.oChurchMemberId, false, '')">
+                                                        <span><i class="fa fa-trash" style="width:25px"></i></span><span class="text-md-left ml-1" style="color:#000"> Delete </span>
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+}
+else
+{
+    <div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center" style="width:90%; margin: 0 auto 0 auto ; padding:0;  ">
+        <form needs-validation bg-transparent p-2" novalidate id="currFormCM_MLS" method="post" enctype="multipart/form-data" asp-action="AddModCM_MLS" class=" form-group bg-transparent p-3">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @if (Model.oMemberLanguageSpoken != null)
+            {
+                <input type="hidden" asp-for="oAppGloOwnId" />
+                <input type="hidden" asp-for="oChurchBodyId" />
+                <input type="hidden" asp-for="oChurchMemberId" />
+
+                <input type="hidden" asp-for="oMemberLanguageSpoken.Id" />
+                <input type="hidden" asp-for="oMemberLanguageSpoken.ChurchBodyId" id="_ChurchBodyId" />
+                <input type="hidden" asp-for="oMemberLanguageSpoken.AppGlobalOwnerId" id="_AppGlobalOwnerId" />
+                <input type="hidden" asp-for="oMemberLanguageSpoken.ChurchMemberId" />
+
+                <input type="hidden" asp-for="oMemberLanguageSpoken.Created" />
+                <input type="hidden" asp-for="oMemberLanguageSpoken.LastMod" />
+                <input type="hidden" asp-for="oMemberLanguageSpoken.CreatedByUserId" />
+                <input type="hidden" asp-for="oMemberLanguageSpoken.LastModByUserId" />
+
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC" />
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC1" />
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC_MLS" />
+
+                <input type="hidden" asp-for="taskIndex" id="_taskIndex_MPC" />
+
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberLanguageSpoken.LanguageSpokenId" class="control-label"> Language </small>
+                        <select id="_LanguageSpokenId_moMLS" class="form-control text-sm " asp-for="oMemberLanguageSpoken.LanguageSpokenId" asp-items="Model.lkpLanguages" required>
+                            <option selected value="" disabled> Select language </option>
+                        </select>
+                    </div>
+                </div>
+
+                @if (Model.oMemberLanguageSpoken.Id > 0)
+                {
+                    <div class="form-row mb-3">
+                        <div class="col-md">
+                            <small asp-for="strLanguageCountry" class="control-label"> Country </small>
+                            <input type="text" asp-for="@Model.strLanguageCountry" class="form-control text-sm " placeholder="Country of Origin" readonly />
+                            <input type="hidden" asp-for="oMemberLanguageSpoken.LanguageSpokenId" />
+                        </div>
+                    </div>
+                }
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberLanguageSpoken.ProficiencyLevel" class="control-label"> Proficiency Level </small>
+                        <select id="_ProficiencyLevel_moMLS" class="form-control text-sm " asp-for="oMemberLanguageSpoken.ProficiencyLevel" asp-items="Model.lkpProficiencyLevels" required>
+                            <option selected value="" disabled> Select proficiency </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row mb-3">
+                    <div class="col-md-6" id="_divIsPrimaryLanguage_moMLS">
+                        <small asp-for="oMemberLanguageSpoken.IsPrimaryLanguage" class="control-label">&nbsp;</small>
+                        <label class="chk_container">
+                            <small> Primary (often-spoken) language </small>
+                            <input id="chk_IsPrimaryLanguage_moMLS" type="checkbox" asp-for="oMemberLanguageSpoken.IsPrimaryLanguage" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    @*<div class="col-md">
+                    <small asp-for="strIsPrimaryLangMess" class="control-label"> Country </small>
+                    <input type="text" asp-for="strIsPrimaryLangMess" class="form-control text-sm " placeholder="Country" readonly />
+                </div>*@
+                </div>
+            }
+
+        </form>
+    </div>
+}

@@ -1,0 +1,207 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.MemberStatusModel
+
+@if (Model.taskIndex == 0 && Model.lsMemberStatusModels != null)
+{
+    <table id="tabDataCM_MCM_MS" class="table table-bordered table-striped  text-sm">
+        <thead>
+            <tr>
+                <th style="vertical-align: middle"> Member Status </th>
+                <th style="vertical-align: middle"> Date </th>
+                @*<th width="150px" style="vertical-align: middle"> Date Ended </th>*@
+                <th style="vertical-align: middle"> Attached Reason  </th>
+                <th class="justify-content-center" style="vertical-align: middle; text-align: center; width: 50px ">
+                    <button type="button" class="btn btn-default w-100 h-100 border-0" onclick="AddEditCurrDataCM_MPC(@Model.oChurchBodyId, @Model.oChurchMemberId, -1, 12, 3, true)">
+                        <i class="fa fa-refresh fa-secondary"></i>
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lsMemberStatusModels)
+            {
+                if (item.oMemberStatus != null)
+                {
+                    <tr>
+                        <td style="vertical-align: middle">
+                            @item.strChurchMemStatus
+                            @if (!string.IsNullOrEmpty(item.strAvailStatus))
+                            {
+                                if (item.oMemberStatus.IsCurrent  == true)
+                                {
+                                    <small class="badge badge-primary text-center">
+                                        @item.strAvailStatus
+                                    </small>
+                                } 
+                            }
+                        </td>
+                        <td style="vertical-align: middle">
+                            @item.strDateDesc
+                        </td>
+                        @*<td style="text-align: center; vertical-align: middle">
+                            @item.strToDate
+                        </td>*@
+                        <td style="vertical-align: middle">
+                            @item.oMemberStatus.Reason
+                        </td>
+                        <td class="p-1" style="vertical-align: middle; text-align:center ">
+                            @{ var strDesc = '"' + @item.strChurchMemStatus + '"'; }
+                            <div class="btn-group ">
+                                <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-ellipsis-v text-gray text-lg"></i>
+                                </button>
+                                <div class="dropdown-menu  dropdown-menu-right p-1" role="menu">
+                                    <ul class="m-0 p-0" style="list-style-type: none;">
+                                        <li>
+                                            <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                               onclick="AddEditCurrDataCM_moMPC(@Model.oChurchBodyId, @Model.oChurchMemberId, @item.oMemberStatus.Id, -1, @strDesc, 12, 3, -1)">
+                                                <span><i class="fa fa-eye" style="width:20px"></i></span><span class="text-md-left ml-1"> View </span>
+                                            </a>
+                                        </li>
+
+                                        @if (item.oChurchBodyId == Model.oChurchBodyId_Logged)
+                                        {
+                                            <li>
+                                                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                                   onclick="AddEditCurrDataCM_moMPC(@Model.oChurchBodyId, @Model.oChurchMemberId, @item.oMemberStatus.Id, -1, @strDesc, 12, 3, 2)">
+                                                    <span><i class="fa fa-edit" style="width:20px"></i></span><span class="text-md-left ml-1"> Edit </span>
+                                                </a>
+                                            </li>
+                                            @if (item.isUserRoleAdmin_Logged ||
+                                   (item.oChurchBodyId == Model.oChurchBodyId_Logged && item.oMemberStatus.CreatedByUserId == Model.oUserId_Logged))
+                                            {
+                                                <li>
+                                                    <a role="button" class="btn btn-light text-danger text-left w-100 border-0"
+                                                       onclick="DeleteCurrDataCM_moMPC(@item.oChurchBodyId, @item.oChurchMemberId, false, '')">
+                                                        <span><i class="fa fa-trash" style="width:20px"></i></span><span class="text-md-left ml-1" style="color:#000"> Delete </span>
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+}
+else
+{
+    <div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center p-3" style="width: 90%; margin: 0 auto 0 auto ; padding: 0;  ">
+        <form needs-validation bg-transparent p-2" novalidate id="currFormCM_MCM_MS" method="post" enctype="multipart/form-data" asp-action="AddModCM_MCM_MS" class=" form-group bg-transparent">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @if (Model.oMemberStatus != null)
+            {
+                <input type="hidden" asp-for="oAppGloOwnId" />
+                <input type="hidden" asp-for="oChurchBodyId" />
+                <input type="hidden" asp-for="oChurchMemberId" />
+
+                <input type="hidden" asp-for="oMemberStatus.Id" />
+                <input type="hidden" asp-for="oMemberStatus.ChurchBodyId" id="_ChurchBodyId" />
+                <input type="hidden" asp-for="oMemberStatus.AppGlobalOwnerId" id="_AppGlobalOwnerId" />
+                <input type="hidden" asp-for="oMemberStatus.ChurchMemberId" />
+
+                <input type="hidden" asp-for="strChurchBody" id="_strChurchBody" />
+
+                <input type="hidden" asp-for="oMemberStatus.Created" />
+                <input type="hidden" asp-for="oMemberStatus.LastMod" />
+                <input type="hidden" asp-for="oMemberStatus.CreatedByUserId" />
+                <input type="hidden" asp-for="oMemberStatus.LastModByUserId" />
+
+                <input type="hidden" asp-for="subSetIndex" id="_subSetIndex_MPC" />
+
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC" />
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC1" />
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC_MCM_MS" />
+
+                <input type="hidden" asp-for="taskIndex" id="_taskIndex_MPC" />
+
+
+                <div class="form-row mb-3">
+                    <div class="col-md-6">
+                        <small asp-for="oMemberStatus.ChurchMemTypeId" class="control-label"> Church Member Status </small>
+                        <select id="_ChurchMemTypeId_moMCM_MS" class="form-control text-sm" asp-for="oMemberStatus.ChurchMemStatusId" asp-items="Model.lkpChurchMemStatuses">
+                            <option value="" selected disabled> Select ... </option>
+                        </select>
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md pt-1" id="_divIsCurrent">
+                        <small asp-for="oMemberStatus.IsCurrent" class="control-label">&nbsp;</small>
+                        <label class="chk_container">
+                            <span class="text-sm font-weight-normal"> Current Status  </span>
+                            <input id="chk_IsCurrent_moMCM_MS" type="checkbox" asp-for="oMemberStatus.IsCurrent" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <small asp-for="oMemberStatus.FromDate" class="control-label"> Date Assigned </small>
+                        <input id="_FromDate_moMCM_MS" type="date" class="form-control text-sm" asp-for="oMemberStatus.FromDate">
+                    </div>
+                    <div class="col-md-6 mb-3" id="_divToDate_moMCM_MS">
+                        <small asp-for="oMemberStatus.ToDate" class="control-label"> Date Ended </small>
+                        <input type="date" class="form-control text-sm" asp-for="oMemberStatus.ToDate">
+                    </div>
+                    <div class="col-md-12 mb-3" id="_divReason_moMCM_MS">
+                        <small asp-for="oMemberStatus.Reason" class="control-label"> Brief Reason </small>
+                        <input type="text" maxlength="30" class="form-control text-sm" asp-for="oMemberStatus.Reason">
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberStatus.Notes" class="control-label"> Any Notes or Comments </small>
+                        <textarea maxlength="300" asp-for="oMemberStatus.Notes" class="form-control text-sm" rows="3"></textarea>
+                    </div>
+                </div>
+
+
+                <br />
+                <hr class="cus-div" style="width:100%; border: 1px solid #808080;" />
+
+                @if (Model.oChurchBody?.OrgType == "CN" && Model.oMemberStatus.ChurchBodyId == Model.oChurchBodyId_Logged)
+                {
+                    <div class="form-row mb-3 mt-3">
+                        <div class="col-md-3">
+                            <small class="font-weight-normal" asp-for="strOwnedByStatus"> Scope </small>
+                            <input type="text" class="form-control text-xs" asp-for="strOwnStatus" placeholder="Scope" readonly>
+                            <input type="hidden" asp-for="oMemberStatus.ChurchBodyId" />
+                        </div>
+                        <div class="col-md">
+                            <small class="font-weight-normal" asp-for="oMemberStatus.SharingStatus"> Sharing Status </small>
+                            <select id="_CountryId" class="form-control text-xs" asp-for="oMemberStatus.SharingStatus" asp-items="Model.lkpSharingStatuses_Any" aria-describedby="fd_SharingStatus" required>
+                                <option selected disabled value=""> Select scope </option>
+                            </select>
+                            <div class="invalid-feedback" id="fd_SharingStatus"> Select sharing status </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-row mb-3 mt-3">
+                        <div class="col-md-3">
+                            <small class="font-weight-normal" asp-for="strOwnershipStatus"> Scope </small>
+                            <input type="text" class="form-control text-xs" asp-for="strOwnStatus" placeholder="Scope" readonly>
+                            <input type="hidden" asp-for="oMemberStatus.SharingStatus" />
+                        </div>
+                        <div class="col-md">
+                            @{ var strOwnCB = "Owned by " + (!string.IsNullOrEmpty(Model.strOwnedByCBLevel) ? "(" + Model.strOwnedByCBLevel + ")" : "");}
+                            <small class="font-weight-normal" asp-for="strOwnedByChurchBody"> @strOwnCB </small>
+                            <input type="text" class="form-control text-xs" asp-for="strOwnedByCB" placeholder="Owned by" readonly>
+                            <input type="hidden" asp-for="oMemberStatus.ChurchBodyId" />
+                        </div>
+                    </div>
+                }
+
+
+            }
+
+        </form>
+    </div>
+}

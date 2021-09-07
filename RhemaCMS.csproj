@@ -1,0 +1,157 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Company>Rhema Systems &amp; Associates Ltd</Company> 
+    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel> 
+    <Authors>Sam Darteh Jr</Authors> 
+    <Version>1.3.2</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20201006092403_ef_m_upd19.cs" />
+    <Compile Remove="Migrations\20201006092403_ef_m_upd19.Designer.cs" />
+    <Compile Remove="Migrations\20201006092939_ef_m_upd19.cs" />
+    <Compile Remove="Migrations\20201006092939_ef_m_upd19.Designer.cs" />
+    <Compile Remove="Migrations\20201006133207_ef_m_upd1.cs" />
+    <Compile Remove="Migrations\20201006133207_ef_m_upd1.Designer.cs" />
+    <Compile Remove="Migrations\20201204111252_ef_m_up1.cs" />
+    <Compile Remove="Migrations\20201204111252_ef_m_up1.Designer.cs" />
+    <Compile Remove="Migrations\20210325125051_ef_m_upd3.cs" />
+    <Compile Remove="Migrations\20210325125051_ef_m_upd3.Designer.cs" />
+    <Compile Remove="Migrations\20210325125324_ef_m_upd1.cs" />
+    <Compile Remove="Migrations\20210325125324_ef_m_upd1.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20201124082544_ef_c_upd1.cs" />
+    <Compile Remove="Migrations\ChurchModel\20201124082544_ef_c_upd1.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20201204113321_ef_c_init.cs" />
+    <Compile Remove="Migrations\ChurchModel\20201204113321_ef_c_init.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20201208021103_ef_c_init.cs" />
+    <Compile Remove="Migrations\ChurchModel\20201208021103_ef_c_init.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20201208021929_ef_c_init.cs" />
+    <Compile Remove="Migrations\ChurchModel\20201208021929_ef_c_init.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20201208182642_ef_c_upd1.cs" />
+    <Compile Remove="Migrations\ChurchModel\20201208182642_ef_c_upd1.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20201211112147_ef_c_upd4.cs" />
+    <Compile Remove="Migrations\ChurchModel\20201211112147_ef_c_upd4.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20201226200645_ef_c_upd18.cs" />
+    <Compile Remove="Migrations\ChurchModel\20201226200645_ef_c_upd18.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210115033740_ef_c_upd20.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210115033740_ef_c_upd20.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210128142312_ef_upd24.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210128142312_ef_upd24.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210128142531_ef_upd2.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210128142531_ef_upd2.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210201114131_ef_c_upd27.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210201114131_ef_c_upd27.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210201115954_ef_c_upd28.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210201115954_ef_c_upd28.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210201120155_ef_c_upd27.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210201120155_ef_c_upd27.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210201122618_ef_c_upd27.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210201122618_ef_c_upd27.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210201123412_ef_c_upd27.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210201123412_ef_c_upd27.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210414202305_ef_c_upd21.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210414202305_ef_c_upd21.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210415113707_ef_c_upd21.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210415113707_ef_c_upd21.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210415114358_ef_c_upd22.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210415114358_ef_c_upd22.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210520162558_ef_m_upd23.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210520162558_ef_m_upd23.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210601232039_ef_c_upd30.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210601232039_ef_c_upd30.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210602132616_ef_c_upd32.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210602132616_ef_c_upd32.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210604030224_ef_c_upd33.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210604030224_ef_c_upd33.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210608195401_ef_c_36.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210608195401_ef_c_36.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210621001216_ef_c_upd1.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210621001216_ef_c_upd1.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210621001821_ef_c_upd1.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210621001821_ef_c_upd1.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210621002055_ef_c_upd1.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210621002055_ef_c_upd1.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210621002426_ef_c_upd1.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210621002426_ef_c_upd1.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210628102009_ef_c_upd10.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210628102009_ef_c_upd10.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210628120608_ef_c_upd12.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210628120608_ef_c_upd12.Designer.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210831110539_ef_c_upd2.cs" />
+    <Compile Remove="Migrations\ChurchModel\20210831110539_ef_c_upd2.Designer.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20201102000222_ef_m_upd3.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20201102000222_ef_m_upd3.Designer.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20201102002513_ef_m_upd3.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20201102002513_ef_m_upd3.Designer.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20201102183722_ef_m_upd4.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20201102183722_ef_m_upd4.Designer.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20201127144405_ef_m_upd13.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20201127144405_ef_m_upd13.Designer.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20201201051852_ef_m_upd14.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20201201051852_ef_m_upd14.Designer.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20201201051941_ef_m_upd15.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20201201051941_ef_m_upd15.Designer.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20201203203024_ef_m_upd15.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20201203203024_ef_m_upd15.Designer.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20201203204107_ef_m_upd15.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20201203204107_ef_m_upd15.Designer.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20201221151106_ef_m_upd14.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20201221151106_ef_m_upd14.Designer.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20210227183007_ef_m_upd2.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20210227183007_ef_m_upd2.Designer.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20210325115250_ef_m_upd11.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20210325115250_ef_m_upd11.Designer.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20210325115904_ef_m_upd12.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20210325115904_ef_m_upd12.Designer.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20210329124616_ef_m_upd3.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20210329124616_ef_m_upd3.Designer.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20210413110018_ef_m_upd3.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20210413110018_ef_m_upd3.Designer.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20210520161337_ef_m_upd4.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20210520161337_ef_m_upd4.Designer.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20210811171431_ef_m_upd5.cs" />
+    <Compile Remove="Migrations\MSTR_Db\20210811171431_ef_m_upd5.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="bootstrap" Version="4.5.2" />
+    <PackageReference Include="bootstrap.sass" Version="4.5.2" />
+    <PackageReference Include="jQuery" Version="3.5.1" />
+    <PackageReference Include="jQuery.UI.Combined" Version="1.12.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Ajax" Version="3.2.6" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.9.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.1" />
+    <PackageReference Include="Twitter.Bootstrap" Version="3.0.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\con_adhc\" />
+    <Folder Include="Controllers\con_ch_adm\" />
+    <Folder Include="Controllers\con_ch_rep_anal\" />
+    <Folder Include="Models\CLNTModels\ch_rep_anal\" />
+    <Folder Include="Models\ViewModels\vm_cl\vm_ch_rep_anal\" />
+    <Folder Include="wwwroot\img_db\" />
+    <Folder Include="wwwroot\img_df\" />
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
+</Project>

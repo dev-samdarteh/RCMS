@@ -1,0 +1,1468 @@
+﻿
+@{
+    /// headers
+    var _strAppName = @ViewData["strAppName"] as string;
+    var _pageTitle = @_strAppName + " - Home";
+
+    var _oAppGloOwnId_Logged_MSTR = @ViewData["oAppGloOwnId_Logged_MSTR"] as int?;  // central db
+    var _oChurchBodyId_Logged_MSTR = @ViewData["oChurchBodyId_Logged_MSTR"] as int?;  // central db
+    var _oAppGloOwnId_Logged = @ViewData["oAppGloOwnId_Logged"] as int?;   // LOCAL DB
+    var _oChurchBodyId_Logged = @ViewData["oChurchBodyId_Logged"] as int?; // LOCAL DB
+
+
+    var _oChurchBodyOrgType_Logged = @ViewData["oCBOrgType_Logged"] as string;
+    var _strClientChurchName = @ViewData["strClientChurchName"] as string;
+    var _strClientBranchName = @ViewData["strClientBranchName"] as string;
+    var _strClientBranchParentName = @ViewData["strClientBranchParentName"] as string;
+    var _strClientChurchLevel = @ViewData["strClientChurchLevel"] as string;
+    var _strAppNameMod = @ViewData["strAppNameMod"] as string;
+    var _strAppCurrUser = @ViewData["strAppCurrUser"] as string;
+
+    var _strCurrChYear =  @ViewData["strACurrChYear"] as string;   //// "2021 /2022"; //
+    var _strCurrChYearDesc = _strCurrChYear + " Church Year";
+
+    var _strAppCurrUser_ModCodes = @ViewData["strModCodes"] as string;      // module level assign
+    bool _bl_AppCurrUser_ModAccessVAA0 = @ViewData["bl_IsModAccessVAA0"] != null ? (bool)@ViewData["bl_IsModAccessVAA0"] : false;  // as bool;
+    bool _bl_AppCurrUser_ModAccessVAA4 = @ViewData["bl_IsModAccessVAA4"] != null ? (bool)@ViewData["bl_IsModAccessVAA4"] : false;  // as bool;
+    ///
+    bool _bl_AppCurrUser_ModAccessDS00 = @ViewData["bl_IsModAccessDS00"] != null ? (bool)@ViewData["bl_IsModAccessDS00"] : false;
+    bool _bl_AppCurrUser_ModAccessAC01 = @ViewData["bl_IsModAccessAC01"] != null ? (bool)@ViewData["bl_IsModAccessAC01"] : false;
+    bool _bl_AppCurrUser_ModAccessMR02 = @ViewData["bl_IsModAccessMR02"] != null ? (bool)@ViewData["bl_IsModAccessMR02"] : false;
+    bool _bl_AppCurrUser_ModAccessCL03 = @ViewData["bl_IsModAccessCL03"] != null ? (bool)@ViewData["bl_IsModAccessCL03"] : false;
+    bool _bl_AppCurrUser_ModAccessCA04 = @ViewData["bl_IsModAccessCA04"] != null ? (bool)@ViewData["bl_IsModAccessCA04"] : false;
+    bool _bl_AppCurrUser_ModAccessFM05 = @ViewData["bl_IsModAccessFM05"] != null ? (bool)@ViewData["bl_IsModAccessFM05"] : false;
+    bool _bl_AppCurrUser_ModAccessRA06 = @ViewData["bl_IsModAccessRA06"] != null ? (bool)@ViewData["bl_IsModAccessRA06"] : false;
+
+    bool _bl_AppCurrUser_ModAccessMin = _bl_AppCurrUser_ModAccessVAA0 || _bl_AppCurrUser_ModAccessVAA4 ||
+                                _bl_AppCurrUser_ModAccessDS00 || _bl_AppCurrUser_ModAccessAC01 || _bl_AppCurrUser_ModAccessMR02 ||
+                                _bl_AppCurrUser_ModAccessCL03 || _bl_AppCurrUser_ModAccessCA04 || _bl_AppCurrUser_ModAccessFM05 || _bl_AppCurrUser_ModAccessRA06;
+
+    var _strAppCurrUser_UR = @ViewData["strAssignedRoleNames"] as string;  //@ViewData["strAppCurrUser_ChRole"] as string;
+    var _strAppCurrUser_URCodes = @ViewData["strAssignedRoleCodes"] as string; // @ViewData["strAppCurrUser_RoleCateg"] as string;
+    var _strAppCurrUser_UG = @ViewData["strAssignedGroupNames"] as string;
+    // var _strAppCurrUser_UGCodes = @ViewData["strAssignedGroupNames"] as string;
+    var _strAppCurrUser_UPCodes = @ViewData["strAssignedPermCodes"] as string;
+
+    ///
+    /// dashboard values
+    var _CB_SubCongCount = @ViewData["CB_SubCongCount"] as string;
+    var _CB_MemListCount = @ViewData["CB_MemListCount"] as string;
+    if (string.IsNullOrEmpty(_CB_MemListCount)) _CB_MemListCount = "1,234";
+
+    var _CBWeek_NewMemListCount = @ViewData["CBWeek_NewMemListCount"] as string;
+    var _CBWeek_NewConvertsCount = @ViewData["CBWeek_NewConvertsCount"] as string;
+    var _CBWeek_VisitorsCount = @ViewData["CBWeek_VisitorsCount"] as string;
+    var _CBWeek_ReceiptsAmt = @ViewData["CBWeek_ReceiptsAmt"] as string;
+    var _CBWeek_PaymentsAmt = @ViewData["CBWeek_PaymentsAmt"] as string;
+    var _TodaysAuditCount = @ViewData["TodaysAuditCount"] as string;
+    ///
+    var _img = ViewData["strAppCurrUserPhoto_Filename"] as string;
+    var imgUrl_LogUser = "~/img_db/" + (@_img ?? "df_user_p.png");
+    ///
+    //var _imgAppLogo = ViewData["strAppLogo_Filename"] as string;  //  ~/frontend/dist/img/rhema_logo.png
+    var _imgAppLogo = "rhema_logo.png";
+    var imgUrl_AppLogo = "~/img_db/" + (@_imgAppLogo ?? "rhema_logo.png");
+    ///
+    var _imgAGO = ViewData["strClientLogo_Filename"] as string;  //
+    var imgUrl_ClientLogo = "~/img_db/" + (@_imgAGO ?? "df_user_p.png");
+
+    var @_strVendorEmail = "https://rhemasystems.com/";// var imgUrl = "~/frontend/dist/img/2020_dev_sam.jpg";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title> @_pageTitle </title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+
+    <environment include="Development">
+        <link href="~/frontend/plugins/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+        <link href="~/frontend/plugins/fontawesome-free/css/all.css" rel="stylesheet" />
+        <link href="~/frontend/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.css" rel="stylesheet" />
+        <link href="~/frontend/plugins/icheck-bootstrap/icheck-bootstrap.css" rel="stylesheet" />
+        <link href="~/frontend/plugins/jqvmap/jqvmap.css" rel="stylesheet" />
+        <!-- DataTables -->
+        <link href="~/frontend/plugins/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />
+        <link href="~/frontend/plugins/datatables-responsive/css/responsive.bootstrap4.css" rel="stylesheet" />
+        <link href="~/frontend/dist/css/adminlte.css" rel="stylesheet" />
+        <link href="~/frontend/plugins/overlayScrollbars/css/OverlayScrollbars.css" rel="stylesheet" />
+        <link href="~/frontend/plugins/summernote/summernote-bs4.css" rel="stylesheet" />
+
+    </environment>
+
+    <environment exclude="Development">
+        <link href="~/frontend/plugins/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <!-- Font Awesome -->
+        <link href="~/frontend/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+        <!-- Tempusdominus Bbootstrap 4 -->
+        <link href="~/frontend/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+        <!-- iCheck -->
+        <link href="~/frontend/plugins/icheck-bootstrap/icheck-bootstrap.min.css" rel="stylesheet" />
+        <!-- JQVMap -->
+        <link href="~/frontend/plugins/jqvmap/jqvmap.min.css" rel="stylesheet" />
+        <!-- DataTables -->
+        <link href="~/frontend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+        <link href="~/frontend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+        <!-- Theme style -->
+        <link href="~/frontend/dist/css/adminlte.min.css" rel="stylesheet" />
+        <!-- overlayScrollbars -->
+        <link href="~/frontend/plugins/overlayScrollbars/css/OverlayScrollbars.min.css" rel="stylesheet" />
+        <!-- summernote -->
+        <link href="~/frontend/plugins/summernote/summernote-bs4.min.css" rel="stylesheet" />
+
+    </environment>
+
+
+    <!-- Bootstrap CSS -->
+    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    *@
+
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="~/frontend/plugins/daterangepicker/daterangepicker.css" />
+
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+
+    @* <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"> *@
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    @*<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.21/datatables.min.css" />*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
+
+    <link href="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1581152092/smartwizard/smart_wizard.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1581152092/smartwizard/smart_wizard_theme_dots.min.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+<!--sidebar-mini-md layout-fixed  " sidebar-mini-md layout-fixed  hold-transition sidebar-mini layout-navbar-fixed -->
+<body class="hold-transition sidebar-mini-md layout-fixed">
+
+
+    <div class="wrapper">
+        @*<div class="bg-warning py-2">
+                Some top header info
+            </div>*@
+        <!-- Navbar  main-header navbar navbar-expand navbar-white navbar-light       <nav class="main-header navbar navbar-expand navbar-white navbar-light">-->
+        <nav id="nav-main-header" class="main-header navbar navbar-expand navbar-dark navbar-cyan">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav" style="z-index: 1040 !important;">
+                <li class="nav-item">
+                    <a class="nav-link " data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a asp-controller="Home" asp-action="Index" class="nav-link ">
+                        <i class="fas fa-home "></i>
+                    </a>
+                </li>
+                @if (_bl_AppCurrUser_ModAccessAC01 == true || _bl_AppCurrUser_ModAccessVAA4 == true) //_strAppCurrUser_URCodes.Contains("CH_ADMN") || _strAppCurrUser_URCodes == "CF_ADMN")
+                {
+                    <li class="nav-item d-none d-sm-inline-block ">
+                        <a asp-controller="ClientSetupParameters" asp-action="Index" class="nav-link">
+                            <i class="fas fa-cog"></i> @* shortcut to Setup Parameters *@
+                        </a>
+                    </li>
+                }
+
+                <li class="nav-item d-none d-sm-inline-block ">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-question-circle"></i>
+                    </a>
+                </li>
+            </ul>
+
+            @*<div class="navbar-nav form-inline ml-3">
+                    <span class="text-muted text-sm mr-1"> Licensed to: </span>
+                    <span class="text-light text-md"> @_strClientChurchName </span>
+                    <span class="text-sm"><i class="fas fa-map-marker-alt fa-sm mr-1 ml-1"></i> @_strClientBranchName </span>
+
+                    <div class="user-panel mt-2 pb-1 d-flex">
+                    <div class="image">
+                        <img src="@Url.Content(imgUrl_ClientLogo)" class="img-circle elevation-2 bg-white" alt="Church logo">
+                    </div>
+                    <div class="info pr-2">
+                        <h3 class="text-bold">
+                            @_strClientChurchName
+                        </h3>
+                        <span class="text-sm pr-1"><i class="fas fa-map-marker-alt fa-sm mr-2 ml-2"></i> ( @_strClientBranchName )</span>
+                    </div>
+                </div>
+                </div>*@
+
+            <!-- SEARCH FORM -->
+            <form class="form-inline ml-3">
+                <div class="input-group input-group-sm">
+                    <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                    <div class="input-group-append">
+                        <button class="btn btn-navbar" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+
+                @*<li class="nav-item dropdown ">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-comments"></i>
+                        <span class="badge badge-danger navbar-badge">3</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <a href="#" class="dropdown-item">
+                            <div class="media">
+                                <img src="~/frontend/dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        Brad Diesel
+                                        <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                                    </h3>
+                                    <p class="text-sm">Call me whenever you can...</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <div class="media">
+                                <img src="~/frontend/dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        John Pierce
+                                        <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+                                    </h3>
+                                    <p class="text-sm">I got your message bro</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                </div>
+                            </div> 
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item"> 
+                            <div class="media">
+                                <img src="~/frontend/dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        Nora Silvester
+                                        <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                                    </h3>
+                                    <p class="text-sm">The subject goes here</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                </div>
+                            </div> 
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+                    </div>
+                </li>*@
+
+                
+                @*<li class="nav-item dropdown">
+                    <a class="nav-link " data-toggle="dropdown" href="#">
+                        <i class="far fa-bell"></i>
+                        <span class="badge badge-warning navbar-badge">15</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <span class="dropdown-item dropdown-header">15 Notifications</span>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-envelope mr-2"></i> 4 new messages
+                            <span class="float-right text-muted text-sm">3 mins</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-users mr-2"></i> 8 friend requests
+                            <span class="float-right text-muted text-sm">12 hours</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-file mr-2"></i> 3 new reports
+                            <span class="float-right text-muted text-sm">2 days</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                    </div>
+                </li>*@
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link " data-toggle="dropdown" href="#">
+                        <i class="far fa-user "></i>
+                        @*<span class="badge badge-danger navbar-badge">3</span>*@
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        @if (_bl_AppCurrUser_ModAccessMin)
+                        {
+                            <a href="#" class="dropdown-item">
+                                <!-- Message Start -->
+                                <div class="media">
+                                    @*<img src="@Url.Content(imgUrl_LogUser)" alt="Current User" class="img-size-50 mr-3 img-circle">*@
+
+                                    <img src="@Url.Content(imgUrl_LogUser)" class="img-size-50 img-circle mr-3"
+                                         style="max-width: 50px; max-height:50px;">
+
+                                    @*<img src="~/frontend/dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">*@
+                                    <div class="media-body pt-2">
+                                        <h3 class="dropdown-item-title">
+                                            @_strAppCurrUser
+                                            @*<span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>*@
+                                        </h3>
+                                        <p class="text-sm">@_strAppCurrUser_UR</p>
+                                        @*<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> @ViewBag.strUserSessionDura</p>*@
+                                    </div>
+                                </div>
+                                <!-- Message End -->
+                            </a>
+                            @*<div class="dropdown-divider"></div>
+                            <a class="dropdown-item btn bg-gradient-light text-center rounded-0" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-eye text-info fa-fw mr-2"></i> View User Profile
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item btn bg-gradient-light text-center rounded-0" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-lock text-info fa-fw mr-2"></i> Change Password
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item btn bg-gradient-light text-center rounded-0" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-user-cog text-info fa-fw mr-2"></i> Manage Account
+                            </a>
+                            <div class="dropdown-divider"></div>*@
+                        }
+
+                        <a class="dropdown-item btn bg-gradient-gray text-center rounded-0" href="#" data-toggle="modal" data-target="#logoutModal">
+                            <i class="fas fa-arrow-left fa-fw"></i>
+                            Logout
+                        </a>
+                    </div>
+                </li>
+
+                @*<li class="nav-item">
+                        <a class="nav-link " data-widget="control-sidebar" data-slide="true" href="#" role="button">
+                            <i class="fas fa-th-large"></i>
+                        </a>
+                    </li>*@
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+
+        <nav id="nav-sub-header" class="main-header navbar navbar-expand navbar-dark navbar-cyan">
+            <!-- Left navbar links -->
+            @if (_bl_AppCurrUser_ModAccessMin == true)
+            {
+            <ul class="navbar-nav">
+                @if (_bl_AppCurrUser_ModAccessMR02 == true || _bl_AppCurrUser_ModAccessVAA4 == true)
+                {
+                    <li class="nav-item dropdown d-none d-sm-inline-block">
+                        <a class="nav-link dropdown-toggle " data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            <span style="width: 40px"><i class="fas fa-user-friends mr-2 text-dark"></i></span> Member Register
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left pt-2">
+                            @*<span class="dropdown-item dropdown-header"> sub-modules </span>*@
+
+                            @*<ul class="m-0 p-0" style="list-style-type: none;">*@
+
+                            @if (@_oChurchBodyOrgType_Logged == "CN")
+                            {
+
+                            <a role="button" class="dropdown-item text-sm" asp-controller="ChurchMembers" asp-action="IndexCM_SUM" asp-route-oCBid="@_oChurchBodyId_Logged">
+                                <span style="width: 40px"><i class="fas fa-users text-info mr-2"></i></span> Church Members
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+                            <a role="button" class="dropdown-item text-sm" asp-controller="ChurchMembers" asp-action="IndexCM_SUM" asp-route-oCBid="@_oChurchBodyId_Logged" asp-route-isNewCM="true">
+                                <span style="width: 40px"><i class="fas fa-user-plus mr-2"></i></span> Add New Member
+                            </a>
+
+
+
+                            var _strNewConvYr = "New Converts ( " + _strCurrChYear + ")"; 
+                            <a role="button" class="dropdown-item text-sm" asp-controller="ChurchMembers" asp-action="IndexCM_SUM" asp-route-oCBid="@_oChurchBodyId_Logged" asp-route-extFltCode="1">
+                                <span style="width: 40px"> </span>
+                                <i class="fas fa-user-clock mr-2"></i> @_strNewConvYr
+                            </a>
+
+                            }
+
+
+                            @*<a href="#" class="dropdown-item text-sm">
+                                <span style="width: 40px"><i class="fa fa-user-o mr-2"></i></span> Member Profile 360
+                            </a>*@
+
+
+
+                            @*<a href="#" class="dropdown-item text-sm">
+            @{ var _strNewConvYr = "New Converts ( " + _strCurrChYear + ")"; }
+            <i class="fas fa-user-clock mr-2"></i> @_strNewConvYr
+
+            <span class="right badge badge-warning">@_CBWeek_NewConvertsCount</span>
+        </a>*@
+
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item text-sm">
+                                <span style="width: 40px"><i class="fas fa-search-location mr-2"></i></span> Member Lookup  @* search member ... [more options ... pop up ... display into Mem Profile or export list] *@
+                            </a>
+
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-map-marker text-danger mr-2"></i> Members Geo-Location
+                            </a>
+
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-history mr-2"></i> Member History
+                            </a>
+
+                            @*
+        <a href="#" class="dropdown-item text-sm">
+            @{ var _strNewMemYr = "New Members ( " + _strCurrChYear + ")"; }
+            <i class="fas fa-user-plus mr-2"></i> @_strNewMemYr
+            <span class="right badge badge-warning">@_CBWeek_NewMemListCount</span>
+        </a>*@
+
+
+                            @if (@_oChurchBodyOrgType_Logged == "CN")
+                            {
+
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-file-import mr-2"></i> Import Member List
+                            </a>
+
+
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-file-export mr-2"></i> Export Member List
+                            </a>
+
+
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-file-upload mr-2"></i> Member Self-Service Portal
+                            </a>
+
+                            }
+
+                            @*<a href="#" class="dropdown-item text-sm">
+            <i class="fas fa-arrow-left mr-2"></i> Past Membership
+        </a>
+                            *@
+
+
+                            @*<div class="dropdown-divider"></div>
+        <a href="#" class="dropdown-item text-sm">
+            <i class="fas fa-user-check mr-2"></i> Souls-Won
+        </a>*@
+
+                        </div>
+                    </li>
+                }
+
+                @if (_bl_AppCurrUser_ModAccessMR02 == true || _bl_AppCurrUser_ModAccessCL03 == true || _bl_AppCurrUser_ModAccessVAA4 == true)
+                {
+                    <li class="nav-item dropdown d-none d-sm-inline-block">
+                        <a class="nav-link dropdown-toggle " data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-church mr-2 text-purple"></i>  Churchlife
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left pt-2">
+                            @*<span class="dropdown-item dropdown-header"> sub-modules </span>
+        <div class="dropdown-divider"></div>*@
+
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-place-of-worship mr-2"></i> Church Activities Pool
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-sm"
+                               asp-controller="ChurchCalendar" asp-action="Index_CCE" asp-route-reqChurchBodyId="@_oChurchBodyId_Logged">
+                                <i class="fas fa-calendar text-danger mr-2"></i> Church Calendar (Global Planner)
+                            </a>
+
+                            @*<a href="#" class="dropdown-item text-sm">
+            <i class="fas fa-bell mr-2"></i> Events Countdown
+        </a>*@
+
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-place-of-worship mr-2"></i> Manage Worship Services
+                            </a>
+
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-calendar-week text-primary mr-2"></i> Weekly Preaching Plan
+                            </a>
+
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-user-tie mr-2"></i> Minister's Schedule (Diary)
+                            </a>
+
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-check-double text-green mr-2"></i> Church Roster
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-edit text-danger mr-2"></i> Church Chronicle
+                            </a>
+
+                            @*<div class="dropdown-divider"></div>
+
+
+
+        @if (_oChurchBodyOrgType_Logged == "CN")
+        {
+            <a class="dropdown-item text-sm" asp-controller="ChurchTransfer" asp-action="IndexReq_CT" asp-route-oCBid="@_oChurchBodyId_Logged">
+                <i class="fas fa-user-slash text-primary mr-2"></i> Member Transfers
+            </a>
+        }
+
+        @if (_oChurchBodyOrgType_Logged == "CH")
+        {
+            <a class="dropdown-item text-sm" asp-controller="ChurchTransfer" asp-action="IndexReq_CT" asp-route-oCBid="@_oChurchBodyId_Logged">
+                <i class="fas fa-user-alt-slash text-purple mr-2"></i> Clergy Transfers
+            </a>
+        }*@
+
+
+
+
+
+
+                            @*  public IActionResult IndexReq_CT(int? oCBid, int dxn = 2, int svc_ndx = 1, bool blReqHist = false, string strTrxTP = "MT" , int? oCMid = null, bool loadLim = false) *@
+                            @*<a class="text-black-50" asp-controller="ChurchTransfer" asp-action="IndexReq_CT" asp-route-oCurrChuBodyId="@Model.oChurchBodyId"
+           asp-route-dxn="2" asp-route-svc_ndx="1" asp-route-blReqHist="false" asp-route-strTrxTP="MT" asp-route-oCMid="-1">
+            <i class="fas fa-refresh mr-1"></i>
+        </a>*@
+
+
+
+
+                            @*public IActionResult Index_Attendance(int currAttendTask = 1, int? oCurrChuBodyId = null, string strAttendee = "C", string strLongevity = "C", /
+                            int? eventId = null, DateTime? eventDateMin = null, DateTime? eventDateMax = null, bool loadLim = false)*@
+
+
+                            <a class="dropdown-item text-sm" asp-controller="ChurchAttendance" asp-action="Index_Attendance" asp-route-oCBid="@Model.oChurchBodyId" asp-route-strAttnType="C">
+                                <i class="fas fa-eye mr-2"></i> Church Attendance Monitor
+                            </a>
+
+                            
+                            <a class="dropdown-item text-sm" asp-controller="ChurchAttendance" asp-action="Index_Attendance" asp-route-oCBid="@Model.oChurchBodyId" asp-route-strAttnType="V">
+                                <i class="fas fa-user-clock mr-2"></i> Visitors Log Book
+                                <span class="right badge badge-info">@_CBWeek_VisitorsCount</span>
+                            </a>
+
+
+
+
+
+
+                            @*
+
+        <a class="dropdown-item-text" asp-controller="ChurchAttendance" asp-action="Index_Attendees" asp-route-strAttendee="M">
+            <i class="fas fa-user-check" style="width: 20px; color: #a7c265; "></i> Church Attendance
+        </a>
+
+        <a class="dropdown-item-text" asp-controller="ChurchAttendance" asp-action="Index_Headcount" asp-route-strAttendee="M" asp-route-currAttendTask="1">
+            <i class="fas fa-users" style="width: 20px; color: black; "></i> Congregants Head-Count
+        </a>
+
+        <hr />
+        <a class="dropdown-item-text" asp-controller="ChurchAttendance" asp-action="Index_Attendees" asp-route-strAttendee="V" asp-route-strLongevity="H">
+            <i class="fas fa-user-clock " style=" width: 20px; "></i> Visitors History
+        </a>
+
+
+
+
+
+
+
+
+            <a href="#" class="dropdown-item text-sm">
+                <i class="fas fa-user-check mr-2"></i> Member Activity Checklist
+            </a>
+            <div class="dropdown-divider"></div>
+
+            <a href="#" class="dropdown-item text-sm">
+                <i class="fas fa-ellipsis-v mr-2"></i> Order of Service
+            </a>*@
+
+
+                            @*<div class="dropdown-divider"></div>
+        <a href="#" class="dropdown-item text-sm">
+            <i class="fas fa-calendar-day mr-2"></i> My Custom Calendar
+        </a>
+        <a href="#" class="dropdown-item text-sm">
+            <i class="fas fa-clipboard-check mr-2"></i> To-Do List Tracker
+        </a>*@
+                        </div>
+                    </li>
+                }
+
+                @if (_bl_AppCurrUser_ModAccessCA04 == true || _bl_AppCurrUser_ModAccessVAA4 == true)
+                {
+                    <li class="nav-item dropdown d-none d-sm-inline-block">
+                        <a class="nav-link dropdown-toggle " data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-building mr-2 text-orange"></i> Church Administration
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left pt-2">
+
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-layer-group mr-2"></i> Manage Church Units &amp; Committees
+                            </a>
+
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-users mr-2"></i> Leadership Pool
+                            </a>
+
+
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-network-wired mr-2"></i> Church Network (Organogram)
+                            </a>
+
+                            @if (@_oChurchBodyOrgType_Logged != "CN")
+                            {
+                                <a class="dropdown-item text-sm" asp-controller="ChurchMembers" asp-action="IndexCM_MRSS" asp-route-oCBid="@_oChurchBodyId_Logged" asp-route-t_ndx="2">
+                                    <i class="fas fa-place-of-worship mr-2"></i> Supervised Congregations
+                                </a>
+                            }
+
+                            @* <div class="dropdown-divider"></div>
+
+                    <a href="#" class="dropdown-item text-sm">
+                         <i class="fas fa-arrows-alt-h mr-2"></i> Promotions &amp; Demotions
+                     </a>*@
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-microphone-alt mr-2"></i> Notices &amp; Announcements
+                            </a>
+
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-sms mr-2"></i> Member Messaging &amp; Notifications @*Church Intercom (SMS)*@
+                            </a>
+
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-briefcase mr-2"></i> Church Projects
+                            </a>
+
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fa fa-book mr-2"></i> Assets Register
+                            </a>
+                        </div>
+                    </li>
+                }
+
+                @if (_bl_AppCurrUser_ModAccessFM05 == true || _bl_AppCurrUser_ModAccessVAA4 == true)
+                {
+                    <li class="nav-item dropdown d-none d-sm-inline-block">
+                        <a class="nav-link dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-coins text-warning mr-2"></i> Finance
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left pt-2">
+
+                            @*<a class="dropdown-item btn btn-light text-sm"
+                       asp-controller="FinanceOperations" asp-action="IndexCB_RCSS" asp-route-oCBid="@_oChurchBodyId_Logged" asp-route-t_ndx="1">
+                        <i class="fas fa-table mr-2"></i> Receipts Summary Sheet (Income)
+                    </a>
+                    <a class="dropdown-item btn btn-light text-sm">
+                        <i class="fas fa-table mr-2"></i> Payments Summary Sheet (Expense)
+                    </a>
+
+                    <div class="dropdown-divider"></div>*@
+
+                            <a href="#" class="dropdown-item text-sm">  <i class="fas fa-arrow-left mr-2 text-success"></i> Receipts (Income)  </a>
+                            <a href="#" class="dropdown-item text-sm">  <i class="fas fa-arrow-right mr-2 text-danger"></i> Payments (Expense)  </a>
+
+
+                            @*<a href="#" id="dropdownSubMenu2" class="dropdown-item text-sm"> <i class="fas fa-ellipsis-h mr-2"></i> Finance Modules </a>
+                    <div aria-labelledby="dropdownSubMenu2" class="dropdown-menu dropdown-menu-lg dropdown-menu-left">*@
+
+                            <div class="dropdown-divider"></div>
+
+                            @if (@_oChurchBodyOrgType_Logged == "CN")
+                            {
+
+                                @*<a href="#" class="dropdown-item text-sm"><i class="fas fa-arrow-right mr-2"></i> Offertory (Collection) </a>*@
+
+                                <a class="dropdown-item text-sm"
+                                   asp-controller="FinanceOperations" asp-action="Index_TT" asp-route-oAppGloOwnId="@_oAppGloOwnId_Logged" asp-route-oCurrChuBodyId="@_oChurchBodyId_Logged " asp-route-setIndex="1">
+                                    <i class="fas fa-arrow-right mr-2"></i> Offertory, Tithes &amp; Other Receipts
+                                </a>
+                            }
+
+                            @*<a href="#" class="dropdown-item text-sm"><i class="fas fa-arrow-right mr-2"></i> Donations</a>*@
+
+                            @*@if (@_oChurchBodyOrgType_Logged == "CN")
+                    {
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item text-sm"><i class="fas fa-arrow-right mr-2"></i> Levies &amp; Dues </a>
+                        <a href="#" class="dropdown-item text-sm"><i class="fas fa-arrow-right mr-2"></i> Suppliers</a>
+                        <a href="#" class="dropdown-item text-sm"><i class="fas fa-arrow-right mr-2"></i> Capitalized Assets</a>
+                        <a href="#" class="dropdown-item text-sm"><i class="fas fa-arrow-right mr-2"></i> Asset Depreciation</a>
+                    }*@
+
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item text-sm"><i class="fas fa-arrow-right mr-2"></i> Pledges &amp; Levies </a>
+                            <a href="#" class="dropdown-item text-sm"><i class="fas fa-arrow-right mr-2"></i> Disbursements (Apportionments)</a>
+                            <a href="#" class="dropdown-item text-sm"><i class="fas fa-arrow-right mr-2"></i> Member Welfare Distribution</a>
+
+                            @*</div>*@
+
+
+                            @* <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item text-sm"><i class="fas fa-layer-group mr-2"></i> Account Categorization  </a>
+                     <a href="#" class="dropdown-item text-sm"> <i class="fas fa-cog mr-2"></i> Accounting Year &amp; Period </a>
+                     <a href="#" class="dropdown-item text-sm"> <i class="fas fa-layer-group mr-2"></i> Subsidiary Ledgers </a>
+                     <a href="#" class="dropdown-item text-sm">  <i class="fas fa-cog mr-2"></i> Control Accounts </a>*@
+
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item text-sm">  <i class="fas fa-cog mr-2"></i> Accounts Setup </a>
+                            <a href="#" class="dropdown-item text-sm">  <i class="fa fa-balance-scale mr-2"></i> Trial Balance</a>
+                            <a href="#" class="dropdown-item text-sm"><i class="fa fa-chart-pie mr-2"></i> Financial Reports</a>
+                        </div>
+                    </li>
+                }
+
+                @*@if (_bl_AppCurrUser_ModAccessAC01 == true || _bl_AppCurrUser_ModAccessVAA4 == true)  // (_strAppCurrUser_URCodes == "CH_ADMN" || _strAppCurrUser_URCodes == "CF_ADMN")
+        {
+            <li class="nav-item dropdown d-none d-sm-inline-block">
+                <a id="_AdminPane" class="nav-link dropdown-toggle " data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-cog mr-2"></i> Admin Pane
+                </a>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left pt-2">
+                    <a class="dropdown-item text-sm" asp-controller="ClientSetupParameters" asp-action="Index">
+                        <i class="fas fa-cog mr-2"></i> App Setup Parameters
+                    </a>
+                    <a class="dropdown-item text-sm" asp-controller="ClientUserProfiles" asp-action="Index_CL_UP">
+                        <i class="fas fa-user-tie mr-2"></i> Manage User Accounts
+                    </a>
+                    <a href="#" class="dropdown-item text-sm">
+                        <i class="fas fa-user-clock mr-2"></i> Check User Activities
+                    </a>
+                    <a href="#" class="dropdown-item text-sm">
+                        <i class="fas fa-check-square mr-2"></i> App Themes &amp; Preferences
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item text-sm">
+                        <i class="fas fa-refresh mr-2"></i> Refresh &amp; Synchronize
+                    </a>
+                    <a href="#" class="dropdown-item text-sm">
+                        <i class="fas fa-ellipsis-h mr-2"></i> Freeze User Access
+                    </a>
+                </div>
+            </li>
+        }*@
+
+                @if (_bl_AppCurrUser_ModAccessRA06 == true || _bl_AppCurrUser_ModAccessVAA4 == true)
+                {
+                    <li class="nav-item dropdown d-none d-sm-inline-block">
+                        <a class="nav-link dropdown-toggle " data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-chart-line mr-2"></i> Analytics &amp; Reports
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left pt-2">
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-chart-bar mr-2"></i> Church Statistics
+                            </a>
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-table mr-2"></i> Pre-built Reports
+                            </a>
+
+                            <a href="#" class="dropdown-item text-sm">
+                                <i class="fas fa-ellipsis-h mr-2"></i> Adhoc Analysis
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item btn btn-light text-sm">
+                                <i class="fas fa-bar-chart mr-2"></i> Church Statistics (Y-on-Y)
+                            </a>
+
+                            <a href="#" class="dropdown-item btn btn-light text-sm">
+                                <i class="fas fa-line-chart mr-2"></i> Church Statistics (Congregations)
+                            </a>
+
+                            @*<a class="dropdown-item btn btn-light text-sm"
+                       asp-controller="ChurchMembers" asp-action="IndexCM_MRSS" asp-route-oCBid="@_oChurchBodyId_Logged" asp-route-t_ndx="1">
+                        <i class="fas fa-table mr-2"></i> Roll Summary Sheet
+                    </a>*@
+
+                            <a class="dropdown-item btn btn-light text-sm"
+                               asp-controller="ChurchMembers" asp-action="IndexCM_MRSS" asp-route-oCBid="@_oChurchBodyId_Logged" asp-route-t_ndx="1">
+                                <i class="fas fa-table mr-2"></i> Member Age Distribution
+                            </a>
+
+                            @*<a href="#" class="dropdown-item btn btn-light text-sm">
+                        <i class="fas fa-area-chart mr-2"></i> Standard Age Distribution
+                    </a>*@
+
+                            <a href="#" class="dropdown-item btn btn-light text-sm">
+                                <i class="fas fa-pie-chart mr-2"></i> Group Members Roll
+                            </a>
+
+
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item btn btn-light text-sm"
+                               asp-controller="FinanceOperations" asp-action="IndexCB_RCSS" asp-route-oCBid="@_oChurchBodyId_Logged" asp-route-t_ndx="1">
+                                <i class="fas fa-table mr-2"></i> Receipts Summary Sheet (Income)
+                            </a>
+                            <a class="dropdown-item btn btn-light text-sm">
+                                <i class="fas fa-table mr-2"></i> Payments Summary Sheet (Expense)
+                            </a>
+
+
+
+                        </div>
+                    </li>
+                }
+
+            </ul>
+            }
+
+        </nav>
+
+        @*<nav id="navbar_top" class="navbar navbar-expand-lg navbar-dark bg-primary">
+                <div class="container">
+                    <a class="navbar-brand" href="#">Brand</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main_nav">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="main_nav">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item"><a class="nav-link" href="#"> Menu item </a></li>
+                            <li class="nav-item"><a class="nav-link" href="#"> Menu item </a></li>
+                            <li class="nav-item"><a class="nav-link" href="#"> Menu item </a></li>
+                        </ul>
+                    </div>  navbar-collapse.//
+                </div>  container-fluid.//
+            </nav>*@
+
+
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container sidebar-dark-fuchsia -->
+        <aside class="main-sidebar elevation-4 sidebar-light-fuchsia border-right border-info" style="overflow-x: hidden">
+            <!-- Brand Logo -->
+            <a asp-controller="Home" asp-action="Index" class="brand-link">
+                <img class="brand-image img-circle elevation-3" style="min-width: 25px; min-height:25px; max-width: 25px; max-height:25px; opacity: .8"
+                     src="@Url.Content(imgUrl_AppLogo)">   @* alt="All rights reserved. RHEMA SYSTEMS @@ 2021"*@
+
+                @*<img src="~/frontend/dist/img/rhema_logo.png" class="brand-image img-circle elevation-3" style="opacity: .8">*@
+
+                @*<img class="profile-user-img img-fluid img-circle" style="min-width: 150px; min-height:150px; max-width: 150px; max-height:150px;"
+                    src="@Url.Content(photoPath)" alt="User profile photo">*@
+
+                <span class="brand-text font-weight-normal text-lg-center"> @_strAppName </span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar pt-2 mb-3">
+                <!-- Sidebar user panel (optional)  -->
+                @*<div class="user-panel mt-2 pb-1 d-flex">
+                        <div class="image">
+                            <img src="@Url.Content(imgUrl_ClientLogo)" class="img-circle elevation-2" alt="Church logo">
+                        </div>
+                        <div class="info pr-2">
+                            <h3 class="text-sm">
+                                @_strClientChurchName
+                            </h3>
+                            <p class="text-sm pr-1"><i class="fas fa-map-marker-alt fa-sm"></i>&nbsp;@_strClientBranchName</p>
+                        </div>
+                    </div>*@
+                @*<div class="dropdown-divider"></div>   *@
+
+                <div class="user-panel pt-1 pb-2 d-flex">
+                    <div class="image">
+                        <img class="img-circle elevation-2" style="min-width: 25px; min-height:25px; max-width: 25px; max-height:25px;"
+                             src="@Url.Content(imgUrl_LogUser)"> @*alt="User photo"*@
+                        </div>
+                    <div class="info">
+                        <a href="#" class="d-block">@_strAppCurrUser</a>
+                    </div>
+                </div>
+
+                @*<div class="user-panel pt-1 pb-2 pb-1 d-flex">
+                        <div class="image border">
+                            <img src="@Url.Content(imgUrl_LogUser)" class="img-circle elevation-2" alt="User photo">
+                        </div>
+                        <div class="info ">
+                            <a href="#" class="d-block">@_strAppCurrUser</a>
+                        </div>
+                    </div>*@
+                @*<div class="user-panel pt-1 pb-2 d-flex">
+                        <div class="overlay-wrapper mb-0">
+                            <span class="text-muted text-sm mr-1 mb-1"> Licensed to: </span>
+                            <div class="text-center">
+                                <img class="profile-user-img img-fluid img-circle elevation-2" src="@Url.Content(imgUrl_ClientLogo)" alt="Church logo">
+                            </div>
+                            <div class="info">
+                                <div class="info text-center mt-2">@_strClientChurchName</div>
+                                <p class="info text-center text-primary text-sm mr-1"> <i class="fas fa-map-marker-alt fa-sm"></i> @_strClientBranchName </p>
+                            </div>
+                        </div>
+                    </div>*@
+                <div class="user-panel pt-1 pb-2 d-flex">
+                    <div class="image justify-content-center">
+                        <i class="fas fa-calendar-check fa-lg text-green" style="min-width: 25px; min-height:25px; max-width: 25px; max-height:25px;"></i>
+                    </div>
+                    <div class="info">
+                        <a href="#" class="d-block text-dark">@_strCurrChYearDesc</a>
+                    </div>
+                </div>
+
+                <div class="user-panel bg-transparent">
+                    <div class="card card-white shadow-none col-md-12 pl-2 pr-3 pb-0 nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false"
+                         style="overflow: hidden; white-space: nowrap">
+                        <div class="overlay-wrapper">
+                            <span class="text-muted text-xs mr-1 mb-2"><i class="fas fa-church fa-xs text-secondary mr-1"></i> Licensed to: </span>
+                            <div class="text-center mb-2">
+                                @*<img class="profile-user-img img-fluid img-circle elevation-2" src="@Url.Content(imgUrl_ClientLogo)" alt="Church logo">   style="overflow: hidden; white-space: nowrap" *@
+
+                                <img class="profile-user-img img-fluid img-circle" style="min-width: 100px; min-height:100px; max-width: 100px; max-height:100px;"
+                                     src="@Url.Content(imgUrl_ClientLogo)" alt="Church logo">
+                            </div>
+                            <div class="info">
+                                <p class="text-center text-wrap mb-1">
+                                    @_strClientChurchName
+                                </p>
+                                <p class="text-sm text-center text-primary text-wrap">
+                                    <i class="fas fa-map-marker-alt fa-sm text-danger mr-1"></i> @_strClientBranchName
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Sidebar Menu -->
+                @if (_bl_AppCurrUser_ModAccessMin == true)
+                {
+                    <nav class="mt-3 mB-3">
+                        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                            <!-- Add icons to the links using the .nav-icon class
+    with font-awesome or any other icon font library -->
+                            @if (_bl_AppCurrUser_ModAccessDS00 == true || _bl_AppCurrUser_ModAccessVAA4 == true)
+                            {
+                            <li class="nav-item has-treeview ">
+                                <a asp-controller="Home" asp-action="Index" class="nav-link active">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>
+                                        Dashboard
+                                        <i class="right fas fa-angle-up"></i>
+                                    </p>
+                                </a>
+
+                                @if (_bl_AppCurrUser_ModAccessMR02 == true || _bl_AppCurrUser_ModAccessCL03 == true || _bl_AppCurrUser_ModAccessVAA4 == true)
+                                {
+                                <a href="#" class="nav-link bg-light">
+                                    @*asp-controller="Home" asp-action="Index_MR" *@
+                                <i class="nav-icon fas fa-users text-info"></i>
+                                <p>
+                                    Member Register
+                                    @*<i class="right fas fa-angle-up"></i>*@
+                                </p>
+                            </a>
+                                }
+
+                                @if (_bl_AppCurrUser_ModAccessMR02 == true || _bl_AppCurrUser_ModAccessCL03 == true || _bl_AppCurrUser_ModAccessVAA4 == true)
+                                {
+                                <a href="#" class="nav-link bg-light">
+                                    @*asp-controller="Home" asp-action="Index_CL" *@
+                                    <i class="nav-icon fas fa-church text-purple"></i>
+                                    <p>
+                                        Churchlife
+                                        @*<i class="right fas fa-angle-up"></i>*@
+                                    </p>
+                                </a>
+                                }
+
+                                @if (_bl_AppCurrUser_ModAccessCA04 == true || _bl_AppCurrUser_ModAccessVAA4 == true)
+                                {
+                                <a href="#" class="nav-link bg-light">
+                                    @*asp-controller="Home" asp-action="Index_CA" *@
+                                <i class="nav-icon fas fa-building text-dark"></i>
+                                <p>
+                                    Church Administration
+                                    @*<i class="right fas fa-angle-up"></i>*@
+                                </p>
+                            </a>
+                                }
+
+
+                                @if (_bl_AppCurrUser_ModAccessFM05 == true || _bl_AppCurrUser_ModAccessVAA4 == true)
+                                {
+                                <a href="#" class="nav-link bg-light">
+                                    @*asp-controller="Home" asp-action="Index_CF" *@
+                                    <i class="nav-icon fas fa-coins text-orange"></i>
+                                    <p>
+                                        Church Financing
+                                        @*<i class="right fas fa-angle-up"></i>*@
+                                    </p>
+                                </a>
+
+                                }
+
+
+                                @if (_bl_AppCurrUser_ModAccessRA06 == true || _bl_AppCurrUser_ModAccessVAA4 == true)
+                                {
+                                <a href="#" class="nav-link bg-light">
+                                    @*asp-controller="Home" asp-action="Index_RA" *@
+                                    <i class="nav-icon fas fa-chart-pie text-danger"></i>
+                                    <p>
+                                        Reports Pool
+                                        @*<i class="right fas fa-angle-up"></i>*@
+                                    </p>
+                                </a>
+                                }
+
+
+                                <br />
+                            </li>
+                            }
+
+
+                            @*<li class="nav-item">
+            <a asp-controller="Home" asp-action="Index" class="nav-link">
+                <i class="nav-icon fas fa-user-clock"></i>
+                <p>Dashboard</p>
+            </a>
+        </li>*@
+
+                         
+                            @if (_oChurchBodyOrgType_Logged == "CN" && (_bl_AppCurrUser_ModAccessMR02 == true || _bl_AppCurrUser_ModAccessCL03 == true || _bl_AppCurrUser_ModAccessVAA4 == true))
+                            {
+                            <li> <div class="dropdown-divider mt-1"></div></li>
+                            <li class="nav-item has-treeview mt-1 mb-1">
+                                @if (_bl_AppCurrUser_ModAccessMR02 == true || _bl_AppCurrUser_ModAccessVAA4 == true)
+                                {
+                                    <a class="nav-link bg-light" asp-controller="ChurchMembers" asp-action="IndexCM_SUM" asp-route-oCBid="@_oChurchBodyId_Logged">
+                                        &nbsp;&nbsp;<i class="fas fa-users fa-sm text-black-50"></i>
+                                        <p>
+                                            &nbsp; Church Members
+                                            <span class="right badge badge-success">@_CBWeek_NewMemListCount</span>
+                                        </p>
+                                    </a>
+
+                                    var _strNewConvYr_sm = "New Converts ( " + _strCurrChYear + ")"; 
+                                    <a asp-controller="ChurchMembers" asp-action="IndexCM_SUM" asp-route-oCBid="@_oChurchBodyId_Logged" asp-route-extFltCode="1" class="nav-link bg-light">
+                                        &nbsp;&nbsp;<i class="fas fa-user-lock fa-sm text-black-50"></i>
+                                        <p>
+                                            &nbsp; @_strNewConvYr_sm
+                                            <span class="right badge badge-warning">@_CBWeek_NewConvertsCount</span>
+                                        </p>
+                                    </a>
+                                }
+
+                                @if (_bl_AppCurrUser_ModAccessMR02 == true || _bl_AppCurrUser_ModAccessCL03 == true)
+                                {
+                                    <a asp-controller="ChurchAttendance" asp-action="Index_Attendance" asp-route-oCBid="@Model.oChurchBodyId" asp-route-strAttnType="C" class="nav-link bg-light">
+                                        &nbsp;&nbsp;<i class="fas fa-user-check fa-sm text-black-50"></i>
+                                        <p>
+                                            &nbsp; Attendance Check-in
+                                        </p>
+                                    </a>
+                                }
+                            </li>
+
+                            }
+
+
+
+                            @*@if (_bl_AppCurrUser_ModAccessRA06 == true || _bl_AppCurrUser_ModAccessVAA4 == true)
+        {
+            <li> <div class="dropdown-divider mt-1"></div></li>
+            <li class="nav-item has-treeview mt-1 mb-1">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-chart-line text-primary"></i>
+                    <p>
+                        Analytics &amp; Reports
+                        <i class="fas fa-angle-right right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview text-black-50 text-sm">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-tachometer-alt nav-icon"></i>
+                            <p> Actionable Dashboards </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-chart-pie nav-icon"></i>
+                            <p> Prebuilt Reports </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-line-chart nav-icon"></i>
+                            <p> Adhoc Analysis &amp; Reports </p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        }*@
+
+
+
+                            @if (_bl_AppCurrUser_ModAccessAC01 == true || _bl_AppCurrUser_ModAccessVAA4 == true)
+                            {
+                            <li> <div class="dropdown-divider mt-1"></div></li>
+                            <li class="nav-item has-treeview mt-1 mb-1">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-screwdriver text-dark"></i>
+                                    <p>
+                                        Admin &amp; Panel
+                                        <i class="fas fa-angle-right right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview text-info text-sm">
+
+                                    <li class="nav-item">
+                                        <a asp-controller="ClientUserProfiles" asp-action="Index" class="nav-link">
+                                            <i class="fas fa-cog fa-sm"></i>  @*nav-icon*@
+                                            <p> App Setup Parameters  </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a asp-controller="ClientUserProfiles" asp-action="Index_CL_UP" class="nav-link">
+                                            <i class="fas fa-user-tie fa-sm"></i>
+                                            <p> Manage User Accounts </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="fas fa-user-clock fa-sm"></i>
+                                            <p>  Check User Activities </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="fas fa-check-square fa-sm"></i>
+                                            <p> App Themes &amp; Preferences </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="fas fa-refresh fa-sm"></i>
+                                            <p> Refresh &amp; Synchronize </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="pages/charts/inline.html" class="nav-link">
+                                            <i class="fas fa-check-double fa-sm"></i>
+                                            <p> Freeze User Access </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="fas fa-database fa-sm"></i>
+                                            <p> Backups &amp; Restore </p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                            }
+
+
+                            @if (_bl_AppCurrUser_ModAccessMin == true)
+                            {
+                            <li> <div class="dropdown-divider mt-1"></div></li>
+                            <li class="nav-item has-treeview mt-1 mb-1">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-question text-dark"></i>
+                                    <p>
+                                        Help &amp; Support
+                                        <i class="fas fa-angle-right right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview text-black-50 text-sm">
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="fas fa-microphone fa-sm"></i>
+                                            <p> My AI Self-Tutor </p>
+                                        </a>
+                                        <a href="#" class="nav-link">
+                                            <i class="fas fa-phone fa-sm"></i>
+                                            <p> Rhema Support Centre @*(Toll-free)*@ </p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            }
+
+                        </ul>
+                    </nav>
+                }
+
+
+
+
+
+
+
+
+
+                <br />
+                <br />
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper bg-white ">
+            <!-- Navbar 2-->
+            <!-- Content Header (Page header) -->
+            @*<div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0 ">Dashboard</h1>
+                            </div> /.col
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                                    <li class="breadcrumb-item active">Dashboard</li>
+                                </ol>
+                            </div> /.col
+                        </div> /.row
+                    </div> /.container-fluid
+                </div>*@
+
+            <!-- /.content-header -->
+            <!-- Main content  pt-2-->
+            <section class="content bg-transparent m-2">
+                @*<div class="container-fluid">*@
+                @RenderBody()
+                @*</div>*@<!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
+        </div>
+
+
+        <!-- /.content-wrapper -->
+        @*<footer class="main-footer">
+                <strong>Copyright &copy; 2020 <a href="@_strVendorEmail">Rhema Systems &amp; Associates Limited - Ghana </a>.</strong>
+                All rights reserved.
+                <div class="float-right d-none d-sm-inline-block">
+                    <b>Version</b> 1.0.5
+                </div>
+            </footer>*@
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-light ">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+
+    </div>
+
+
+
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Logout!</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body"> Logout current user session ? </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" asp-area="" asp-controller="UserLogin" asp-action="LoginUserAcc">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Modal-->
+    @*<div class="modal fade" id="changePwdModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient-gray">
+                        <h5 class="modal-title" id="exampleModalLabel"> Change User Password</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @{ await Html.RenderPartialAsync("_ChangeUserPwd"); }
+                    </div>
+                    <div class="modal-footer bg-gradient-gray">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-primary" asp-area="" asp-controller="UserLogin" asp-action="LoginUserAcc"> Save Password </a>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+    <!-- Logout Modal-->
+    @*<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Logout!</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body"> Logout to end your current session. Sure?</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-primary" asp-area="" asp-controller="UserLogin" asp-action="LoginUserAcc">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+
+
+
+
+    <environment include="Development">
+        <script src="~/frontend/plugins/jquery/jquery.js"></script>
+        <script src="~/frontend/plugins/jquery-ui/jquery-ui.js"></script>
+        <script src="~/frontend/plugins/bootstrap/js/bootstrap.bundle.js"></script>
+        <script src="~/frontend/plugins/chart.js/Chart.js"></script>
+        <script src="~/frontend/plugins/jqvmap/jquery.vmap.js"></script>
+        <!-- DataTables -->
+        <script src="~/frontend/plugins/datatables/jquery.dataTables.js"></script>
+        <script src="~/frontend/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+        <script src="~/frontend/plugins/datatables-responsive/js/dataTables.responsive.js"></script>
+        <script src="~/frontend/plugins/datatables-responsive/js/responsive.bootstrap4.js"></script>
+
+        <script src="~/frontend/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.js"></script>
+        <script src="~/frontend/plugins/summernote/summernote-bs4.js"></script>
+        <script src="~/frontend/plugins/overlayScrollbars/js/jquery.overlayScrollbars.js"></script>
+        <script src="~/frontend/dist/js/adminlte.js"></script>
+
+
+    </environment>
+
+    <environment exclude="Development">
+        <!-- jQuery -->
+        <script src="~/frontend/plugins/jquery/jquery.min.js"></script>
+        <!-- jQuery UI 1.11.4 -->
+        <script src="~/frontend/plugins/jquery-ui/jquery-ui.min.js"></script>
+        <!-- Bootstrap 4 -->
+        <script src="~/frontend/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- ChartJS -->
+        <script src="~/frontend/plugins/chart.js/Chart.min.js"></script>
+        <!-- JQVMap -->
+        <script src="~/frontend/plugins/jqvmap/jquery.vmap.min.js"></script>
+        <!-- DataTables -->
+        <script src="~/frontend/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="~/frontend/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="~/frontend/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="~/frontend/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+        <!-- Tempusdominus Bootstrap 4 -->
+        <script src="~/frontend/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+        <!-- Summernote -->
+        <script src="~/frontend/plugins/summernote/summernote-bs4.min.js"></script>
+        <!-- overlayScrollbars -->
+        <script src="~/frontend/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+        <!-- AdminLTE App -->
+        <script src="~/frontend/dist/js/adminlte.min.js"></script>
+
+
+    </environment>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    @*<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>*@
+
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <!-- Sparkline -->
+    <script src="~/frontend/plugins/sparklines/sparkline.js"></script>
+    <script src="~/frontend/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="~/frontend/plugins/jquery-knob/jquery.knob.min.js"></script>
+    <!-- daterangepicker -->
+    <script src="~/frontend/plugins/moment/moment.min.js"></script>
+    <script src="~/frontend/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="~/frontend/dist/js/pages/dashboard.js"></script>
+    <script src="~/frontend/dist/js/pages/dashboard2.js"></script>
+    <script src="~/frontend/dist/js/pages/dashboard3.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="~/frontend/dist/js/demo.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
+    <script type="text/javascript" src="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1581152197/smartwizard/jquery.smartWizard.min.js"></script>
+
+    <!-- ./wrapper -->
+    <!-- Bootstrap core JavaScript-->
+    @*<script src="~/content/vendor/jquery/jquery.min.js"></script>
+        <script src="~/content/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>*@
+
+    <!-- Core plugin JavaScript-->
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>*@
+
+    <!-- Page level plugin JavaScript-->
+    @*<script src="~/content/vendor/chart.js/Chart.min.js"></script>*@
+    @*<script src="~/content/vendor/datatables/jquery.dataTables.js"></script>
+        <script src="~/content/vendor/datatables/dataTables.bootstrap4.js"></script>*@
+
+
+
+    @*<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>*@
+
+
+
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
+
+
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    @*  <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
+
+        <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'></script>*@
+
+
+    @*<script>
+            $(document).ready(function () {
+                // Animate loader off screen
+                $(".se-pre-con").fadeOut("slow");
+            });
+        </script>*@
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            window.addEventListener('scroll', function () {
+                if (window.scrollY > 50) {
+                    document.getElementById('navbar_top').classList.add('fixed-top');
+                    // add padding top to show content behind navbar
+                    navbar_height = document.querySelector('.navbar').offsetHeight;
+                    document.body.style.paddingTop = navbar_height + 'px';
+                } else {
+                    document.getElementById('navbar_top').classList.remove('fixed-top');
+                    // remove padding top from body
+                    document.body.style.paddingTop = '0';
+                }
+            });
+        });
+
+    </script>
+
+
+
+}

@@ -1,0 +1,288 @@
+﻿
+@{
+    ViewData["Title"] = "_Layout_setup";  //Layout = "_Layout_setup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    /// headers
+    var _strAppName = @ViewData["strAppName"] as string;
+    var _pageTitle = @_strAppName + " - Setup Parameters";
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title> @_pageTitle </title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+
+    <environment include="Development">
+        <link href="~/frontend/plugins/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+        <link href="~/frontend/plugins/fontawesome-free/css/all.css" rel="stylesheet" />
+        <link href="~/frontend/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.css" rel="stylesheet" />
+        <link href="~/frontend/plugins/icheck-bootstrap/icheck-bootstrap.css" rel="stylesheet" />
+        <link href="~/frontend/plugins/jqvmap/jqvmap.css" rel="stylesheet" />
+        <!-- DataTables -->
+        <link href="~/frontend/plugins/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />
+        <link href="~/frontend/plugins/datatables-responsive/css/responsive.bootstrap4.css" rel="stylesheet" />
+        <link href="~/frontend/dist/css/adminlte.css" rel="stylesheet" />
+        <link href="~/frontend/plugins/overlayScrollbars/css/OverlayScrollbars.css" rel="stylesheet" />
+        <link href="~/frontend/plugins/summernote/summernote-bs4.css" rel="stylesheet" />
+
+    </environment>
+
+    <environment exclude="Development">
+        <link href="~/frontend/plugins/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <!-- Font Awesome -->
+        <link href="~/frontend/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+        <!-- Tempusdominus Bbootstrap 4 -->
+        <link href="~/frontend/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+        <!-- iCheck -->
+        <link href="~/frontend/plugins/icheck-bootstrap/icheck-bootstrap.min.css" rel="stylesheet" />
+        <!-- JQVMap -->
+        <link href="~/frontend/plugins/jqvmap/jqvmap.min.css" rel="stylesheet" />
+        <!-- DataTables -->
+        <link href="~/frontend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+        <link href="~/frontend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+        <!-- Theme style -->
+        <link href="~/frontend/dist/css/adminlte.min.css" rel="stylesheet" />
+        <!-- overlayScrollbars -->
+        <link href="~/frontend/plugins/overlayScrollbars/css/OverlayScrollbars.min.css" rel="stylesheet" />
+        <!-- summernote -->
+        <link href="~/frontend/plugins/summernote/summernote-bs4.min.css" rel="stylesheet" />
+
+    </environment>
+
+
+    <!-- Bootstrap CSS -->
+    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    *@
+
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="~/frontend/plugins/daterangepicker/daterangepicker.css" />
+
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+
+    @* <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"> *@
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    @*<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.21/datatables.min.css" />*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
+
+    <link href="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1581152092/smartwizard/smart_wizard.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1581152092/smartwizard/smart_wizard_theme_dots.min.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+ 
+<body class="hold-transition sidebar-mini-md sidebar-toggled layout-fixed">
+    <div class="wrapper">
+        <h3> Setup Parameters </h3>
+        <hr />
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-2">
+                        @*<a href="mailbox.html" class="btn btn-primary btn-block mb-3">Back to Inbox</a>*@
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title"> Parameters </h3>
+
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <ul class="nav nav-pills flex-column">
+                                    <li class="nav-item active">
+                                        <a asp-controller="ClientSetupParameters" asp-action="Index_test" asp-route-setIndex="4" asp-route-loadSectionOnly="@true" class="nav-link">
+                                            <i class="fas fa-layer-group pr-2"></i> Church Body Units
+                                            <span class="badge bg-primary float-right">12</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="far fa-envelope"></i> Sent
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="far fa-file-alt"></i> Drafts
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="fas fa-filter"></i> Junk
+                                            <span class="badge bg-warning float-right">65</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="far fa-trash-alt"></i> Trash
+                                        </a>
+                                    </li>
+                                    <li class="nav-item active">
+                                        <a asp-controller="ClientSetupParameters" asp-action="Index_test" asp-route-setIndex="6" asp-route-loadSectionOnly="@true" class="nav-link">
+                                            <i class="fas fa-cogs pr-2"></i> General Parameters
+                                            @*<span class="badge bg-primary float-right">12</span>*@
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Labels</h3>
+
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body p-0">
+                                <ul class="nav nav-pills flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#"><i class="far fa-circle text-danger"></i> Important</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#"><i class="far fa-circle text-warning"></i> Promotions</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#"><i class="far fa-circle text-primary"></i> Social</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-10">
+
+                        @RenderBody()
+
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </section>
+
+
+
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2020 <a href="http://rhema-systems.com">Rhema Systems &amp; Associates Limited - Ghana </a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 1.0.5
+            </div>
+        </footer>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark ">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+
+
+
+    <environment include="Development">
+        <script src="~/frontend/plugins/jquery/jquery.js"></script>
+        <script src="~/frontend/plugins/jquery-ui/jquery-ui.js"></script>
+        <script src="~/frontend/plugins/bootstrap/js/bootstrap.bundle.js"></script>
+        <script src="~/frontend/plugins/chart.js/Chart.js"></script>
+        <script src="~/frontend/plugins/jqvmap/jquery.vmap.js"></script>
+        <!-- DataTables -->
+        <script src="~/frontend/plugins/datatables/jquery.dataTables.js"></script>
+        <script src="~/frontend/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+        <script src="~/frontend/plugins/datatables-responsive/js/dataTables.responsive.js"></script>
+        <script src="~/frontend/plugins/datatables-responsive/js/responsive.bootstrap4.js"></script>
+
+        <script src="~/frontend/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.js"></script>
+        <script src="~/frontend/plugins/summernote/summernote-bs4.js"></script>
+        <script src="~/frontend/plugins/overlayScrollbars/js/jquery.overlayScrollbars.js"></script>
+        <script src="~/frontend/dist/js/adminlte.js"></script>
+
+
+    </environment>
+
+    <environment exclude="Development">
+        <!-- jQuery -->
+        <script src="~/frontend/plugins/jquery/jquery.min.js"></script>
+        <!-- jQuery UI 1.11.4 -->
+        <script src="~/frontend/plugins/jquery-ui/jquery-ui.min.js"></script>
+        <!-- Bootstrap 4 -->
+        <script src="~/frontend/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- ChartJS -->
+        <script src="~/frontend/plugins/chart.js/Chart.min.js"></script>
+        <!-- JQVMap -->
+        <script src="~/frontend/plugins/jqvmap/jquery.vmap.min.js"></script>
+        <!-- DataTables -->
+        <script src="~/frontend/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="~/frontend/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="~/frontend/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="~/frontend/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+        <!-- Tempusdominus Bootstrap 4 -->
+        <script src="~/frontend/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+        <!-- Summernote -->
+        <script src="~/frontend/plugins/summernote/summernote-bs4.min.js"></script>
+        <!-- overlayScrollbars -->
+        <script src="~/frontend/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+        <!-- AdminLTE App -->
+        <script src="~/frontend/dist/js/adminlte.min.js"></script>
+
+
+    </environment>
+       
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <!-- Sparkline -->
+    <script src="~/frontend/plugins/sparklines/sparkline.js"></script>
+    <script src="~/frontend/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="~/frontend/plugins/jquery-knob/jquery.knob.min.js"></script>
+    <!-- daterangepicker -->
+    <script src="~/frontend/plugins/moment/moment.min.js"></script>
+    <script src="~/frontend/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="~/frontend/dist/js/pages/dashboard.js"></script>
+    <script src="~/frontend/dist/js/pages/dashboard2.js"></script>
+    <script src="~/frontend/dist/js/pages/dashboard3.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="~/frontend/dist/js/demo.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
+    <script type="text/javascript" src="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1581152197/smartwizard/jquery.smartWizard.min.js"></script>
+
+
+
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

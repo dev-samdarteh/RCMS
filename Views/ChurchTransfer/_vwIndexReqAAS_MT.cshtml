@@ -1,0 +1,75 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.ApprovalActionStepModel
+
+
+@if (Model != null)
+{
+    <table id="tabDataReq_AAS" class="table table-bordered table-striped text-sm">
+        <thead>
+            <tr>
+                <th> Step </th>
+                <th> Approver </th> 
+                <th> Location </th>
+                <th> Requested </th>
+                <th> Action Date </th>
+                <th style="text-align:center;"> Status </th>
+                <th class="justify-content-center" style="vertical-align: middle; text-align: center; width: 50px "> </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model.lsApprActionStepModels)
+            {
+                if (item.oApprovalActionStep != null)
+                {
+                    <tr>
+                        <td style="vertical-align: middle; text-align: center">
+                            @item.oApprovalActionStep.ApprovalStepIndex
+                        </td>
+                        <td style="vertical-align: middle">
+                            @item.strApproverChurchMember
+                        </td>
+                         <td style="vertical-align: middle">
+                            @item.strApproverChurchBody
+                        </td>
+                        <td style="vertical-align: middle; text-align: right">
+                            @item.strApprovalReqDate
+                        </td>  
+                        <td style="vertical-align: middle; text-align: right">
+                            @item.strApprovalDate
+                        </td> 
+                        <td style="text-align: center; vertical-align: middle">
+                            <span class="badge badge-light border">
+                                @{
+                                    switch (item.oApprovalActionStep.ActionStepStatus)
+                                    {
+                                        case "P": <i class="fa fa-pause fa-sm mr-1" style="color:deepskyblue"></i>; break;
+                                        case "I": <i class="fa fa-play fa-sm mr-1" style="color: gold"></i>; break;
+                                        case "H": <i class="fa fa-pause-circle fa-sm mr-1" style="color:darkorange"></i>; break;
+                                        case "A": <i class="fa fa-check-double fa-lg mr-1" style="color:lawngreen"></i>; break;
+                                        case "F": <i class="fa fa-check-circle fa-lg mr-1" style="color:darkgreen"></i>; break;
+                                        case "D": <i class="fa fa-times fa-lg mr-1" style="color:firebrick"></i>; break;
+                                        case "R": <i class="fa fa-arrow-left fa-lg mr-1" style="color:lightblue"></i>; break;
+                                        case "X": <i class="fa fa-times fa-lg mr-1" style="color: grey"></i>; break;
+
+
+                                        default: <i class="fas fa-stamp fa-lg mr-1 text-black-50"></i>; break;
+                                    }
+                                }
+
+                                @item.strApprovalStepStatus
+                            </span>
+                        </td> 
+                        <td class="p-1 justify-content-center" style="vertical-align: middle; text-align:center ">
+                            @{ var strDesc = '"' + "Approver: " + item.strApproverChurchMember + '"'; }
+                            <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-outline-light text-center border-0" data-backdrop="static"
+                               onclick="AddEditCurrDataReq_CT(@item.oApprovalActionStep.ChurchBodyId, @item.oApprovalActionStep.ApproverChurchMemberId, @item.oApprovalActionStep.Id, @strDesc)">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+}

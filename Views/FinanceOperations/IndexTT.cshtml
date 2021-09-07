@@ -1,0 +1,584 @@
+﻿
+@model RhemaCMS.Models.ViewModels.TitheModel
+
+@{
+    ViewData["Title"] = (!string.IsNullOrEmpty(ViewBag.AppName) ? ViewBag.AppName : "") + " - Tithe Payment";
+}
+
+@if (Model != null)
+{
+    <body id="page-top" class="hold-transition sidebar-mini-md sidebar-toggled layout-fixed w-100">
+        @{
+            var _oCBId = Model.oChurchBodyId != null ? (int)Model.oChurchBodyId : -1;
+            var _oAGOId = Model.oAppGlolOwnId != null ? (int)Model.oAppGlolOwnId : -1;
+        }
+
+        @*<input type="hidden" asp-for="@Model.setIndex" id="_setIndex" />
+        <input type="hidden" asp-for="@Model.oChurchBodyId_Logged" id="_oChurchBody_Logged" />
+        <input type="hidden" asp-for="@Model.oAppGlolOwnId_Logged" id="_oAppGloOwnId_Logged" />
+        <input type="hidden" asp-for="@Model.oUserId_Logged" id="_oUserId_Logged" />*@
+
+
+        <input type="hidden" id="_oSetIndex" data-value="@Model.setIndex" />
+        <input type="hidden" id="_oAppGloOwnId_Logged" data-value="@Model.oAppGloOwnId_Logged" />
+        <input type="hidden" id="_oChurchBodyId_Logged" data-value="@Model.oChurchBodyId_Logged" />
+        <input type="hidden" id="_oUserId_Logged" data-value="@Model.oUserId_Logged" />
+
+
+
+        <div class="wrapper" id="divSetupMain">
+
+            <div class="content-header border-bottom border-info mb-3 pb-0">
+                <div class="row m-0">
+                    <div class="col-sm">
+                        <h4> Tithe Payments </h4>
+                    </div>
+                    <div class="col-sm-4">
+                        <ol class="breadcrumb float-sm-right" style="list-style-type: none;">
+                            <li>
+                                <a role="button" class="btn btn-light" data-toggle="tooltip" data-placement="bottom" title="Tithe Payments"
+                                   asp-controller="FinanceOperations" asp-action="IndexCM_SUM" asp-route-oCBid="@Model.oChurchBodyId">
+                                    <i class="fas fa-list text-dark mr-1"></i>
+                                </a>
+                            </li>
+                            @*<li>
+                                <a role="button" class="btn btn-light" data-toggle="tooltip" data-placement="bottom" title="Reload data"
+                                   onclick="AddEditCurrDataCM_MPC(@Model.oChurchBodyId, @Model.oChurchMemberId, -1, @Model.setIndex)">
+                                    <i class="fas fa-refresh text-dark mr-1"></i>
+                                </a>
+                            </li>*@
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container mt-2 mb-2">
+                    <div class="col-md">
+                        @*@{ var strDesc = '"' +  "Tithe Payment" + '"'; }*@
+
+                        @if (Model.setIndex == 0 || Model.setIndex == 1)
+                        {
+                            <div class="card col-md-12 p-2 border shadow-sm" id="section-cmmbd">
+                                <div class="card-header pl-1 pr-1" style="width:100%; border-bottom: 2px solid #b7b5b5;">
+                                    <span class="title text-primary"> <i class="fas fa-coins fa-lg text-black-50 mr-2"></i> Tithe Payments </span>
+                                    @{ var _strHeader = !string.IsNullOrEmpty(Model.strChurchBody) ? "  - " + Model.strChurchBody : ""; }
+                                    <span id="_strHeader" class="text-black-50 text-md"> @_strHeader </span>
+                                     
+                                    <button type="button" class="btn btn-light border btn-sm float-right"
+                                            onclick="AddEditCurrData_TT(0, @_oAGOId, @_oCBId, @Model.setIndex, '[New Tithe]')">
+                                        <i class="fas fa-edit text-primary"></i> <span> Add New Tithe </span>
+                                    </button>
+                                </div>
+                                <div class="card-body mt-1 ">
+                                    <div id="divTabDataMPCvd_MBD" class="overlay-wrapper">
+                                        @{ await Html.RenderPartialAsync("_vwIndexTT", Model); }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </section>
+
+            <div class="modal fade" id="divPopModal_AddEdit" tabindex="-1" role="dialog" aria-labelledby="_modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable " role="document" style="max-height: 60%;">
+                    <div class="modal-content">
+                        <div class="modal-header bg-teal"  >
+                            <h5 class="modal-title"> Editing: </h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div id="divModalBody_AddEdit" class="modal-body bg-light" style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: 10pt">
+                        </div>
+                        <div class="modal-footer " style="background-color: lightgrey; left:auto; right: auto">
+                            <a role="button" class="btn btn-outline-light " data-dismiss="modal"> <span class="text-sm "> Cancel </span> </a>
+
+                            <button id="btnSaveChanges" type="submit" class="btn btn-outline-dark border-0 shadow-sm float-right" style="background-color: lightskyblue">
+                                <i class="fas fa-database mr-1"></i> <span class="text-bold"> Save changes </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+
+        </div>
+    </body>
+
+}
+
+
+
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+
+    <script>
+
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+
+        $(document).ready(function () {
+
+            let anchorlinks = document.querySelectorAll('a[href^="#section"]')
+
+            for (let item of anchorlinks) { // relitere
+                item.addEventListener('click', (e) => {
+                    let hashval = item.getAttribute('href')
+                    let target = document.querySelector(hashval)
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    })
+                    history.pushState(null, null, hashval)
+                    e.preventDefault()
+                })
+            }
+
+        });
+
+
+
+        $(document).ready(function () {
+
+            $('#smartwizard').smartWizard({
+                selected: 0,
+                theme: 'dots',
+                autoAdjustHeight: true,
+                transitionEffect: 'fade',
+                showStepURLhash: false,
+
+            });
+        });
+
+
+
+
+
+        var DisplaySuccessInfo = function (msg, reload = false) {
+
+            $.alert({
+                title: 'Done!',
+                type: 'green',
+                typeAnimated: true,
+                content: msg,
+                closeIcon: true,
+                closeIconClass: 'fa fa-close'
+            });
+
+        };
+
+        var DisplayErrorInfo = function (msg, reload = false) {
+
+            $.alert({
+                title: 'Oops!',
+                type: 'red',
+                typeAnimated: true,
+                content: msg,
+                closeIcon: true,
+                closeIconClass: 'fa fa-close'
+            });
+
+        };
+
+
+        var DisplaySuccessInfo_Reload_CM = function (msg, reload = false, resetNew = false, _setIndex = 6, _subSetIndex = 1, _currCMCode = '') {   //currSubSetIndex,  proScope, subScope,
+
+            // alert('success.. reload: ' + reload);
+
+            $.alert({
+                title: 'Done!',
+                type: 'green',
+                icon: 'success',
+                content: '<span style="color:#000">' + msg + '<span>',
+                html: true,
+                background: 'green',
+                typeAnimated: true,
+                // closeIcon: false,
+                closeIconClass: 'fa fa-close',
+                buttons: {
+                    ok: function () {
+                        if (reload) {
+                            ReloadCurrPage_CM(_setIndex, _subSetIndex, _currCMCode);
+                        }
+
+                        //if (resetNew == true) {
+                        //    AddEditCurrData_CM(0, '', valCMCode,'', 1); //(0, currDenomId, currChuBodyId, currSetIndex, currSubSetIndex, _desc);
+                        //}
+                        //else {
+                        //    $("#divPopModal_AddEdit .close").click();
+                        //}
+                    }
+                }
+            });
+
+            //if (reload) {
+            //    ReloadCurrPage();   //, currSubSetIndex , proScope, subScope
+            //}
+        };
+
+        var DisplayErrorInfo_Reload_CM = function (msg, reload = false, _setIndex = 6, _subSetIndex = 1, _currCMCode = '') {
+            //  alert('fail.. reload: ' + reload);
+
+            $.alert({
+                title: 'Oops!',
+                type: 'red',
+                //icon: 'fail',
+                content: '<span style="color:#000">' + msg + '<span>',
+                html: true,
+                background: 'red',
+                typeAnimated: true,
+                //closeIcon: true,
+                closeIconClass: 'fa fa-close',
+                buttons: {
+                    ok: function () {
+                        if (reload) {
+                            ReloadCurrPage_CM(_setIndex, _subSetIndex, _currCMCode);
+                        }
+                    }
+                }
+            });
+
+        };
+
+    </script>
+
+
+    <!-- _TT  no ADD, no DEL, only EDIT -->
+    <script>
+
+        $(function () {
+            if ($.fn.dataTable.isDataTable('#tabData_TT')) {
+                $('#tabData_TT').DataTable();
+            }
+            else {
+                $('#tabData_TT').DataTable({
+                    "responsive": true,
+                    "autoWidth": false,
+                    //"paging": true,
+                    //"lengthChange": false,
+                    "searching": true,
+                    //  "orderable": true,
+                    //"info": true,
+                    "order": [],
+                    "columnDefs": [{
+                        "targets": [0, 5],
+                        "orderable": false,
+                    }]
+                });
+            }
+        });
+
+
+        var AddEditCurrData_TT = function (currId, currDenomId, currChuBodyId, currSetIndex, _strItemName) {
+                    //alert('addORedit...'); 
+
+                    if (currId < 0) currId = null;
+                    if (currDenomId < 0) currDenomId = null;
+                    if (currChuBodyId < 0) currChuBodyId = null;
+                    if (currSetIndex < 0) currSetIndex = null;
+             
+                    var currAGOId_Logged = $("#_oAppGloOwnId_Logged").data("value");
+                    var currCBId_Logged = $("#_oChurchBodyId_Logged").data("value");
+                    var currUserId_Logged = $("#_oUserId_Logged").data("value");
+             
+
+                   var url = "@Url.Action("AddOrEdit_TT", "FinanceOperations")?oAppGloOwnId=" + currDenomId + "&oCurrChuBodyId=" + currChuBodyId + "&id=" + currId + "&setIndex=" + currSetIndex +
+                "&oAGOId_Logged=" + currAGOId_Logged + "&oCBId_Logged=" + currCBId_Logged + "&oUserId_Logged=" + currUserId_Logged;
+
+
+            // alert(url)  // if (currId > 0) { document.querySelector('#btnSaveChanges_TT').innerHTML = 'Update'; }
+             
+            if (currId > 0)
+            { document.querySelector('#btnSaveChanges').innerHTML = '<i class="fas fa-database text-bold mr-1"></i> Update';}
+
+            $('#divPopModal_AddEdit').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+                       
+
+            $('#divPopModal_AddEdit .modal-dialog').draggable({
+                handle: ".modal-header"
+            });
+
+            //alert('loading modal...')
+            $('#divPopModal_AddEdit .modal-body').load(url, function () {
+
+                $('#divPopModal_AddEdit .modal-title').html(_strItemName);
+                $("#_TithedByScope").change();
+                $("#_TitheMode").change();
+
+                $("#divPopModal_AddEdit").modal('show');
+            });
+        };
+
+
+        var ReloadCurrPage_TT = function (currDenomId = null, currChuBodyId = null, currSetIndex ) {  
+            // alert('load..');
+           // window.location.href = '/FinanceOperations/Index?oDenomId=' + currDenomId + '&oCurrChuBodyId=' + currChuBodyId + '&setIndex=' + currSetIndex + '&subSetIndex=' + currSubSetIndex + '&oParentId=' + parId; // + '&oChuCategId=' + chuCategId + '&oShowAllCong=' + showAllCong;
+
+
+            //  public ActionResult Index_TT(int? oAppGloOwnId = null, int? oCurrChuBodyId = null, int setIndex = 0, bool loadLim = false)
+            var url = '@Url.Action("Index_TT", "FinanceOperations")?oAppGloOwnId=' + currDenomId + '&oCurrChuBodyId=' + currChuBodyId + '&setIndex=' + currSetIndex + '&loadLim=true';
+
+
+           // alert(url)
+            $('#divTabData_TT').load(url, function () {
+                if ($.fn.dataTable.isDataTable('#tabData_TT')) {
+                    $('#tabData_TT').DataTable();
+                }
+                else {
+                    $('#tabData_TT').DataTable({
+                        "responsive": true,
+                        "autoWidth": false,
+                        //"paging": true,
+                        //"lengthChange": false,
+                        "searching": true,
+                        //  "orderable": true,
+                        //"info": true,
+                        "order": [],
+                        "columnDefs": [{
+                            "targets": [0, 5],
+                            "orderable": false,
+                        }]
+                    });
+                }
+            });
+             
+        }
+
+        $(document).on('click', '#btnSaveChanges', function (e) {
+            e.preventDefault();
+
+            //  alert('click..');
+            const form = document.getElementById("currForm_TT");
+            //alert('val 4 .. ' + form.checkValidity())
+
+            if (form.checkValidity() === true) {
+
+                SaveCurr_TT(); //currSetIndex, currSubSetIndex);
+            }
+            else {
+                // alert('val 5')
+                event.preventDefault();
+                event.stopPropagation();
+
+                form.classList.add('was-validated');
+            }
+        })
+
+        var SaveCurr_TT = function () { // (currSetIndex, currSubSetIndex) {
+            //    alert('save... ');
+
+             var currFormData = new FormData($("#currForm_TT").get(0));
+                // var currFormData = $("#currForm_TT").serialize();
+               // alert('save... submitting...');
+
+                $.ajax({
+                    type: 'POST',
+                    // data: formdata,
+                    // processData: false,
+
+                    url: '@Url.Action("AddOrEdit_TT", "FinanceOperations")',
+
+                   // url: "/FinanceOperations/AddOrEdit_TT",
+                    data: currFormData,   //{ data: currFormData, taskIndx: oTask },  //
+                    //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+
+                        if (res.taskSuccess == true) {
+
+                            var currChuBodyId = $("#_hdnChuBodyId").val();
+                            var currDenomId = $("#_hdnAppGloOwnId").val();
+                            
+                            ReloadCurrPage_TT(currDenomId, currChuBodyId, 1);   //currId... via AJAX...
+
+                            // var ures = confirm("Add new member?");
+
+                            //alert($('#btnSaveChanges').text())
+
+                           // if ($('#btnSaveChanges').text().includes('Save')) {  // newly added...
+                               // alert('adding new...')
+                               $.confirm({
+                                    title: 'Done!',
+                                    content: res.userMess,
+                                    type: 'green',
+                                    typeAnimated: true,
+                                    closeIcon: true,
+                                    closeIconClass: 'fa fa-close',
+                                    ///
+                                    buttons: {
+                                        ok: function () {
+                                           // AddEditCurrData_TT(res.currCBId, res.currId, res.memDispName);
+
+                                            if (res.resetNew == true) {
+                                                var currChuBodyId = $("#_hdnChuBodyId").val();
+                                                var currDenomId = $("#_hdnAppGloOwnId").val();
+                                                AddEditCurrData_TT(0, currDenomId, currChuBodyId, 1, '[New Tithe]');
+                                            }
+                                            else {
+                                                $("#divPopModal_AddEdit .close").click();
+                                            } 
+                                        }
+                                    }
+                               });
+
+                           // }
+
+                            //else {   // update..
+                            //   // alert('updating...')
+                            //    DisplaySuccessInfo(res.userMess);
+                            //    $("#divPopModal_AddEdit .close").click();
+                            //}
+                        }
+
+                        else //if (res.taskSuccess == false)
+                        {
+                            DisplayErrorInfo(res.userMess);
+                        }
+                    }
+                })
+
+        }
+
+        var DeleteCurrData_TITHE = function (currId, currChuBodyId, currSetIndex, delConfirm = false, msg = "") {
+            // alert('DEL.. ' + currId + ' __ indx: ' + currSetIndex + 'delConfirm: ' + delConfirm);
+
+            //  if (delConfirm == null) { delConfirm = false; }
+
+            //alert('DEL.. ' + currId + ' __ indx: ' + currSetIndex + 'delConfirm: ' + delConfirm);
+            var oAppGloId = null;
+
+            $.confirm({
+                title: 'Confirm delete!',
+                content: (msg == '' ? 'Are you sure you want to delete the specified ' + (currSetIndex == 1 ? 'system admin profile' : 'church admin profile') : msg) + ' ?',
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    cancel: function () {
+                        //$.alert('Canceled!');
+                    },
+                    //info: {
+                    //    btnClass: 'btn-blue',
+                    //    action: function(){}
+                    //},
+                    delete: {
+                        btnClass: 'btn-danger ',
+                        action: function () {
+                            $.ajax({
+                                type: 'POST',
+                                url: "/FinanceOperations/Delete_TT",
+                                data: { id: currId, setIndex: currSetIndex, delConfirmed: delConfirm },
+                                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                                success: function (res) {
+                                    if (res.taskSuccess == true) {
+                                        //var currChuBodyId = $("#_hdnChuBodyId").val();
+                                        DisplaySuccessInfo(res.userMess, oAppGloId, currChuBodyId, currSetIndex);
+                                        ReloadCurrPage_CNFG(oAppGloId, currChuBodyId, currSetIndex);
+                                    }
+                                    else {
+                                        // alert(res.userMess);
+                                        if (currSetIndex == 1 && !delConfirm) {
+                                            DeleteCurrData_TITHE(currId, currChuBodyId, currSetIndex, true, res.userMess);
+                                        }
+                                        else {
+                                            //alert(res.userMess);
+                                            $.alert({
+                                                title: 'Delete failed!',
+                                                content: 'Could not delete specified record(s). Please try again.',
+                                            });
+                                        }
+                                    }
+                                },
+                                error: function () {
+                                    alert("Error occured while deleting data");
+                                }
+                            });
+                        }
+                    },
+
+                    //,
+                }
+            });
+
+        };
+
+    </script>
+     
+    <script>
+
+        $(document).on('change', '#_TitheMode', function (e) {
+                    e.preventDefault();
+
+                    var _valMode = $("#_TitheMode").val();
+                   // alert('_searchId: ' + _valMode);
+
+                    var memVis = true;
+                    var grpVis = true;
+                    var adhocVis = true;
+
+                    if (_valMode == 'M') {
+                        memVis = false;
+                    }
+                    else if (_valMode == 'G') {
+                        var _valScope = $("#_TithedByScope").val();
+                        grpVis = _valScope != 'D';
+                        adhocVis = _valScope != 'E';
+
+                        //  adhocVis = false;
+                        //if (_valScope != 'E') { grpVis = false; }
+                    }
+                    else if (_valMode == 'O') {
+                        adhocVis = false;
+                    }
+
+
+                    //alert('memVis: ' + memVis);
+                    //alert('grpVis: ' + grpVis);
+                    //alert('adhocVis: ' + adhocVis);
+                    $('#_divChurchMemberId').prop('hidden', memVis);
+                    $('#_divCorporate_ChurchBodyId').prop('hidden', grpVis);
+                    $('#_divTitherDesc').prop('hidden', adhocVis);
+
+                });
+        
+        $(document).on('change', '#_TithedByScope', function (e) {
+                    e.preventDefault();
+
+                    var _valScope = $("#_TithedByScope").val();
+                   // alert('_valScope: ' + _valScope);
+                    var url = '@Url.Content("~/")' + 'FinanceOperations/GetTitheModeByScope';
+                    $('#_TitheMode').empty();
+                    //  public JsonResult GetTitheModeByScope(string scope) //, bool addEmpty = false)
+                    $.getJSON(url, { scope: _valScope }, function (data) {   // , addEmpty: true
+                        if (Object.keys(data).length > 0) {
+                            var items = '';
+                            $.each(data, function (i, oVal) {
+                                items += "<option value='" + oVal.value + "'>" + oVal.text + "</option>";   // alert(items);
+                            });
+                            // items += "<option value=''> Select </option>";
+                            $('#_TitheMode').html(items);
+                        }
+                    });
+        });
+
+    </script>
+
+}
+
+
+   
+
+
+
+

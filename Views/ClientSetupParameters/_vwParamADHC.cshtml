@@ -1,0 +1,67 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.AdhocParameterModel
+
+
+@if (Model != null)
+{
+    <table id="tabData_ADHC" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th> Parameter </th>
+                <th> Category </th>
+                <th> Value </th> 
+                <th width="50px" style="text-align:center; vertical-align: middle"> Scope </th> 
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lsAppUtilityNVPModels)
+            {
+                if (item.oAppUtilityNVP != null)
+                {
+                    <tr>
+                        <td style="vertical-align: middle">
+                            @if (item.oAppUtilityNVP.NVPCode == "CPRD" && item.oAppUtilityNVP.NVPSubCode.Contains("_CP"))
+                            {<i class="fa fa-calendar fa-sm text-danger mr-1"></i> }
+                            else if (item.oAppUtilityNVP.NVPCode == "CPRD" && item.oAppUtilityNVP.NVPSubCode.Contains("_AP"))
+                            {<i class="fas fa-calendar-check-o fa-sm text-warning mr-1"></i> }
+                            else if (item.oAppUtilityNVP.NVPCode == "CPRD")  
+                            {<i class="fas fa-calendar-plus-o fa-sm text-warning mr-1"></i> }
+                            else if (item.oAppUtilityNVP.NVPCode == "MCCF")
+                            {<i class="fas fa-fingerprint fa-sm text-dark mr-1"></i>}
+
+                            @item.strNVPSubTag
+                        </td>
+                        <td style="vertical-align: middle">
+                            @item.strNVPTag
+                        </td>
+                        <td style="text-align:center; vertical-align: middle">
+                            @if (item.oAppUtilityNVP.ValueType == "B") // && (item.oAppUtilityNVP.NVPValue == "Y" || item.oAppUtilityNVP.NVPValue == "N"))   // bool type
+                            {
+                                @if (item.oAppUtilityNVP.NVPValue == "Y")
+                                {<i class="fas fa-check-circle text-success"></i> }
+                                else
+                                { <i class="fas fa-times text-secondary"></i>}
+                            }
+                            else
+                            { 
+                                var _descVal = @item.strNVPValue_Cumm;
+                                if (item.oAppUtilityNVP.NVPValue == "D")
+                                { _descVal = item.strNVPValue_Cumm.Contains("-") ? item.strNVPValue_Cumm.Remove(item.strNVPValue_Cumm.LastIndexOf("-")) : item.strNVPValue_Cumm;  }
+                                
+                                <span> @_descVal </span>
+                            }
+                        </td>
+                        <td width="50px" style="text-align:center; vertical-align: middle">
+                            @if (item.strOwnershipCode == "O")
+                            {<span class="badge badge-primary text-center text-light font-weight-normal border"> <i class="fas fa-cog"></i>  @item.strOwnershipStatus </span> }
+                            else if (item.strOwnershipCode == "I")
+                            { <span class="badge badge-primary text-center text-light font-weight-normal border"> <i class="fas fa-download"></i>  @item.strOwnershipStatus </span> }
+                            else
+                            { <span class="badge badge-light text-center font-weight-normal border"> <i class="fas fa-info-circle"></i> @item.strOwnershipStatus </span>}
+                        </td>  
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+}

@@ -1,0 +1,87 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_app_ven.UserProfileModel
+
+@{
+    var _img = Model.oUserProfile.UserPhoto; // ViewData["strAppCurrUserPhoto_Filename"] as string;
+    var imgUrl_LogUser = "~/img_db/" + (@_img ?? "df_user_p.png");
+}
+
+<div class="row">
+    <div class="col-md-4 cus-rel-center" > 
+        <div class="overlay-wrapper">
+            <div class="text-center">
+                <img class="profile-user-img img-fluid img-circle" style="min-width: 150px; min-height: 150px; max-width: 150px; max-height: 150px"
+                     src="@Url.Content(imgUrl_LogUser)" alt="User profile photo">
+
+                @*<img class="card-img-top" style="min-width: 150px; min-height: 150px; max-width: 150px; max-height: 150px"
+                     src="@photoPath" asp-append-version="true" alt="User photo" id="imgFile" />*@
+            </div>
+
+            @*<div class="image">
+               <img src="@Url.Content(imgUrl_LogUser)" class="img-circle elevation-2" alt="User photo">
+        </div>
+        <img src="~/frontend/dist/img/rhema_logo.png" class="brand-image img-circle elevation-3" style="opacity: .8">*@
+
+            <h3 class="profile-username text-center mt-3">@Model.oUserProfile.UserDesc</h3>
+            @*@{ 
+                var strUGR = !string.IsNullOrEmpty(Model.strUserRole) && !string.IsNullOrEmpty(Model.strUserGroup) ? (Model.strUserRole.Trim() + " | " + Model.strUserGroup.Trim()) : (Model.strUserRole + Model.strUserGroup); 
+             }*@
+            <p class="text-muted text-center">@Model.strUserRoleName </p>
+            <p class="text-muted text-center">@Model.strUserGroupName </p>
+        </div>
+    </div>
+    <div class="col-md-8 border-left border-secondary p-3 pr-5">
+        <div class="form-row mb-3">
+            <div class="col-md">
+                <small asp-for="oUserProfile.UserDesc " class="control-label"> Name of User </small>
+                <input asp-for="oUserProfile.UserDesc" class="form-control" readonly />
+            </div>
+        </div>
+        <div class="form-row  mb-3">
+            <div class="col-md">
+                <small asp-for="oUserProfile.Email " class="control-label">Email</small>
+                <input asp-for="oUserProfile.Email" class="form-control" readonly />
+            </div>
+        </div>
+        <div class="form-row mb-3">
+            <div class="col-md">
+                <small asp-for="oUserProfile.Username " class="control-label">Username</small>
+                <input asp-for="oUserProfile.Username" class="form-control" readonly />
+            </div>
+        </div>
+        <div class="form-row mb-3">
+            <div class="col-md-6">
+                <small asp-for="oUserProfile.Strt " class="control-label">Effective</small>
+                <input asp-for="strSTRT" class="form-control" readonly />
+            </div>
+            @if (Model.oUserProfile.Expr != null)
+            {
+                <div class="col-md-6">
+                    <small asp-for="oUserProfile.Strt " class="control-label"> Until </small>
+                    <input asp-for="strEXPR" class="form-control" readonly />
+                </div>
+            }
+        </div>
+
+        <div class="form-row ">
+            @if (Model.oUserProfile.ResetPwdOnNextLogOn == true)
+            {
+            <div class="col-md-6 ">
+                <small asp-for="oUserProfile.UserStatus" class="control-label"> Pending Activity</small>
+                <span class="badge badge-warning text-center text-black-50 font-weight-normal border">
+                    <i class="fas fa-tasks mr-2"></i> User to reset password at next logon.
+                </span>
+            </div>
+            }
+
+            <div class="col-md-6 ">
+                <small asp-for="oUserProfile.UserStatus" class="control-label">Status</small>
+                <div>
+                    @if (Model.oUserProfile.UserStatus == "A")
+                    {<span class="badge badge-success text-center text-light font-weight-normal border"> <i class="fas fa-check fa-sm text-light mr-1"></i> @Model.strUserStatus</span> }
+                    else
+                    { <span class="badge badge-light text-center text-secondary font-weight-normal border"> <i class="fas fa-times fa-sm mr-1"></i> @Model.strUserStatus </span>}
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

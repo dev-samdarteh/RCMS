@@ -1,0 +1,1291 @@
+﻿
+@model RhemaCMS.Models.ViewModels.vm_cl.ChurchMemberSummaryModel
+
+@{
+    ViewData["Title"] = (!string.IsNullOrEmpty(ViewBag.AppName) ? ViewBag.AppName : "") + " - Church Register";
+}
+
+
+
+@if (Model != null)
+{
+    <body id="page-top" class="hold-transition sidebar-mini-md sidebar-toggled layout-fixed w-100">
+        <input type="hidden" id="_oSetIndex" data-value="@Model.setIndex" />
+        <input type="hidden" id="_oSubSetIndex" data-value="@Model.subSetIndex" />
+
+        @*<input type="hidden" id="_oChurchBody_Logged" data-value="@Model.oChurchBody_Logged" />*@
+        @*<input type="hidden" id="_pageIndex" data-value="@Model.pageIndex" />*@
+
+        <input type="hidden" id="_oChurchBodyId_Logged" data-value="@Model.oChurchBodyId_Logged" />
+        <input type="hidden" id="_oAppGloOwnId_Logged" data-value="@Model.oAppGloOwnId_Logged" />
+        <input type="hidden" id="_oUserId_Logged" data-value="@Model.oUserId_Logged" />
+
+
+        <div class="wrapper" id="divSetupMain">
+
+
+            <!-- Main content -->
+            <section class="content ">
+                @*<div class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i><div class="text-bold pt-2">Loading...</div></div>*@
+
+                <div class="container-fluid mt-5">
+                    <div class="content-header border-bottom mb-0 pb-0 mb-5">
+                        <div class="row m-0">
+                            <div class="col-sm">
+                                @{ var _strHeader = !string.IsNullOrEmpty(Model.strChurchBody) ? "  - " + Model.strChurchBody : "";}
+                                <h4 class="text-primary" style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: x-large; ">                                     
+                                    @{ var _strMdlHdr = !string.IsNullOrEmpty(Model.strMdlHdr) ? Model.strMdlHdr : "Church Member Roll"; }
+
+                                    @_strMdlHdr
+                                    <span class="text-black-50 text-md"> @_strHeader </span>
+                                </h4>
+                            </div>
+
+
+                            <div class="col-sm-3">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item active">
+                                        <a asp-controller="ChurchMembers" asp-action="IndexCM_SUM" class="text-black-50">
+                                            <i class="fas fa-refresh mr-1"></i>
+                                        </a>
+                                    </li>
+                                    @*<li class="breadcrumb-item active">
+                                        <a asp-controller="Home" asp-action="Index_CA" class="nav-link bg-light">
+                                            <i class="nav-icon fas fa-building text-teal"></i>
+                                            <p>
+                                                Profile
+                                            </p>
+                                        </a>
+                                    </li>*@
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div id="section-cmbd" class="card card-light col-md-12 m-0 p-2 border-0 shadow-none">
+                            <div class="card-header bg-transparent shadow-none mb-0 pb-0 border-0">
+                                @* style=" border-bottom: 3px solid deepskyblue"*@
+                                <div class="form-row">
+                                    <div class="col-sm mb-0">
+                                        <div class="input-group rounded-top m-0 border border-bottom-0">
+                                            <span class="input-group-text bg-transparent border-0 text-center" id="basic-addon1" data-toggle="tooltip" data-placement="top" title="Total Roll"
+                                                  style="width: 40px; "><i class="fas fa-user-friends text-dark"></i></span>
+                                            <input type="text" role="button" class="form-control bg-gray-light text-xl-center  border-0" aria-label="Roll" aria-describedby="basic-addon1" asp-for="@Model.numTotalRoll"
+                                                   style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: large; " readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm mb-0">
+                                        <div class="input-group rounded-top m-0 border border-bottom-0">
+                                            <span class="input-group-text bg-transparent border-0  text-center" id="basic-addon2" data-toggle="tooltip" data-placement="top" title="Total Male"
+                                                  style="width: 40px"> <i class="fas fa-male text-primary text-center"></i> </span>
+                                            <input type="text" role="button" class="form-control bg-gray-light  text-xl-center  border-0" aria-label="Male" aria-describedby="basic-addon2" asp-for="@Model.numTotalRoll_M"
+                                                   style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: large;" readonly>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm mb-0">
+                                        <div class="input-group rounded-top m-0 border border-bottom-0">
+                                            <span class="input-group-text bg-transparent border-0 text-center" id="basic-addon3" data-toggle="tooltip" data-placement="top" title="Total Female"
+                                                  style="width: 40px"> <i class="fas fa-female fa-lg text-pink text-center"></i></span>
+                                            <input type="text" role="button" class="form-control bg-gray-light  text-xl-center  border-0" aria-label="Female" aria-describedby="basic-addon3" asp-for="@Model.numTotalRoll_F"
+                                                   style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: large;" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm mb-0">
+                                        <div class="input-group rounded-top  m-0 border border-bottom-0">
+                                            <span class="input-group-text bg-transparent border-0 text-center" id="basic-addon4" data-toggle="tooltip" data-placement="top" title="Total Neuter"
+                                                  style="width: 40px"><i class="fas fa-neuter fa-lg text-secondary"></i></span>
+                                            <input type="text" role="button" class="form-control bg-gray-light  text-xl-center  border-0" aria-label="Other" aria-describedby="basic-addon4" asp-for="@Model.numTotalRoll_O"
+                                                   style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: large;" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm mb-0">
+                                        <div class="input-group rounded-top  m-0 border border-bottom-0">
+                                            <span class="input-group-text bg-transparent border-0 text-center" id="basic-addon5" data-toggle="tooltip" data-placement="top" title="Total Children"
+                                                  style="width: 40px"> <i class="fas fa-child fa-lg text-green"></i> </span>
+                                            <input type="text" role="button" class="form-control bg-gray-light  text-xl-center  border-0" aria-label="Children" aria-describedby="basic-addon5" asp-for="@Model.numTotalRoll_CHL"
+                                                   style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: large;" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm mb-0">
+                                        <div class="input-group rounded-top m-0 border border-bottom-0">
+                                            <span class="input-group-text bg-transparent border-0 text-center" id="basic-addon6" data-toggle="tooltip" data-placement="top" title="Total Leaders"
+                                                  style="width: 40px"> <i class="fas fa-user-shield text-purple"></i> </span>
+                                            <input type="text" role="button" class="form-control bg-gray-light text-xl-center  border-0" aria-label="Leaders" aria-describedby="basic-addon6" asp-for="@Model.numTotalRoll_LDR"
+                                                   style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: large;" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> @* card-light card-outline border-left border-right border-bottom *@
+
+
+                            <div class="card-header clearfix mb-1 shadow-sm card-gray card-outline border-left border-right border-bottom">
+                                <div class="form-row pr-3 pl-3">
+
+                                    @*<div class="col-md-3 mb-1 mt-1">
+                                        <button id="btnInfo_CM" type="button" class="btn btn-light" data-container="body" data-toggle="popover" data-placement="bottom"
+                                                data-content="Church member data is core to the functionality of the entire app notably the Member Register module. Note: Member Profile may be referenced in any of the modules">
+                                            <i class="fa fa-info-circle text-black-50"></i>
+                                        </button>
+                                        <button id="btnListView_CM" type="button" class="btn btn-light" data-toggle="tooltip" data-placement="bottom" title="List View"
+                                                onclick="ReloadCurrPageCM_BD(@Model.oChurchBodyId)">
+                                            <i class="fas fa-list fa-lg text-primary"></i>
+                                        </button>
+                                        <button id="btnGridView_CM" type="button" class="btn btn-light" data-toggle="tooltip" data-placement="bottom" title="Grid View"
+                                                onclick="ReloadCurrPageCM_BD(@Model.oChurchBodyId)">
+                                            <i class="fas fa-th fa-lg text-primary"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-md mb-1 mt-1">
+                                        <div class="input-group">
+                                            <input id="_strMemberListFilter" type="text" class="form-control text-md-center mr-1 text-black-50" placeholder="more search options" 
+                                                   aria-label="Member Search" aria-describedby="basic-addon-mms" style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: 10pt">
+                                            <button type="button" class="btn btn-default border" id="basic-addon-mms" data-toggle="tooltip" data-placement="bottom" title="Filter">
+                                                <i class="fas fa-filter fa-xs text-black-50"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-default border border-left-0" id="basic-addon-mms" data-toggle="tooltip" data-placement="bottom" title="Advanced search">
+                                                <i class="fas fa-ellipsis-h fa-sm text-black-50"></i>
+                                            </button>
+                                        </div>
+                                    </div>*@
+
+                                    <div class="col-md-3 mb-1 mt-1">
+                                        <div class="input-group">
+                                            <button id="btnInfo_CM" type="button" class="btn btn-light mr-1" data-container="body" data-toggle="popover" data-placement="bottom"
+                                                    data-content="Church member data is core to the functionality of the entire app notably the Member Register module. Note: Member Profile may be referenced in any of the modules">
+                                                <i class="fa fa-info-circle text-black-50"></i>
+                                            </button>
+
+                                            <ul id="_tabMemView" class="nav nav-pills justify-content-start text-sm">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" href="#item1" data-toggle="tab">
+                                                        <i class="fas fa-list fa-lg text-primary"></i>
+                                                        @*Member List*@
+                                                    </a>
+
+                                                    @*<button id="btnListView_CM" type="button" class="btn btn-light" data-toggle="tooltip" data-placement="bottom" title="List View"
+                                                            onclick="ReloadCurrPageCM_BD(@Model.oChurchBodyId)">
+                                                        <i class="fas fa-list fa-lg text-primary"></i>
+                                                    </button>*@
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="#item2" data-toggle="tab">
+                                                        @*Member Grid*@
+                                                        <i class="fas fa-th fa-lg text-primary"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                     <div class="col-md mb-1 mt-1">
+                                         <div class="input-group">
+                                             <select id="_itemListMemberFilter" class="form-control text-sm" asp-items="Model.lkpPrebuitFilterOptions">
+                                                 <option selected disabled value=""> Pre-built Filters </option>
+                                             </select>
+                                             <input id="_strBioCIMemberFilter" type="text" class="form-control text-md-center mr-1 text-black-50" placeholder="Type something" @* - name, phone, location etc*@
+                                                    aria-label="Member Filter" aria-describedby="basic-addon-mms" style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: 10pt"
+                                                    onchange="ReloadCurrPageCM_BD(@Model.oChurchBodyId)">
+
+                                             <button type="button" class="btn btn-default border" id="basic-addon-mms" data-toggle="tooltip" data-placement="bottom" title="Filter"
+                                                     onclick="ReloadCurrPageCM_BD(@Model.oChurchBodyId)">
+                                                 <i class="fas fa-filter fa-xs text-black-50"></i>
+                                             </button>
+                                             <button type="button" class="btn btn-default border border-left-0" id="basic-addon-mms" data-toggle="tooltip" data-placement="bottom" title="Advanced search">
+                                                 <i class="fas fa-ellipsis-h fa-sm text-black-50"></i>
+                                             </button>
+                                         </div>
+                                    </div>
+                                    <div class="col-md mb-1 mt-1">
+                                        @if (Model.oChurchBodyId == Model.oChurchBodyId_Logged)
+                                        {
+                                            var strMTCode = '"' + "C" + '"'; var strNCCode = '"' + "N" + '"';
+                                            var strMTDesc = '"' + "[New] Church Member - Biodata" + '"';
+                                            var strNCDesc = '"' + "New Convert - Biodata" + '"';
+
+                                            <button type="button" class="btn btn-outline-warning border shadow-sm mr-1 float-right"
+                                                    onclick="AddEditCurrDataCM_BD(@Model.oChurchBodyId, 0, @strNCCode, @strNCDesc)">
+                                                <i class="fas fa-user-plus text-black-50  mr-1"></i> <span class="text-sm text-dark"> Add New Convert </span>
+                                            </button>
+                                            <button type="button" class="btn btn-primary border shadow-sm mr-1 float-right"
+                                                    onclick="AddEditCurrDataCM_BD(@Model.oChurchBodyId, 0, @strMTCode, @strMTDesc)">
+                                                <i class="fas fa-edit mr-1"></i> <span class="text-sm text-bold"> Add Member </span>
+                                            </button>
+                                        }
+
+                                        <button type="button" class="btn btn-default border mr-1 float-right" onclick="ReloadCurrPageCM_BD(@Model.oChurchBodyId)">
+                                            <i class="fas fa-refresh text-secondary"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                             
+                            @*<div class="card-header card-light">
+                                <ul class="nav nav-pills justify-content-start mb-3 text-sm">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="#item1" data-toggle="tab" >
+                                            <i class="fas fa-list fa-lg text-primary"></i>
+                                            Member List
+                                        </a>
+
+                                        <button id="btnListView_CM" type="button" class="btn btn-light" data-toggle="tooltip" data-placement="bottom" title="List View"
+                                                onclick="ReloadCurrPageCM_BD(@Model.oChurchBodyId)">
+                                            <i class="fas fa-list fa-lg text-primary"></i>
+                                        </button>
+                                    </li>
+                                    <li class="nav-item"><a class="nav-link" href="#item2" data-toggle="tab"> Member Grid </a></li>
+                                </ul>
+                            </div>*@
+
+                        <div class="card-body mt-1">
+
+                            @*<div class="tab-content">
+                                <div class="active tab-pane" id="item1">
+                                    <div id="divTabDataCM_SUMList" class="overlay-wrapper">
+                                        <div class="se-pre-con"></div>
+
+                                        @{ await Html.RenderPartialAsync("_vwIndexCM_SUMList", Model); }
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="item2">
+                                    <div id="divTabDataCM_SUMGrid" class="overlay-wrapper">
+                                        <div class="se-pre-con"></div>
+
+                                        @{ await Html.RenderPartialAsync("_vwIndexCM_SUMGrid", Model); }
+                                    </div>
+                                </div>
+                            </div>*@
+
+                            <div id="divTabDataCM_SUM" class="overlay-wrapper">
+                                <div class="se-pre-con"></div>
+
+                                @{ await Html.RenderPartialAsync("_vwIndexCM_SUM", Model); }
+                            </div>
+                        </div>
+                             
+                            @*<div class="card-body mt-1 shadow-sm" style="border : 1px solid lightskyblue">
+                                <div id="divTabDataCM_BD" class="overlay-wrapper">
+                                    <div class="se-pre-con"></div>
+
+                                    @{ await Html.RenderPartialAsync("_vwIndexCM_SUM", Model); }
+                                </div>
+                            </div>*@
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+        <div class="modal fade" id="divPopModal_AddEdit" tabindex="-1" role="dialog" aria-labelledby="_modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable " role="document" style="max-height: 75%; height: 60%;">
+                <div class="modal-content">
+                    <div class="modal-header shadow-sm" id="divPopModal_AddEdit_Hdr" style="background-color: deepskyblue; color: #fff">
+                        <h5 class="modal-title"> Editing: </h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div id="divModalBody_AddEdit" class="modal-body bg-light" style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: 10pt">
+                    </div>
+                    <div class="modal-footer " style="background-color: lightgrey; left:auto; right: auto">
+                        <a role="button" class="btn btn-outline-light " data-dismiss="modal"> <span class="text-sm "> Cancel </span> </a>
+
+                        <button id="btnSaveChanges" type="submit" class="btn btn-outline-dark border shadow-sm float-right" > @*style="background-color: lightskyblue"*@
+                            <i class="fas fa-database mr-1"></i> <span class="text-bold"> Save changes </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*<div class="modal fade" id="divPopModal_AddEdit" tabindex="-1" role="dialog" aria-labelledby="_modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable " role="document"
+                 style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size:medium; width:auto ; height:auto; padding: 2px; max-height: 75%;">
+                <div class="modal-content">
+                    <div class="modal-header bg-pink text-dark">
+                        <h5 class="modal-title"> Editing: </h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div id="divModalBody_AddEdit_lg" class="modal-body bg-light" style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: 10pt">
+                    </div>
+                    <div class="modal-footer " style="background-color: lightgrey; left:auto; right: auto">
+                        <a role="button" class="btn btn-outline-light " data-dismiss="modal"> <span class="text-sm "> Cancel </span> </a>
+
+
+                        <button id="btnSaveChanges" type="submit" class="btn btn-outline-dark border-0 shadow-sm float-right" style="background-color: lightskyblue">
+                            <i class="fas fa-database mr-1"></i> <span class="text-bold"> Save changes </span>
+                        </button>
+                        <button id="btnSaveChanges_ProcToMPC" type="button" class="btn btn-light float-right" hidden>
+                            Proceed to Member Profile <i class="fas fa-arrow-right text-bold ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+        @*<div class="modal fade" id="divPopModal_AddEdit_lg" tabindex="-1" role="dialog" aria-labelledby="_modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-fuchsia text-light">
+                        <h5 class="modal-title"> Editing: </h5> @Model.strCurrTask
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div id="divModalBody_AddEdit_lg" class="modal-body bg-light" style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: 10pt">
+                    </div>
+                    <div class="modal-footer " style="color: lightgrey; left:auto; right: auto">
+                        <a href="#" class="btn btn-outline-light " data-dismiss="modal"> Cancel </a>
+                        <button id="btnSaveChanges" type="submit" class="btn btn-light  save-data font-weight-bold"><i class="fa fa-database fa-sm"></i> Save changes </button>
+
+                        <button id="btnSaveChanges" class="btn btn-primary" type="submit" >Submit form</button>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+        <!-- Success Modal-->
+        @*<div class="modal fade" id="divPopModal_Success" tabindex="-1" role="dialog" aria-hidden="true" style="color:transparent; min-width:75px">
+            <div class="modal-dialog modal-sm bg-info" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 style="color: white; font-weight:bold"> Done! </h5>
+                    </div>
+                    <div class="modal-body bg-white" style="align-items:center">
+                        <label id="lblUserMessage" class="text-sm font-weight-normal text-center"></label>
+                    </div>
+
+                    <div class="modal-footer bg-white">
+                        <a href="#" id="_btnSuccessOK" class="btn btn-success shadow shadow-sm" data-dismiss="modal">Ok</a>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+    </body>
+
+}
+
+
+
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+
+    @* <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
+        <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'></script>*@
+    @*<script type='text/javascript' src='loadImg.js'></script>
+
+        <script type='text/javascript'>
+            $(function () {
+                $('img').imgPreload()
+            })
+        </script>*@
+
+
+    <script>
+        //// Wait for window load
+        //$(window).load(function () {
+        //    // Animate loader off screen
+        //    $(".se-pre-con").fadeOut("slow");
+        //});
+
+        $(document).ready(function () {
+            // Animate loader off screen
+            $(".se-pre-con").fadeOut("slow");
+        });
+    </script>
+
+
+    <script>
+
+
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+
+        $(document).ready(function () {
+
+            let anchorlinks = document.querySelectorAll('a[href^="#section"]')
+
+            for (let item of anchorlinks) { // relitere
+                item.addEventListener('click', (e) => {
+                    let hashval = item.getAttribute('href')
+                    let target = document.querySelector(hashval)
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    })
+                    history.pushState(null, null, hashval)
+                    e.preventDefault()
+                })
+            }
+
+        });
+
+
+
+        $(document).ready(function () {
+
+            $('#smartwizard').smartWizard({
+                selected: 0,
+                theme: 'dots',
+                autoAdjustHeight: true,
+                transitionEffect: 'fade',
+                showStepURLhash: false,
+
+            });
+        });
+
+        var DisplaySuccessInfo = function (msg, reload = false) {
+
+            $.alert({
+                title: 'Done!',
+                type: 'green',
+                typeAnimated: true,
+                content: msg,
+                closeIcon: true,
+                closeIconClass: 'fa fa-close'
+            });
+
+        };
+
+        var DisplayErrorInfo = function (msg, reload = false) {
+
+            $.alert({
+                title: 'Oops!',
+                type: 'red',
+                typeAnimated: true,
+                content: msg,
+                closeIcon: true,
+                closeIconClass: 'fa fa-close'
+            });
+
+        };
+
+
+        var DisplaySuccessInfo_Reload_CM = function (msg, reload = false, resetNew = false, _setIndex = 6, _subSetIndex = 1, _currCMCode = '') {   //currSubSetIndex,  proScope, subScope,
+
+            // alert('success.. reload: ' + reload);
+
+            $.alert({
+                title: 'Done!',
+                type: 'green',
+                icon: 'success',
+                content: '<span style="color:#000">' + msg + '<span>',
+                html: true,
+                background: 'green',
+                typeAnimated: true,
+                // closeIcon: false,
+                closeIconClass: 'fa fa-close',
+                buttons: {
+                    ok: function () {
+                        if (reload) {
+                            ReloadCurrPage_CM(_setIndex, _subSetIndex, _currCMCode);
+                        }
+
+                        //if (resetNew == true) {
+                        //    AddEditCurrData_CM(0, '', valCMCode,'', 1); //(0, currDenomId, currChuBodyId, currSetIndex, currSubSetIndex, _desc);
+                        //}
+                        //else {
+                        //    $("#divPopModal_AddEdit .close").click();
+                        //}
+                    }
+                }
+            });
+
+            //if (reload) {
+            //    ReloadCurrPage();   //, currSubSetIndex , proScope, subScope
+            //}
+        };
+
+        var DisplayErrorInfo_Reload_CM = function (msg, reload = false, _setIndex = 6, _subSetIndex = 1, _currCMCode = '') {
+            //  alert('fail.. reload: ' + reload);
+
+            $.alert({
+                title: 'Oops!',
+                type: 'red',
+                //icon: 'fail',
+                content: '<span style="color:#000">' + msg + '<span>',
+                html: true,
+                background: 'red',
+                typeAnimated: true,
+                //closeIcon: true,
+                closeIconClass: 'fa fa-close',
+                buttons: {
+                    ok: function () {
+                        if (reload) {
+                            ReloadCurrPage_CM(_setIndex, _subSetIndex, _currCMCode);
+                        }
+                    }
+                }
+            });
+
+        };
+
+
+        function BtnLoading(elem, loadStr) {
+            $(elem).attr("data-original-text", $(elem).html());
+            $(elem).prop("disabled", true);
+            $(elem).html('<i class="spinner-border spinner-border-sm mr-1"></i>' + loadStr);   /// Loading...
+        }
+
+        function BtnReset(elem) {
+            $(elem).prop("disabled", false);
+            $(elem).html($(elem).attr("data-original-text"));
+        }
+
+
+    </script>
+
+
+    <!-- CM_BD  no ADD, no DEL, only EDIT -->
+    <script>
+        //LoadTableCM_BD();
+
+        $(function () {
+            if ($.fn.dataTable.isDataTable('#tabDataCM_BD')) {
+                $('#tabDataCM_BD').DataTable();
+            }
+            else {
+                $('#tabDataCM_BD').DataTable({
+                    "responsive": true,
+                    "autoWidth": false,
+                    //"paging": true,
+                    //"lengthChange": false,
+                    "searching": true,
+                    //  "orderable": true,
+                    //"info": true,
+                    "order": [],
+                    "columnDefs": [{
+                        "targets": [0, 6],
+                        "orderable": false,
+                    }]
+                });
+            }
+        });
+
+        //$(function () {
+        //    if ($.fn.dataTable.isDataTable('#tabDataCM_Grid')) {
+        //        $('#tabDataCM_Grid').DataTable();
+        //    }
+        //    else {
+        //        $('#tabDataCM_Grid').DataTable({
+        //            "responsive": true,
+        //            "autoWidth": false,
+        //            //"paging": true,
+        //            //"lengthChange": false,
+        //            "searching": true,
+        //            //  "orderable": true,
+        //            //"info": true,
+        //            "order": [],
+        //            "columnDefs": [{
+        //                "targets": [0, 6],
+        //                "orderable": false,
+        //            }]
+        //        });
+        //    }
+        //});
+
+        var AddEditCurrDataCM_BD = function (currCBId, currId, _strMT = "C", _strItemName="", _vw = 0) {
+            //  alert('add OR edit...');
+               // alert('addORedit.. ' + currId )  //+ ' __indx: ' + currSetIndex);
+
+           // var currAGOId_Logged = $("#_oAppGloOwnId_Logged").data("value");
+           // var currCBId_Logged
+
+            if (currCBId == null) {
+                currCBId = $("#_oChurchBodyId_Logged").data("value");
+            }
+
+           // var currUserId_Logged = $("#_oUserId_Logged").data("value");
+
+           // var currCountryCode = $("#_currCountryCode").val();
+           // var currParBodyId = null;
+
+            if (currId < 0) currId = null;
+
+            //  public IActionResult AddModCM_BD(int id = 0, int? oCBid = null, string strMT = "MM", int vw = 0)
+            var url = "@Url.Action("AddModCM_BD", "ChurchMembers")?id=" + currId + "&oCBid=" + currCBId + "&strMT=" + _strMT + "&vw=" + _vw;  //0;     // + "&strCodeCriteria_2=" + null + "&oUserId=" + currUserId_Logged ;
+
+            // alert(url)  // if (currId > 0) { document.querySelector('#btnSaveChangesCM_BD').innerHTML = 'Update'; }
+
+            // document.querySelector('#btnSaveChanges').innerHTML = '<i class="fas fa-database text-bold mr-1"></i> Update';
+            // $('#btnSaveChangesCM_BD').html('Update');
+
+            $('#btnSaveChanges').prop('hidden', _vw < 0);
+
+            if (_vw >= 0 && currId > 0 )
+            { document.querySelector('#btnSaveChanges').innerHTML = '<i class="fas fa-database text-bold mr-1"></i> Update';}
+
+            $('#divPopModal_AddEdit').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+                        //$('#divPopModal_AddEdit').modal({
+                        //    backdrop: false,
+                        //    show: true
+                        //});
+
+            $('#divPopModal_AddEdit .modal-dialog').draggable({
+                handle: ".modal-header"
+            });
+
+            if (_strMT == "N") {
+                document.getElementById("divPopModal_AddEdit_Hdr").style.backgroundColor = 'lightgreen';  // 'fuchsia';
+                document.getElementById("divPopModal_AddEdit_Hdr").style.color = 'black';  // 'fuchsia';
+            } 
+            
+            else
+                document.getElementById("divPopModal_AddEdit_Hdr").style.backgroundColor = 'deepskyblue';
+
+
+            //alert('loading modal...')
+            $('#divPopModal_AddEdit .modal-body').load(url, function () {
+
+                $('#divPopModal_AddEdit .modal-title').html(_strItemName);
+
+                $('#_NationalityId').change();
+                $('#_CountryId_MemCI').change();
+                $('#_MaritalStatus').change();
+                $('#_IdTypeId').change();
+                // calcMemAgeByVal($('#_DateOfBirth').val());
+
+               // var isDisable = $('#_bl_AUT_GN').val();
+               // alert('isDisable: ' + isDisable)
+                $('#_MemberCustomCode').prop('disabled', $('#_bl_AUT_GN').val());
+                ///
+
+                $("#divPopModal_AddEdit").modal('show');
+            });
+        };
+
+        var ReloadCurrPageCM_BD = function (currCBId) {
+           // alert('reload.. ')
+            //
+
+            // var tabIdx = $('_tabMemView').data("tabidx");
+            //var idx = $("#_tabMemView").index('a[data-toggle="tab"]'); 
+            //alert(idx);
+
+            /// _itemListMemberFilter
+            var _extFltBioStr = $("#_strBioCIMemberFilter").val();
+            var _extFltCode = $("#_itemListMemberFilter").val();
+            if (_extFltCode == -1 || _extFltCode == null || _extFltCode == '') _extFltCode = 0;
+
+           // alert('filter: '+ _extFltCode)
+            //   public ActionResult IndexCM_SUM(int? oCBid, bool? isNewCM = false, bool? isStAv = true, string memClass = "I", int extFltCode = 0, bool loadLim = false) 
+            var url = '@Url.Action("IndexCM_SUM", "ChurchMembers")?oCBid=' + currCBId + '&extFltCode=' + _extFltCode + '&extFltBioStr=' + _extFltBioStr + '&loadLim=true';
+
+
+           // alert(url)
+            $('#divTabDataCM_SUM').load(url, function () {
+                if ($.fn.dataTable.isDataTable('#tabDataCM_BD')) {
+                    $('#tabDataCM_BD').DataTable();
+                }
+                else {
+                    $('#tabDataCM_BD').DataTable({
+                        "responsive": true,
+                        "autoWidth": false,
+                        //"paging": true,
+                        //"lengthChange": false,
+                        "searching": true,
+                        //  "orderable": true,
+                        //"info": true,
+                        "order": [],
+                        "columnDefs": [{
+                            "targets": [0, 6],
+                            "orderable": false,
+                        }]
+                    });
+                }
+            });
+
+            //$('#divTabDataCM_Grid').load(url, function () {
+            //    //if ($.fn.dataTable.isDataTable('#tabDataCM_Grid')) {
+            //    //    $('#tabDataCM_Grid').DataTable();
+            //    //}
+            //    //else {
+            //    //    $('#tabDataCM_Grid').DataTable({
+            //    //        "responsive": true,
+            //    //        "autoWidth": false,
+            //    //        //"paging": true,
+            //    //        //"lengthChange": false,
+            //    //        "searching": true,
+            //    //        //  "orderable": true,
+            //    //        //"info": true,
+            //    //        "order": [],
+            //    //        "columnDefs": [{
+            //    //            "targets": [0, 6],
+            //    //            "orderable": false,
+            //    //        }]
+            //    //    });
+            //    //}
+            //});
+
+
+            // tabData_CTRY
+            //$('#divTabDataCM_BD').load(url, function (e) {
+            //   // e.preventDefault();
+
+            //    $("#tabDataCM_BD").DataTable({
+            //        "responsive": true,
+            //        "autoWidth": false,
+            //        //"paging": true,
+            //        //"lengthChange": false,
+            //        //"searching": false,
+            //        //"ordering": true,
+            //        //"info": true,
+            //        "order": [],
+            //        "columnDefs": [{
+            //            "targets": [0, 7],
+            //            "orderable": false,
+            //        }]
+            //    });
+            //});
+
+        }
+
+        var SaveCurrCM_BD = function (elem) { // (currSetIndex, currSubSetIndex) {
+            //    alert('save... ');
+
+           // const form = document.getElementById("currFormCM_BD");
+           // alert('val 4 .. ' + form.checkValidity())
+
+             var currFormData = new FormData($("#currFormCM_BD").get(0));
+                // var currFormData = $("#currFormCM_BD").serialize();
+               // alert('save... submitting...');
+
+                $.ajax({
+                    type: 'POST',
+                    // data: formdata,
+                    // processData: false,
+
+                    url: '@Url.Action("AddModCM_BD", "ChurchMembers")',
+
+                   // url: "/ChurchMembers/AddModCM_BD",
+                    data: currFormData,   //{ data: currFormData, taskIndx: oTask },  //
+                    //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+
+                        if (res.taskSuccess == true) {
+
+                            ReloadCurrPageCM_BD(res.currCBId);   //currId... via AJAX...
+
+                            // var ures = confirm("Add new member?");
+
+                            //alert($('#btnSaveChanges').text())
+
+                            var _userMessExt = 'Add another new Member';
+                            if (res.currMT == "N") _userMessExt = 'Add another New Convert';
+
+                            if ($('#btnSaveChanges').text().includes('Save')) {  // newly added...
+                               // alert('adding new...')
+                               $.confirm({
+                                    title: 'Done!',
+                                   content: res.userMess + '. >>> ' + _userMessExt + ' ?', //Add new member - biodata?',
+                                    type: 'green',
+                                    typeAnimated: true,
+                                    closeIcon: true,
+                                    closeIconClass: 'fa fa-close',
+                                    ///
+                                    buttons: {
+                                        close: function () {
+                                            AddEditCurrDataCM_BD(res.currCBId, res.currId, res.currMT, res.memDispName);
+                                            document.querySelector('#btnSaveChanges').innerHTML = '<i class="fas fa-database text-bold mr-1"></i> Update';
+                                            // enable the proceed to ... btn
+                                            $('#btnSaveChanges_ProcToMPC').prop('hidden', false);
+                                        },
+                                        ///
+                                        'ok add new': function () {
+                                            var _desc = "'[New] Church Member - Biodata'";
+                                            if (res.currMT == 'N') _desc = "'New Convert - Biodata'";
+                                            AddEditCurrDataCM_BD(res.currCBId, 0, res.currMT, _desc);
+                                            document.querySelector('#btnSaveChanges').innerHTML = '<i class="fas fa-database text-bold mr-1"></i> Save changes';
+                                            $('#btnSaveChanges_ProcToMPC').prop('hidden', 'hidden');
+                                        },
+                                    }
+                                });
+                            }
+
+                            else {   // update..
+                               // alert('updating...')
+                                DisplaySuccessInfo(res.userMess);
+                                $("#divPopModal_AddEdit .close").click();
+                            }
+                        }
+
+                        else //if (res.taskSuccess == false)
+                        {
+                            DisplayErrorInfo(res.userMess);
+                        }
+
+                             //var strBtn = '<i class="fas fa-database fa-sm mr-1"></i> Save changes';
+                            //if ($('#btnSaveChanges').text.includes('Save')) {
+                            //    strBtn = 'Proceed to Member Profile <i class="fas fa-arrow-right fa-sm ml-1"></i> ';
+                            //}
+
+
+                            //document.querySelector('#btnSaveChanges').innerHTML = strBtn;
+                            //if (res.resetNew == true) {
+                            //    AddEditCurrDataCM_BD(res.currCBId, 0, "'[New] Church Member - Biodata'");
+                            //}
+                            //else {
+                            //    AddEditCurrDataCM_BD(res.currCBId, res.currId, res.memDispName);
+
+                            //    // enable the proceed to ... btn
+                            //    $('#btnSaveChanges_ProcToMPC').prop('hidden', false);
+                            //}
+
+
+                            //if (res.resetNew == true) {
+                            //    AddEditCurrDataCM_BD(0, _desc); //(0, currDenomId, currChuBodyId, currSetIndex, currSubSetIndex, _desc);
+                            //}
+                            //else {
+                            //    $("#divPopModal_AddEdit .close").click();
+                            //}
+
+                            //window.location.href = '/ChurchMembers/Index?oCurrChuBodyId=' + currChuBodyId + '&setIndex=' + currSetIndex;
+
+
+                        BtnReset(elem); 
+
+                    },
+                    error: function () {
+                         
+                        BtnReset(elem);  
+                    }
+
+
+                })
+
+        }
+
+        var DeleteCurrDataCM_BD = function (currCBId, currId, forceDeleteConfirm = false, msg = "") {
+
+        alert('deleting')
+
+        var currUserId_Logged = $("#_oUserId_Logged").data("value");
+        var currAGOId_Logged = $("#_oAppGloOwnId_Logged").data("value");
+        if (currCBId == null)
+            { currCBId = $("#_oChurchBodyId_Logged").data("value");}
+
+            $.confirm({
+                title: 'Confirm delete!',
+                content: (msg == '' ? 'Are you sure you want to delete the specified church member' : msg) + ' ?',
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    cancel: function () {
+                        //$.alert('Canceled!');
+                    },
+                    //info: {
+                    //    btnClass: 'btn-blue',
+                    //    action: function(){}
+                    //},
+
+                    delete: {
+                        btnClass: 'btn-danger ',
+                        action: function () {
+                            $.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("DeleteCM_BD", "ChurchMembers")',
+                               // url: "/ChurchMembers/DeleteCM_BD",
+                               // data: { loggedUserId: currUserId_Logged, id: currId, setIndex: currSetIndex, subSetIndex: currSubSetIndex, forceDeleteConfirm: forceDeleteConfirm },  //forceDeleteConfirm = -1 {denied-error, info}, 0 {denied-dependencies, info}, 1 {denied-confirm to force-delete, task}
+
+                                // public IActionResult DeleteCM_BD(int? oAppGloOwnId, int? oChurchBodyId, int? loggedUserId, int id, int setIndex, int subSetIndex, bool forceDeleteConfirm = false)
+                                data: { oAppGloOwnId: currAGOId_Logged, oChurchBodyId: currCBId, loggedUserId: currUserId_Logged, id: currId, forceDeleteConfirm: forceDeleteConfirm },  //forceDeleteConfirm = -1 {denied-error, info}, 0 {denied-dependencies, info}, 1 {denied-confirm to force-delete, task}
+                                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                                success: function (res) {
+                                    if (res.taskSuccess == true) {
+                                        DisplaySuccessInfo(res.userMess);
+                                        ReloadCurrPageCM_BD(res.currCBId);
+                                    }
+
+                                    else {
+                                        if (res.tryForceDelete == true) {
+                                            DeleteCurrDataCM_BD(currCBId, currId, true, res.userMess);
+                                        }
+
+                                        else {
+                                            DisplayErrorInfo(res.userMess);
+                                        }
+                                    }
+                                },
+
+                                error: function () {
+                                    alert("Error occured while deleting data");
+                                }
+                            });
+                        }
+                    },
+
+                    //,
+                }
+            });
+
+        };
+
+
+
+         var AddEditCurrDataCM_MPC = function (currCBId, currCMId, s_ndx) { // , _strItemName
+          //   alert('add OR edit...');
+
+            if (currCBId == null) {
+                currCBId = $("#_oChurchBodyId_Logged").data("value");
+            }
+
+            if (currCMId < 0) currCMId = null;
+
+            //  public IActionResult AddModCM_vwMPC(int? oCBid = null, int? oCMid = null, int? oParid = null, int s_ndx = 0, int sb_ndx = 0, int vw = 0)
+             var url = "@Url.Action("AddModCM_vwMPC", "ChurchMembers")?oCMid=" + currCMId + "&oCBid=" + currCBId + "&s_ndx=" + s_ndx; // + "&vw=" + 0;     // + "&strCodeCriteria_2=" + null + "&oUserId=" + currUserId_Logged ;
+
+           // alert(url)  // if (currCMId > 0) { document.querySelector('#btnSaveChangesCM_BD').innerHTML = 'Update'; }
+
+            if (s_ndx > 0) {
+                $('#divTabDataMPCvd').load(url, function () {
+
+                    /// alert('load data...')
+
+                });
+            }
+            else {
+                window.location.assign(url); // window.location = url;
+            }
+        };
+
+
+
+
+        $(document).on('click', '#btnSaveChanges_ProcToMPC', function (e) {
+        e.preventDefault();
+
+       //  alert('proceeding... to Member Profile Catalogue');
+
+            var currCBId = $("#_ChurchBodyId").val(); 
+            var currCMId = $("#_hdnCurrIdCM_BD").val();
+
+            if (currCBId < 0) currCBId = null;
+            if (currCMId < 0) currCMId = null;
+
+            AddEditCurrDataCM_MPC (currCBId, currCMId, 0);
+
+    })
+
+        $(document).on('click', '#btnSaveChanges', function (e) {
+        e.preventDefault();
+
+        //  alert('click..');
+        const form = document.getElementById("currFormCM_BD");
+        //alert('val 4 .. ' + form.checkValidity())
+
+        if (form.checkValidity() === true) {
+
+
+            // alert('enabling spin...')
+            var _elem = $(this);
+            BtnLoading(_elem, 'Saving...');
+
+
+            SaveCurrCM_BD(_elem); //currSetIndex, currSubSetIndex);
+        }
+        else {
+            // alert('val 5')
+            event.preventDefault();
+            event.stopPropagation();
+
+            form.classList.add('was-validated');
+        }
+
+
+        // }, false);
+    })
+
+
+    //$(document).on('click', '#btnListView_CM', function (e) {
+    //    e.preventDefault();
+
+    //    $('#divTabGrid_CM').prop('hidden', true);
+    //    $('#divTabList_CM').prop('hidden', false);
+    //})
+
+    //$(document).on('click', '#btnGridView_CM', function (e) {
+    //    e.preventDefault();
+
+    //    $('#divTabList_CM').prop('hidden', true);
+    //    $('#divTabGrid_CM').prop('hidden', false);
+    //})
+
+
+
+
+    </script>
+
+    <script>
+        $(document).on('change', '#_NationalityId', function (e) {
+            e.preventDefault();
+
+          //  alert('_ctryId: ');
+            var ctryId = $("#_NationalityId").val();
+          //  alert('_ctryId: ' + ctryId);
+
+
+            $('#_HometownRegionId').empty();
+
+            //alert('...')
+            var url = '@Url.Content("~/")' + 'ChurchMembers/GetCountryRegionsByCountry';
+
+            //GetCountryRegionsByCountry( int? ctryId, bool addEmpty = false)
+
+            //    var  url: '@Url.Action("GetCountryRegionsByCountry", "ChurchMembers")';
+
+                $.getJSON(url, { ctryId: ctryId, addEmpty: true}, function (data) {
+                if (Object.keys(data).length > 0)
+                {
+                    var items = '';
+                    $.each(data, function (i, ctryReg) {
+                        items += "<option value='" + ctryReg.value + "'>" + ctryReg.text + "</option>";   // alert(items);
+                    });
+                   // items += "<option value=''> Select </option>";
+                    $('#_HometownRegionId').html(items);
+                }
+            });
+        })
+
+
+        $(document).on('change', '#_CountryId_MemCI', function (e) {
+                e.preventDefault();
+
+                var ctryId = $("#_CountryId_MemCI").val();
+
+            // var url = '@Url.Content("~/")' + 'ChurchMembers/GetCountryRegionsByCountry';
+            // var  url: '@Url.Action("GetCountryRegionsByCountry", "ChurchMembers")';
+
+            var url = '@Url.Content("~/")' + 'ChurchMembers/GetCountryRegionsByCountry';
+
+                $('#_RegionId_MemCI').empty();
+                //GetCountryRegionsByCountry( int? ctryId, bool addEmpty = false)
+                 $.getJSON(url, { ctryId: ctryId, addEmpty: true}, function (data) {
+                    if (Object.keys(data).length > 0)
+                    {
+                        var items = '';
+                        $.each(data, function (i, ctryReg) {
+                            items += "<option value='" + ctryReg.value + "'>" + ctryReg.text + "</option>";   // alert(items);
+                        });
+                       // items += "<option value=''> Select </option>";
+                        $('#_RegionId_MemCI').html(items);
+                    }
+                });
+
+         });
+
+
+        $(document).on('change', '#_MaritalStatus', function (e) {
+            e.preventDefault();
+
+            var strVal = $("#_MaritalStatus").val();
+            // alert('strVal: ' + strVal)
+
+            $('#_divMarriageType').prop('hidden', strVal != 'M'); //  $('#_divMarriageRegNo').prop('hidden', strVal != 'M');
+            $('#_divMarriageRegNo').prop('hidden', strVal != 'M');
+
+            //if (strVal == 'M') {
+            //    var strVal2 = $("#_MarriageType").val();
+            //    $('#_divMarriageRegNo').prop('hidden', strVal2 != 'O');
+            //}
+            //else {
+            //    $('#_divMarriageRegNo').prop('hidden', 'hidden');
+            //}
+        });
+
+        //$(document).on('change', '#_MarriageType', function (e) {
+        //    e.preventDefault();
+
+        //    var strVal = $("#_MarriageType").val();
+        //    $('#_divMarriageRegNo').prop('hidden', strVal != 'O');
+        //});
+
+        $(document).on('change', '#_IdTypeId', function (e) {
+            e.preventDefault();
+            var strVal = $("#_IdTypeId").val().trim();
+            $('#_divNational_IdNum').prop('hidden', (strVal == null || strVal == ''));
+        });
+
+        $(document).on('change', '#chk_ResAddrSameAsPostAddr_MemCI', function (e) {
+            e.preventDefault();
+           // alert('_isAddrSame: ');
+            var _isAddrSame = $("#chk_ResAddrSameAsPostAddr_MemCI").is(":checked");
+          //  alert('_isAddrSame: ' + _isAddrSame);
+            $('#_divPostalAddress_MemCI').prop('hidden', _isAddrSame);
+
+        })
+
+         $(document).on('change', '#_MobilePhone1', function (e) {
+            e.preventDefault();
+
+             var _isDisable = $("#_MobilePhone1").val() == '';
+             $('#_MobilePhone2').prop('disabled', _isDisable);
+        })
+
+        $(document).on('click', '#btnAddContactDetail', function (e) {
+            e.preventDefault();
+          //  alert('clicked...: ');
+
+            var str = $("#btnAddContactDetail").text();
+            var _isHide = str.includes("Less");
+            var btnStr = 'Less Contact Detail';
+            if (_isHide) { btnStr = 'Add Contact Detail'; }
+
+          //  alert('_isHide: ' + _isHide + '  .. ' + btnStr);
+            $('#_divMemContactInfo').prop('hidden', _isHide);
+
+            document.querySelector('#btnAddContactDetail').innerText = btnStr;
+        })
+
+
+
+        var calcMemAge = function (dob) {
+            var strAge = '';
+            if (dob != null) {
+                var dt = dob.value;
+                //alert("dob: " + dt);
+                strAge = calcMemDateDiff(dt, new Date());
+            }
+
+            // alert('age: ' + strAge);
+            $("#_strMemberAge").val(strAge);
+        }
+
+        var calcMemAgeByVal = function (dob) {
+            var strAge = '';
+            if (dob != null) {
+                var dt = dob;
+              //  alert("dob: " + dt);
+                strAge = calcMemDateDiff(dt, new Date());
+            }
+
+            // alert('age: ' + strAge);
+            $("#_strMemberAge").val(strAge);
+        }
+
+        var calcMemLongevity = function (dt_enroll) {
+            var strLong = '';
+            if (dt_enroll != null) {
+                var dt = dt_enroll.value;
+                // alert("dt_enroll: " + dt);
+                strLong = calcMemDateDiff(dt, new Date());
+            }
+            // alert('long: ' + strLong);
+            $("#_strLongevity").val(strLong);
+        }
+
+
+        var ___calcMemDateDiff = function (dt1, dt2) {
+
+            if (dt2 < dt1)
+                if (castToString)
+                    return "N/A";
+                else
+                    return 0;
+
+
+            // var dt = dt1.value;
+            //    alert("dt conv: " + dt1);
+            //var mdate = $("#birth_date").val().toString();
+            var mdate = dt1.toString();
+            var yearThen = parseInt(mdate.substring(0, 4), 10);
+            var monthThen = parseInt(mdate.substring(5, 7), 10);
+            var dayThen = parseInt(mdate.substring(8, 10), 10);
+
+            //var dt2 = new Date();
+            var birthday = new Date(yearThen, monthThen, dayThen);
+
+            var differenceInMilisecond = dt2.valueOf() - birthday.valueOf();
+
+            var year_age = Math.floor(differenceInMilisecond / 31536000000);
+            //  var day_age = Math.floor((differenceInMilisecond % 31536000000) / 86400000);
+
+            //if ((today.getMonth() == birthday.getMonth()) && (today.getDate() == birthday.getDate())) {
+            //    alert("Happy B'day!!!");
+            //}
+            var strDiff = '';
+            if (year_age >= 0) {
+                //var month_age = Math.floor(day_age / 30);
+
+                //day_age = day_age % 30;
+
+                if (isNaN(year_age)) { // || isNaN(month_age) || isNaN(day_age)) {
+                    strDiff = 'N/A';
+
+                    // $("#_strMemberAge").text("Invalid birthday - Please try again!");
+                }
+                else {
+                    strDiff = year_age + ' yrs';
+
+                    //$("#exact_age").html("You are<br/><span id=\"age\">" + year_age + " years " + month_age + " months " + day_age + " days</span> old");
+                }
+            }
+
+            return strDiff;
+
+            // alert('age: ' + strAge);
+            //$("#_strMemberAge").val(strAge);
+        }
+
+
+        var calcMemDateDiff = function (dt1, dt2) {
+            // var dt = dt1.value;
+         //    alert("dt conv: " + dt1);
+            //var mdate = $("#birth_date").val().toString();
+            var mdate = dt1.toString();
+            var yearThen = parseInt(mdate.substring(0, 4), 10);
+            var monthThen = parseInt(mdate.substring(5, 7), 10);
+            var dayThen = parseInt(mdate.substring(8, 10), 10);
+
+            //var dt2 = new Date();
+            var birthday = new Date(yearThen, monthThen - 1, dayThen);
+
+            var differenceInMilisecond = dt2.valueOf() - birthday.valueOf();
+
+            var year_age = Math.floor(differenceInMilisecond / 31536000000);
+            //  var day_age = Math.floor((differenceInMilisecond % 31536000000) / 86400000);
+
+            //if ((today.getMonth() == birthday.getMonth()) && (today.getDate() == birthday.getDate())) {
+            //    alert("Happy B'day!!!");
+            //}
+            var strDiff = '';
+            if (year_age >= 0) {
+                //var month_age = Math.floor(day_age / 30);
+
+                //day_age = day_age % 30;
+
+                if (isNaN(year_age)) { // || isNaN(month_age) || isNaN(day_age)) {
+                    strDiff = 'N/A';
+
+                    // $("#_strMemberAge").text("Invalid birthday - Please try again!");
+                }
+                else {
+                    strDiff = year_age + ' years';
+
+                    //$("#exact_age").html("You are<br/><span id=\"age\">" + year_age + " years " + month_age + " months " + day_age + " days</span> old");
+                }
+            }
+
+            return strDiff;
+
+            // alert('age: ' + strAge);
+            //$("#_strMemberAge").val(strAge);
+        }
+
+
+
+    </script>
+
+}

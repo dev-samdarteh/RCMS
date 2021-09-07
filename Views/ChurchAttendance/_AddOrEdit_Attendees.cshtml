@@ -1,0 +1,293 @@
+﻿
+@model RhemaCMS.Models.ViewModels.vm_cl.ChurchAttendanceModel
+
+
+@{
+    ViewData["Title"] = (!string.IsNullOrEmpty(ViewBag.AppName) ? ViewBag.AppName : "") + " - Church Attendance";
+}
+
+<div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center"
+     style="width: 80%; margin: 0px auto 10px auto ; padding:0;  ">
+
+    <form id="currForm_Attendee" method="post" enctype="multipart/form-data" asp-action="AddOrEdit_Attendee" class=" form-group bg-light"
+          style="margin-top:0px; padding-left: 3px; padding-right:3px;   ">
+
+        @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>      *@
+
+        <input type="hidden" asp-for="oChurchAttendee.Id" id="_hdnCurrId" />
+        <input type="hidden" asp-for="oChurchAttendee.ChurchBodyId" id="_hdnChuBodyId" />
+        <input type="hidden" asp-for="oChurchAttendee.AttendeeType" id="_AttendeeType"/>
+
+        <input type="hidden" asp-for="oChurchAttendee.Created" />
+        <input type="hidden" asp-for="oChurchAttendee.LastMod" />
+        <input type="hidden" asp-for="strAttnLongevity" id="_strAttnLongevity" />
+        <input type="hidden" asp-for="f_strAttendeeTypeCode" id="_strAttendeeTypeCode" />
+
+        @*<br />
+            <br />*@
+
+        @*<hr class="cus-div" style="width:100%; border: 1px inset #000;" />
+            <h6 class="breadcrumb breadcrumb-item active shadow-lg" style="background-color: lightblue "> Please provide church attendance details </h6>
+            <br />*@
+
+        @if (Model.oChurchAttendee != null)
+        {
+
+            <div class="form-row mb-3" hidden>
+                <div class="col-md">
+                    <small asp-for="oChurchAttendee.ChurchEventDetailId" class="control-small col-md"></small>
+                    <div class="form-row mb-3" hidden>
+                        <div class="input-group col">
+                            <select id="_ChuEventFilterBy" class="form-control text-sm col-md-5">
+                                <option value="AA"> All Activities </option>
+                                <option value="CR"> Current Activities</option>
+                                <option value="PS"> Past Activities </option>
+                                <option value="FS"> Filter by search-string </option>
+                                <option value="BF"> Before </option>
+                                <option value="EQ"> Equals </option>
+                                <option value="AF"> After </option>
+                                <option value="BT"> Between </option>
+                            </select>
+                            <input id="_strSearchString" class="form-control text-sm col-md-3" asp-for="strEventSearchString" placeholder="From" hidden />
+                            <input id="_FilterDate1" class="form-control text-sm col-md-3" asp-for="dtEventFilterDate1" placeholder="From" hidden />
+                            <input id="_FilterDate2" class="form-control text-sm col-md-3" asp-for="dtEventFilterDate2" placeholder="To" hidden />
+                            <button id="_btnReloadMem" class="form-control text-sm  btn btn-outline-success col-md-1" type="button" style="border: 1px solid lightgrey; ">
+                                <i class="fa fa-refresh  fa-sm "></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+            <div id="_divChurchVisitor" class="cus-panel pt-3">
+
+                @*<hr class="cus-div" style="width:100%; border: 1px inset #000;" />
+        <h6 class="breadcrumb breadcrumb-item active shadow-none" style="background-color: gainsboro "> Visitor Details  </h6>*@
+
+                 
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oChurchAttendee.FirstName" class="control-small">First Name</small>
+                        <input id="_FirstName" asp-for="oChurchAttendee.FirstName" class="form-control text-sm" autocomplete="off" />
+                        <span asp-validation-for="oChurchAttendee.FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="col-md">
+                        <small asp-for="oChurchAttendee.MiddleName" class="control-small">Middle Name</small>
+                        <input id="_MiddleName" asp-for="oChurchAttendee.MiddleName" class="form-control text-sm" autocomplete="off" />
+                        <span asp-validation-for="oChurchAttendee.MiddleName" class="text-danger"></span>
+                    </div>
+                    <div class="col-md">
+                        <small asp-for="oChurchAttendee.LastName" class="control-small">Last Name</small>
+                        <input id="_LastName" asp-for="oChurchAttendee.LastName" class="form-control text-sm" autocomplete="off" />
+                        <span asp-validation-for="oChurchAttendee.LastName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oChurchAttendee.ResidenceLoc" class="control-small"> Residence /Location </small>
+                        <input id="_ResidenceLoc" asp-for="oChurchAttendee.ResidenceLoc" class="form-control text-sm" autocomplete="off" />
+                        <span asp-validation-for="oChurchAttendee.ResidenceLoc" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <small asp-for="oChurchAttendee.MobilePhone" class="control-small"> Phone </small>
+                        <input id="_MobilePhone1" asp-for="oChurchAttendee.MobilePhone" class="form-control text-sm" autocomplete="off" />
+                        <span asp-validation-for="oChurchAttendee.MobilePhone" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oChurchAttendee.Email" class="control-small">Email</small>
+                        <input asp-for="oChurchAttendee.Email" class="form-control text-sm" />
+                    </div> 
+                </div>
+
+                <div id="_divSearchRoll" class="card-body bg-transparent mb-3 p-2 shadow-sm ; " hidden>
+                    
+
+                    @*<hr class="cus-div" style="width:100%; border: 1px inset #fff;" />*@
+                    <div class="form-row " style=" margin-left:auto;margin-right:auto; width:100%; border-bottom: 2px inset fuchsia; ">
+                        @*<span style=" text-transform:fullsize-kana"> History Count: &nbsp;</span>*@
+                        <i class="fas fa-history fa-sm mr-1" style="color: #000"></i> Previous Visits:
+                        <small class="ml-1" id="_lblSearchRoll"></small>
+                    </div>
+
+                    <div id="divTabData_MCAH" class="overlay-wrapper">
+                        @*@{ await Html.RenderPartialAsync("_vwAttendPreviousVisit", Model.oChurchAttendees_VMList); }*@
+                    </div>
+
+                    <button id="_btnAddGuest" class="form-control text-sm btn btn-light" type="button" hidden >
+                        <i class="fa fa-plus fa-sm "></i> Add New Visitor
+                    </button>
+
+
+                    @*<table id="tblAttendFilter" class="table-sm table-responsive-sm table-borderless  w-100  ">
+            <tbody id="tblAttendFilter_Body" class="" style="color: #4f82fb">
+
+                <tr>
+                    <td id="" name="_">
+            <a class="btn btn-link" asp-controller="ChurchAttendance" asp-action="AddOrEdit_AttendeesItem" asp-route-currAttendVm="@Model" asp-route-id="1">
+                Godsway Elemawusi Akikpa (Mr.)
+            </a>
+        </td>
+        <td id="" name="_"> Wedding between Joe and Clara:- 6 Aug, 2020 </td>
+        <td id="" name="_">0244123654</td>
+        <td id="" name="_">21 Dec, 2019</td>
+        <td id="" name="_">
+            <a class="btn btn-sm btn-outline-light" asp-controller="ChurchAttendance" asp-action="AddOrEdit_AttendeesItem" asp-route-currAttendVm="@Model" asp-route-id="0">
+                <i class="fa fa-plus fa-sm " style="color: #000; width:30px"></i>
+            </a>
+        </td>
+                </tr>
+
+            </tbody>
+        </table>*@
+
+                </div>
+                                 
+
+                <div id="_divChuVisMoreDetails" class="m-0 mt-3 p-0">
+                    <small id="_lblDetailInfo" class="control-small" hidden> Please complete details to check-in visitor.  </small>
+
+                    <hr class="cus-div" style="width:100%; border: 1px solid #808080;" />
+
+                    <div class="form-row">
+                        <div class="col-md-3 mb-3">
+                            <small asp-for="oChurchAttendee.Title" class="control-small">Title</small>
+                            <select id="_Title" class="form-control text-sm" asp-for="oChurchAttendee.Title" asp-items="Model.lkpPersTitles"></select>
+                            <span asp-validation-for="oChurchAttendee.Title" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <small asp-for="oChurchAttendee.Gender" class="control-small">Gender</small>
+                            <select class="form-control text-sm" asp-for="oChurchAttendee.Gender" asp-items="Model.lkpGenderTypes"></select>
+                            <span asp-validation-for="oChurchAttendee.Gender" class="text-danger"></span>
+                        </div>
+
+                        @if (Model.oChurchAttendee.Id > 0)
+                        {
+                            <div class="col-md-3">
+                                <small asp-for="oChurchAttendee.Id" class="control-small"> Attendance # </small>
+                                <input asp-for="oChurchAttendee.Id" class="form-control text-sm" disabled />
+                                <span asp-validation-for="oChurchAttendee.Id" class="text-danger"></span>
+                            </div>
+                        }
+
+                        <div class="col-md-4">
+                            <small class="control-small" asp-for="oChurchAttendee.DateAttended">Date Attended</small>
+                            <input id="_DateAttended" asp-for="oChurchAttendee.DateAttended" class="form-control text-sm" onchange="popChurchEventsMod(this.value);" style="background-color: lightyellow" />
+                            <span asp-validation-for="oChurchAttendee.DateAttended" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+                    @* Other details of visitor... hide, show on demand*@
+
+                    <div class="form-row mb-3">
+                        <div class="col-md">
+                            <small asp-for="oChurchAttendee.ChurchEventDetailId" class="control-small">Church Event</small>
+                            <select id="_ChurchEventDetailId" class="form-control text-sm" asp-for="oChurchAttendee.ChurchEventDetailId" asp-items="Model.lkpChuCalEvents" style="background-color: lightyellow"></select>
+                            <span asp-validation-for="oChurchAttendee.ChurchEventDetailId" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row mb-3">
+                        <div class="col-md ">
+                            <small asp-for="oChurchAttendee.DateOfBirth " class="control-label">Date of Birth</small>
+                            <input id="_DateOfBirth" type="date" asp-for="oChurchAttendee.DateOfBirth" class="form-control text-sm" placeholder="Date of Birth" />
+                        </div>
+                        <div class="col-md">
+                            <small asp-for="oChurchAttendee.EnrollMode" class="control-label"> Enroll Mode </small>
+                            <select class="form-control text-sm" asp-for="oChurchAttendee.EnrollMode" asp-items="Model.lkpEnrollModes">
+                                <option value="" selected disabled> Enroll Mode </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row mb-3">
+                        <div class="col-md">
+                            <small asp-for="oChurchAttendee.VisitReason" class="control-small">Visit Reason</small>
+                            <input maxlength="100" asp-for="oChurchAttendee.VisitReason" class="form-control text-sm" />
+                        </div>
+                    </div>
+
+                    <div class="form-row mb-3">
+                        <div class="col-md-4">
+                            <small asp-for="oChurchAttendee.AgeBracketId" class="control-small">Age Bracket</small>
+                            <select id="_MaritalStatus" class="form-control text-sm" asp-for="oChurchAttendee.AgeBracketId" asp-items="Model.lkpVisitorAgeBracket"></select>
+                        </div>
+                        <div class="col-md">
+                            <small asp-for="oChurchAttendee.NationalityId" class="control-small">Nationality</small>
+                            <select id="_NationalityId" class="form-control text-sm" asp-for="oChurchAttendee.NationalityId" asp-items="Model.lkpCountries"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-row mb-3">
+                        <div class="col-md-4">
+                            <small asp-for="oChurchAttendee.MemRankId" class="control-small"> Member Rank </small>
+                            <select class="form-control text-sm" asp-for="oChurchAttendee.ChurchRankId" asp-items="Model.lkpChurchRanks">
+                                <option selected disabled value=""> Member Type </option>
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <small asp-for="oChurchAttendee.MemStatusId" class="control-small"> Member Availability Status </small>
+                            <select class="form-control text-sm" asp-for="oChurchAttendee.ChurchMemStatusId" asp-items="Model.lkpChurchMemStatuses">
+                                <option selected disabled value=""> Member Status </option>
+                            </select>
+                        </div>
+                    </div>
+                     
+
+                    @*<div class="col-md" hidden>
+            <small asp-for="oChurchAttendee.VisitReason_Other" class="control-small"> </small>
+            <input id="_VisitReason_Other" asp-for="oChurchAttendee.VisitReason_Other" class="form-control text-sm" />
+            <span asp-validation-for="oChurchAttendee.VisitReason_Other" class="text-danger"></span>
+        </div>*@
+
+                    <div class="form-row mb-3">
+                        <div class="col-md-4">
+                            <small asp-for="oChurchAttendee.TempCelc" class="control-small"> Body Temperature (°C)</small>
+                            <input min="0" asp-for="oChurchAttendee.TempCelc" class="form-control text-sm text-center" style="background-color: lightyellow" />
+                        </div>
+                        <div class="col-md-4">
+                            <small asp-for="oChurchAttendee.PersKgWt" class="control-small"> Weight (Kg) </small>
+                            <input min="0" asp-for="oChurchAttendee.PersKgWt" class="form-control text-sm text-center" style="background-color: lightyellow" />
+                        </div>
+                        <div class="col-md-4">
+                            <small asp-for="oChurchAttendee.PersBPMin" class="control-small"></small>
+                            <div class="input-group">
+                                <div class="col-md m-0">
+                                    <small asp-for="oChurchAttendee.PersBPMax" class="control-small"> BP: Systolic </small>
+                                    <input min="0" asp-for="oChurchAttendee.PersBPMax" class="form-control text-sm text-center" style="background-color: lightyellow" />
+                                </div>
+                                <div class="col-md m-0">
+                                    <small asp-for="oChurchAttendee.PersBPMin" class="control-small"> BP: Diastolic </small>
+                                    <input min="0" asp-for="oChurchAttendee.PersBPMin" class="form-control text-sm text-center" style="background-color: lightyellow" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row mb-3">
+                        <div class="col-md">
+                            <small asp-for="oChurchAttendee.Notes" class="control-small"> Any comments ? </small>
+                            <textarea asp-for="oChurchAttendee.Notes" class="form-control text-sm" id="OtherInfo" row="6" cols="40"></textarea>
+                            <span asp-validation-for="oChurchAttendee.Notes" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+        }
+
+    </form>
+</div>
+
+

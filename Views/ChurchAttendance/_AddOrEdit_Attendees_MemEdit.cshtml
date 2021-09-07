@@ -1,0 +1,152 @@
+﻿
+@model RhemaCMS.Models.ViewModels.vm_cl.ChurchAttendanceModel
+
+ 
+
+
+<div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center"
+     style="width: 95%; margin: 0px auto 5px auto ; padding:0;  ">
+    <div class="card mb-3 " style="background-color: transparent; width: 100%; ">
+        <div class="card-header rounded-bottom border-0 bg-white" style="color: #0094ff; margin-left:auto; margin: 1px ">
+            <div>
+                <i class="fas fa-user-friends "></i>
+                Roll : @Model.CHCF_TotAttend_MemOrVis
+                &nbsp;&nbsp; | &nbsp;&nbsp;
+                <i class="fas fa-male fa-lg" style="color:deepskyblue"></i>
+                Males :  @Model.CHCF_TotAttend_M
+                &nbsp;&nbsp; | &nbsp;&nbsp;
+                <i class="fas fa-female fa-lg" style="color:deeppink"></i>
+                Females :  @Model.CHCF_TotAttend_F
+                &nbsp;&nbsp; | &nbsp;&nbsp;
+                <i class="fas fa-question-circle fa-lg" style="color: #8b4717"></i>
+                Other :  @Model.CHCF_TotAttend_O
+            </div>
+        </div>
+
+        <div class="card-body small ">
+            @using (Html.BeginForm("Index_Attendees", "ChurchAttendance", FormMethod.Post))
+            {
+                <input type="hidden" asp-for="oChurchBodyId" id="_hdnChuBodyId" />
+                if (Model.lsChurchAttendanceModels.Count() > 0)
+                {
+                    <div class="form-row col-sm  pr-0 pt-1 " style="background-color: gainsboro">
+                        <div class="form-group col-sm-6">
+                            <label class="control-label" asp-for="f_ChurchEventDetailId">Church Event</label>
+                            <select id="_m_ChurchEventDetailId" asp-for="f_ChurchEventDetailId" name="m_ChurchEventDesc" class="form-control" asp-items="@Model.lkpChuCalEvents "></select>
+                            <span asp-validation-for="f_ChurchEventDetailId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <label class="control-label" asp-for="f_DateAttended">Date Attended</label>
+                            <input id="_dtFilter_AttendFrom" name="dtFilter_AttendFrom" asp-for="f_DateAttended" class="form-control" />
+                            <span asp-validation-for="f_DateAttended" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">&nbsp;</label>
+                            <input type="submit" value="Save changes" class="btn btn-info btn-block " />
+                        </div>
+                    </div>
+                    <br />
+                    if (!string.IsNullOrEmpty(ViewBag.u_Message))
+                    {
+                        if (((string)ViewBag.u_Message).ToLower().Contains("success"))
+                        { <p class="bg-light text-success "> <i class="fa fa-check fa-lg"></i> &nbsp; @ViewBag.u_Message</p> }
+                    else
+                    { <p class="bg-light text-danger "> <i class="fa fa-check fa-lg"></i> &nbsp; @ViewBag.u_Message</p> }
+            }
+
+        }
+
+
+        <table id="tblAttendees_MemEdit" class="table table-sm  table-bordered table-striped table-responsive-sm table-hover p-1" cellspacing="0"
+               style="border: 1px solid #2c2f5b">
+            <thead>
+                <tr style="text-align: left; background-color: gainsboro">
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th style=" vertical-align: middle">
+                        &nbsp; Member Name
+                    </th>
+                    <th style="vertical-align: middle">
+                        Gender
+                    </th>
+                    <th style="vertical-align: middle">
+                        Location
+                    </th>
+                    <th style="vertical-align: middle">
+                        Age Group
+                    </th>
+                    <th style="text-align: center; vertical-align: middle">
+                        Phone
+                    </th>
+                    <th align="center" width="70px" style="vertical-align: middle">
+                        Check-In
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @*@{ List<ChurchProData.Models.Membership.ChurchMember> AttendDetails = Model.AttendDetails; }*@
+                @for (int i = 0; i < Model.lsChurchAttendanceModels.Count; i++)
+                {
+                    <tr style="text-align:left">
+                        <td>@Html.DisplayFor(modelItem => Model.lsChurchAttendanceModels[i].oAttend_Id)</td>
+                        <td>@Html.DisplayFor(modelItem => Model.lsChurchAttendanceModels[i].oChurchBodyId)</td>
+                        <td>@Html.DisplayFor(modelItem => Model.lsChurchAttendanceModels[i].oChurchMemberId)</td>
+                        <td style="vertical-align: middle">
+                            &nbsp;
+                            <i class="fas fa-user" style="color:deepskyblue"></i>
+                            &nbsp;
+                            @*<a asp-controller="ChurchMembers" asp-action="AddOrEdit" asp-route-id="@item.oChurchAttend.Id" asp-route-reqChurchBodyId="@item.oChurchBody.Id">
+                                    @item.strMemberFullName
+                                </a>*@
+                            @Html.DisplayFor(modelItem => Model.lsChurchAttendanceModels[i].strAttendeeName)
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => Model.lsChurchAttendanceModels[i].strGender)</td>
+                        <td style="vertical-align: middle">
+                            @{
+                                var strLocDesc = Model.lsChurchAttendanceModels[i].strResidenceLoc;
+                                if (!string.IsNullOrEmpty(Model.lsChurchAttendanceModels[i].strResidenceLoc) && !string.IsNullOrEmpty(Model.lsChurchAttendanceModels[i].strNationality))
+                                { strLocDesc += ", "; }
+                                strLocDesc += Model.lsChurchAttendanceModels[i].strNationality;
+                            }
+                            @Html.DisplayFor(modelItem => strLocDesc)
+                        </td>
+                        <td align="center" style="vertical-align: middle">
+                            @Html.DisplayFor(modelItem => Model.lsChurchAttendanceModels[i].strAgeGroup)
+                        </td>
+                        <td align="center" style="vertical-align: middle">
+                            @Html.DisplayFor(modelItem => Model.lsChurchAttendanceModels[i].strPhone)
+                        </td>
+                        <td class=" pr-3" align="center" style="vertical-align: middle">
+                            @Html.CheckBoxFor(modelItem => Model.lsChurchAttendanceModels[i].f_ChkMemAttend)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            @*<tfoot>
+                    <tr class="bg-white" style="text-align: center; color: white; ">
+                        <th style="border-bottom: 5px solid whitesmoke;"> </th>
+                        <th style="border-bottom: 5px solid whitesmoke;"> </th>
+                        <th style="border-bottom: 5px solid whitesmoke;"> </th>
+                        <th style="border-bottom: 5px solid whitesmoke;"> </th>
+                        <th style="border-bottom: 5px solid whitesmoke;"> </th>
+                        <th style="border-bottom: 5px solid whitesmoke;"> </th>
+                        <th style="border-bottom: 5px solid whitesmoke;"> </th>
+                        <th style="border-bottom: 5px solid whitesmoke;"> </th>
+                        <th style="border-bottom: 5px solid whitesmoke;"> </th>
+                        <th style="border-bottom: 5px solid whitesmoke;">
+                            <a href="#" class="btn btn-sm btn-light btn-block smaller" onclick="ReloadCurrPage()" style=" color:black; font-weight:bold; font-size:small"><i class="fa fa-recycle fa-spin fa-lg"></i>&nbsp;</a>
+
+                        </th>
+                    </tr>
+                </tfoot>*@
+        </table>
+
+    }
+        </div>
+
+        @*<div class="card-footer small text-muted">Loaded on @DateTime.Now.ToLongDateString().ToString() at @DateTime.Now.ToShortTimeString().ToString()</div>*@
+
+    </div>
+</div>
+

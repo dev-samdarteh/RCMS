@@ -1,0 +1,342 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.ChurchRoleModel
+
+
+@if (Model != null)
+{
+    @if (Model.oChurchRole != null)
+    {
+        int? _oAGOId = -1; if (Model.oChurchRole.AppGlobalOwnerId != null) { _oAGOId = (int)Model.oChurchRole.AppGlobalOwnerId; };
+        int? _oCBId = -1; if (Model.oChurchRole.OwnedByChurchBodyId != null) { _oCBId = (int)Model.oChurchRole.OwnedByChurchBodyId; }
+
+        @*<div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center" style="width: 90%; margin: 0px auto 10px auto ; padding:0;  ">
+            <form class="needs-validation novalidate bg-transparent p-2" id="currForm_CRL" method="post" enctype="multipart/form-data" asp-action="AddOrEdit_CRL">*@
+
+        <div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center " style="width: 90%; margin: 0px auto 10px auto ; padding:0;">
+            <form class="needs-validation bg-transparent p-2" novalidate id="currForm_CRL" method="post" enctype="multipart/form-data" asp-action="AddOrEdit_CRL">
+
+                @*//var CBNameTag = Model.oChurchRole.OrgType == "CH" ? "Name of Congregation Head-unit" : Model.oChurchRole.OrgType == "CN" ? "Name of Congregation" : "Church Unit Name"; }*@
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="oChurchRole.Id" id="_hdnCurrId_CRL" />
+                <input type="hidden" asp-for="oChurchRole.AppGlobalOwnerId" id="_hdnAppGloOwnId_CRL" />
+                @*<input type="hidden" asp-for="oChurchRole.OwnedByChurchBodyId" id="_hdnOwnedByChurchBodyId_CRL" />*
+        @*<input type="hidden" asp-for="pageIndex" id="_hdnPageIndex" />*@
+
+                <input type="hidden" asp-for="oCBLevelCount" id="_oCBLevelCount_CRL" />
+                <input type="hidden" asp-for="numChurchLevel_Index" id="_numCLIndex_CRL" />
+
+                @*<input type="hidden" asp-for="oChurchRole.OrgType" />*@
+
+                <input type="hidden" asp-for="oChurchRole.Created" />
+                <input type="hidden" asp-for="oChurchRole.LastMod" />
+                <input type="hidden" asp-for="oChurchRole.CreatedByUserId" />
+                <input type="hidden" asp-for="oChurchRole.LastModByUserId" />
+
+                <input type="hidden" asp-for="@Model.setIndex" id="_setIndex" />
+
+                @* <input type="hidden" asp-for="@Model.setIndex" id="_setIndex_Test" />
+        <input type="hidden" asp-for="@Model.subSetIndex" id="_subSetIndex" />*@
+
+                <input type="hidden" asp-for="@Model.oChurchBodyId_Logged" id="_oChurchRole_Logged" />
+                <input type="hidden" asp-for="@Model.oAppGloOwnId_Logged" id="_oAppGloOwnId_Logged" />
+                <input type="hidden" asp-for="@Model.oUserId_Logged" id="_oCurrUserId_Logged" />
+
+
+
+                @*<div class="form-row mb-3">
+            <div class="col-md">
+                <small class="font-weight-normal" asp-for="strAppGlobalOwn">Denomination (Church)</small>
+                <input id="_strAppGlobalOwn_CRL" class="form-control text-sm" type="text" asp-for="strAppGlobalOwn" placeholder="Denomination (Church)" readonly>
+            </div>
+        </div>*@
+
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <small class="font-weight-normal" asp-for="numParentRoleCLId"> Level of Operation </small>
+                        <select id="_TargetChurchLevelId_CRL" class="form-control text-sm" asp-for="oChurchRole.TargetChurchLevelId" asp-items="Model.lkpChurchLevels_CRL" aria-describedby="fd_ParentRoleChurchLevelId" required>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <small class="font-weight-normal" asp-for="strOrgType"> Unit Type</small>
+                        <select id="_OrgType_CRL" class="form-control text-sm" asp-for="oChurchRole.OrgType" asp-items="Model.lkpOrgTypes_CRL" aria-describedby="fd_OrgType" required>
+                            <option selected disabled value=""> Select Unit Type  </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        @{ var strCRLNameTag = "Name of " + Model.strOrgType; }
+                        <small id="_lblName_CRL" class="font-weight-normal" asp-for="oChurchRole.Name"> @strCRLNameTag </small>
+                        <input type="text" maxlength="100" class="form-control text-sm" asp-for="oChurchRole.Name" placeholder="@strCRLNameTag" aria-describedby="fd_Name" required>
+                        <div class="invalid-feedback" id="fd_Name">
+                            @{ var strName = strCRLNameTag + " required"; }
+                            @strName
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <small class="font-weight-normal" asp-for="oChurchRole.Name"> Acronym </small>
+                        <input type="text" maxlength="15" class="form-control text-sm" asp-for="oChurchRole.Acronym">
+                    </div>
+                </div>
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small class="font-weight-normal" asp-for="oChurchRole.Description"> Description </small>
+                        <input type="text" class="form-control text-sm" asp-for="oChurchRole.Description" placeholder="Description">
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small class="font-weight-normal" asp-for="oChurchRole.GlobalRoleCode"> Role Code </small>
+                        <input type="text" class="form-control text-sm" maxlength="30" asp-for="oChurchRole.GlobalRoleCode" placeholder="Church code" aria-describedby="fd_GlobalRoleCode" readonly>
+                        @if (string.IsNullOrEmpty(Model.oChurchRole.GlobalRoleCode))
+                        {<small id="fd_GlobalRoleCode" class="form-text text-muted"> Code will be auto-generated when saved. </small>}
+                    </div>
+                    <div class="col-md">
+                        <small class="font-weight-normal" asp-for="oChurchRole.RootRoleCode">Root Role Code</small>
+                        <input class="form-control text-sm" type="text" maxlength="300" asp-for="oChurchRole.RootRoleCode" placeholder="Root Role Code" aria-describedby="fd_RootRoleCode" readonly>
+                        @if (string.IsNullOrEmpty(Model.oChurchRole.RootRoleCode))
+                        {<small id="fd_RootRoleCode" class="form-text text-muted"> Code will be auto-generated when saved. </small>}
+                    </div>
+                </div>
+
+
+                @*<div class="form-row">
+            <div class="col-md-12">
+                <small asp-for="oChurchRole.IsChurchMainstream" class="control-label"> Function at </small>
+                <div class="row m-0 border-top border-white">
+
+                </div>
+            </div>
+        </div>*@
+
+                <div>
+                    <small asp-for="oChurchRole.IsChurchMainstream" class="control-label text-dark"> Functions at </small>
+                    <div class="form-row border-top border-dark">
+                        <div class="col-md-6 mb-3">
+                            <small asp-for="oChurchRole.IsChurchMainstream" class="control-label">&nbsp;</small>
+                            <label class="chk_container text-sm font-weight-normal">
+                                <small> Mainstream congregation </small>
+                                <input id="chk_IsApplyToMainstreamUnit_CRL" type="checkbox" asp-for="oChurchRole.IsApplyToMainstreamUnit" />
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div id="_divApplyToChurchUnitOrgType_CRL" class="col-md-6">
+                            <small asp-for="oChurchRole.strApplyToChurchUnitOrgType" class="control-label"> &nbsp; </small>
+                            <select id="_strApplyToChurchUnitOrgType_CRL" class="form-control text-sm" asp-for="strApplyToChurchUnitOrgTypeCode" asp-items="Model.lkpOrgTypes_ApplyToUnit" aria-describedby="fd_ApplyToChurchUnitOrgType">
+                                <option selected disabled value=""> Select Unit Type </option>
+                            </select>
+                            <small id="fd_ApplyToChurchUnitOrgType" class="form-text text-muted"> Unit Type </small>
+                        </div>
+                        @* the church units ... from the Owner CB ... and role must be shared-all or direct-share [inheriting CB must be part of the network of Owner CB] *@
+                        <div id="_divApplyToChurchUnitId_CRL" class="col-md-12 mb-3">
+                            @{ var strApplyToChurchUnitIdTag = "Apply to Church Unit" + (!string.IsNullOrEmpty(Model.strApplyToChurchUnitOrgType) ? " (" + Model.strApplyToChurchUnitOrgType + ")" : ""); }
+                            <small id="_lblApplyToChurchUnitId_CRL" class="font-weight-normal" asp-for="oChurchRole.ApplyToChurchUnitId"> @strApplyToChurchUnitIdTag </small>
+                            <div class="input-group m-0">
+                                <select id="_ApplyToChurchUnitId_CRL" class="form-control text-sm" asp-for="oChurchRole.ApplyToChurchUnitId" asp-items="Model.lkpApplyToChurchUnits">
+                                    <option selected disabled value=""> Select Church Unit </option>
+                                </select>
+                                <button id="_btnLoadApplyToList_CRL" type="button" class="btn btn-light btn-sm border border-left-0 ">
+                                    <i class="fa fa-refresh text-secondary"></i>
+                                </button>
+                            </div>
+                            <input id="hdn_ApplyToChurchUnitId_CRL" type="hidden" asp-for="oChurchRole.ApplyToChurchUnitId" />
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-row" id="_divSupervisedBy_CRL">
+                    <div class="col-md-12">
+                        <small class="font-weight-normal" asp-for="oChurchRole.ParentRoleId"> Supervising Role (Reports to) </small>
+                        <div class="card shadow-none">
+                            <div class="card-header border">
+                                <a id="heading-collapsed-sprole" class="collapsed" data-toggle="collapse" href="#collapse-collapsed-sprole" aria-expanded="true" aria-controls="collapse-collapsed-sprole">
+                                    <i class="fas fa-user-tie fa-secondary pr-2"></i>
+                                    <i class="fa fa-chevron-down fa-sm pull-right"></i>
+                                    <span class="text-sm" id="_strParentChurchRole">  @Model.strParentRole </span>
+                                </a>
+                                <input id="_numParentRoleId_CRL" type="hidden" asp-for="oChurchRole.ParentRoleId" />
+                            </div>
+                            <div id="collapse-collapsed-sprole" class="card-body collapse bg-white card-fuchsia card-outline border-left border-right border-bottom" aria-labelledby="heading-collapsed-sprole">
+                                <div class="col-md-12 mb-3">
+                                    @{ var strCBLevelTag_sup = "Supervising Body" + (!string.IsNullOrEmpty(Model.strCBLevel_sup) ? " (" + Model.strCBLevel_sup + ")" : ""); }
+                                    <small id="_lblParentRoleCB_CRL_sup" class="font-weight-normal" asp-for="strSupervisedByRoleCB"> @strCBLevelTag_sup </small>
+                                    <div class="input-group">
+                                        <input id="_strParentRoleCB_CRL_sup" type="text" class="form-control text-sm bg-transparent" asp-for="strParentRoleCB" aria-describedby="button-addon2" placeholder="choose church body" disabled />
+                                        <button class="btn btn-light btn-sm border border-left-0" type="button" id="button-addon2"
+                                                onclick="ImportTargetCB(@_oAGOId, @_oCBId, '_ParentRoleCBId_CRL_sup', '_strParentRoleCB_CRL_sup', '', '_lblParentRoleCB_CRL_sup', 'Supervising_Body')">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </button>
+                                    </div>
+                                    <input id="_ParentRoleCBId_CRL_sup" type="hidden" asp-for="oChurchRole.ParentRoleCBId" />
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <small class="font-weight-normal" asp-for="strParentRoleOrgType"> Role Type </small>
+                                    <div class="input-group">
+                                        <select id="_strParentRoleOrgType_CRL" class="form-control text-sm" asp-for="strParentRoleOrgTypeCode" asp-items="Model.lkpOrgTypes_CRL">
+                                            <option selected disabled value=""> Select Role Type </option>
+                                        </select>
+                                        <button id="_btnLoadParentRoleOrgType_CRL" type="button" class="btn btn-light btn-sm border border-left-0 ">
+                                            <i class="fa fa-refresh text-secondary"></i>
+                                        </button>
+                                        @*<input id="hdn_ParentRoleOrgType_CRL" type="hidden" asp-for="strParentRoleOrgType" />*@
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <small class="font-weight-normal" asp-for="oChurchRole.ParentRoleId"> Supervising Role </small>
+                                    <div class="input-group">
+                                        <select id="_ParentRoleId_CRL" class="form-control text-sm" asp-for="oChurchRole.ParentRoleId" aria-describedby="fd_ParentRoleId">
+                                            <option selected disabled value=""> Select Role </option>
+                                        </select>
+                                        <button id="_btnClearParentRole_CRL" type="button" class="btn btn-light btn-sm border border-left-0">
+                                            <i class="fa fa-times text-danger"></i>
+                                        </button>
+                                    </div>
+                                    <input id="hdn_ParentRoleId_CRL" type="hidden" asp-for="oChurchRole.ParentRoleId" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md" id="_divIsAdhocRole_CRL">
+                        <small asp-for="oChurchRole.IsAdhocRole" class="control-label">&nbsp;</small>
+                        <label class="chk_container text-sm font-weight-normal">
+                            <small> Adhoc (supplementary) role </small>
+                            <input id="chk_IsAdhocRole_CRL" type="checkbox" asp-for="oChurchRole.IsAdhocRole" />
+                            <span class="checkmark"></span>
+                        </label>
+                        <small id="fd_IsAdhocRole" class="form-text text-muted"> May not be constitutional. </small>
+                    </div>
+                    <div class="col-md" id="_divIsApplyToClergyOnly_CRL">
+                        <small asp-for="oChurchRole.IsApplyToClergyOnly" class="control-label">&nbsp;</small>
+                        <label class="chk_container text-sm font-weight-normal">
+                            <small> Apply to Clergy </small>
+                            <input id="chk_IsApplyToClergyOnly_CRL" type="checkbox" asp-for="oChurchRole.IsApplyToClergyOnly" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-row mb-3" id="_divGenderStatus1">
+                    <div class="col-md-4">
+                        <small class="font-weight-normal" asp-for="oChurchRole.GenderStatus"> Apply to Gender </small>
+                        <select id="_GenderStatus" class="form-control text-sm" asp-for="oChurchRole.ApplyToGender" asp-items="Model.lkpGenderStatuses" aria-describedby="fd_Status">
+                            <option selected disabled value=""> Gender </option>
+                        </select>
+                    </div>
+                    <div class="col-md-8">
+                        <small class="font-weight-normal" asp-for="oChurchRole.MinNumAllowed"> Role Allowed Persons (Min-Max) </small>
+                        <div class="input-group" aria-describedby="fd_PersonsAllowed">
+                            <input type="number" min="1" class="form-control text-sm" asp-for="oChurchRole.MinNumAllowed" aria-describedby="fd_MinNumAllowed">
+                            <input type="number" min="1" class="form-control text-sm" asp-for="oChurchRole.MaxNumAllowed" aria-describedby="fd_MaxNumAllowed">
+
+                        </div>
+                        @* <small id="fd_MinNumAllowed" class="form-text text-muted ml-1"> Min Persons </small>
+                <small id="fd_MaxNumAllowed" class="form-text text-muted ml-1"> Max Persons </small>  *@
+                        <small id="fd_PersonsAllowed" class="form-text text-muted ml-1"> Note: Range is inclusive. </small>
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oChurchRole.OfficeTermType" class="control-label"> Term (of Office) Type </small>
+                        <select id="_OfficeTermType" class="form-control text-sm" asp-for="oChurchRole.OfficeTermType" asp-items="Model.lkpOfficeTermTypes">
+                            <option selected value=""> Choose Term Type</option>
+                        </select>
+                    </div>
+                    <div class="col-md" id="_divOfficeTermMax_Yrs" hidden>
+                        <small asp-for="oChurchRole.OfficeTermMax_Yrs" class="control-label"> Term Duration (yrs) </small>
+                        <input id="_OfficeTermMax_Yrs" type="text" maxlength="50" class="form-control text-sm" asp-for="oChurchRole.OfficeTermMax_Yrs" placeholder="Maximum Term Duration" />
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small class="font-weight-normal" asp-for="oChurchRole.PrimaryFunction"> Primary Function </small>
+                        <textarea asp-for="oChurchRole.PrimaryFunction" maxlength="200" class="form-control text-sm" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                        <small class="font-weight-normal" asp-for="oChurchRole.OrderIndex">Order Index</small>
+                        <input type="number" min="1" class="form-control text-sm" asp-for="oChurchRole.RankIndex" placeholder="Order index">
+                    </div>
+                    <div class="col-md-4 mb-3"></div>
+
+                    @*<div class="col-md-4 mb-3">
+                <small class="font-weight-normal" asp-for="oChurchRole.ChurchWorkStatus"> Work Status </small>
+                <select id="_ChurchWorkStatus_CRL" class="form-control text-sm" asp-for="oChurchRole.ChurchWorkStatus" asp-items="Model.lkpChurchWorkStatuses" aria-describedby="fd_ChurchWorkStatus">
+                    <option selected disabled value="">Select</option>
+                </select>
+            </div>*@
+
+                    <div class="col-md-4 mb-3">
+                        <small class="font-weight-normal" asp-for="oChurchRole.Status"> Status  </small>
+                        <select id="_Status_CR" class="form-control text-sm" asp-for="oChurchRole.Status" asp-items="Model.lkpStatuses" aria-describedby="fd_Status" required>
+                            <option selected disabled value="">Select Status </option>
+                        </select>
+                    </div>
+
+                    @*<div class="col-md-1"></div>
+            <div class="col-md-3 mb-3">
+                <small class="font-weight-normal" asp-for="oChurchRole.Status"> Activated </small>
+                <div class="custom-control custom-switch custom-switch-on-success">
+                    <input type="checkbox" class="custom-control-input" id="customSwitch3" asp-for="bl_IsActivated">
+                    <label class="custom-control-label font-weight-normal text-sm" for="customSwitch3"> &nbsp; </label>
+                </div>
+
+                <input type="hidden" asp-for="oChurchRole.Status" />
+            </div>*@
+                </div>
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small class="font-weight-normal" asp-for="oChurchRole.Comments">Any comments</small>
+                        <textarea asp-for="oChurchRole.Comments" class="form-control text-sm" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <br />
+                <hr class="cus-div" style="width:100%; border: 1px solid #b7b5b5;" />
+
+                @if ((Model.oChurchBody?.OrgType == "CR" || Model.oChurchBody?.OrgType == "CH") && Model.oChurchRole.OwnedByChurchBodyId == Model.oChurchBodyId_Logged)
+                {
+                    <div class="form-row mb-3">
+                        <div class="col-md-4">
+                            <small class="font-weight-normal" asp-for="strOwnedByStatus"> Scope </small>
+                            <input type="text" class="form-control text-sm" asp-for="strOwnershipStatus" placeholder="Scope" readonly>
+                            <input id="_OwnedByChurchBodyId_CRL" type="hidden" asp-for="oChurchRole.OwnedByChurchBodyId" />
+                        </div>
+                        <div class="col-md-8">
+                            <small class="font-weight-normal" asp-for="oChurchRole.SharingStatus"> Sharing Status </small>
+                            <select class="form-control text-sm" asp-for="oChurchRole.SharingStatus" asp-items="Model.lkpSharingStatuses" aria-describedby="fd_SharingStatus" required>
+                                <option selected disabled value="">Select Scope </option>
+                            </select>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-row mb-3">
+                        <div class="col-md-4">
+                            <small class="font-weight-normal" asp-for="strOwnershipStatus"> Scope </small>
+                            <input type="text" class="form-control text-sm" asp-for="strOwnershipStatus" placeholder="Scope" readonly>
+                            <input type="hidden" asp-for="oChurchRole.SharingStatus" />
+                        </div>
+                        <div class="col-md-8">
+                            @{ var strOwnCB = "Owned by " + (!string.IsNullOrEmpty(Model.strChurchLevel_OwnedByCB) ? "(" + Model.strChurchLevel_OwnedByCB + ")" : "");}
+                            <small class="font-weight-normal" asp-for="strOwnedByChurchBody"> @strOwnCB </small>
+                            <input type="text" class="form-control text-sm" asp-for="strOwnedByChurchBody" placeholder="Owned by" readonly>
+                            <input id="_OwnedByChurchBodyId_CRL" type="hidden" asp-for="oChurchRole.OwnedByChurchBodyId" />
+                        </div>
+                    </div>
+                }
+
+            </form>
+        </div>
+    }
+}
+
+

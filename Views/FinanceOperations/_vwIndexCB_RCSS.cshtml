@@ -1,0 +1,60 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.CBTitheBalModel
+
+
+@if (Model != null)
+{
+    <table id="tabDataCB_RCSS" class="table table-bordered table-striped" style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: small">
+        <thead>
+            <tr>
+                <th style="vertical-align: middle; "> Congregation </th>
+
+                
+                <th style="vertical-align: middle; text-align:center"> Total Receipts </th>
+                <th style="vertical-align: middle; text-align:center"> Total Disbursed </th>
+                <th style="vertical-align: middle; text-align:center"> Total Net </th> 
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lsCBTitheBalModels)
+            {
+                <tr>
+                    <td style="vertical-align: middle">
+                        @{ var strDesc = '"' + item.oChurchBody?.Name + '"'; }
+                        <a href="#" data-backdrop="static" onclick="ReloadCurrPageCB_RCSS(@item.oCBTitheTransBal?.ChurchBodyId, @Model.taskIndex, @strDesc)">
+                            @item.strChurchBody
+                        </a>
+                    </td>
+
+                   
+                    <td style="vertical-align: middle; text-align:center">
+                        @item.strTotCol
+                    </td>
+                    <td style="vertical-align: middle; text-align:center">
+                        @item.strTotOut
+                    </td>
+                    <td style="vertical-align: middle; text-align:center">
+                        @item.strTotNet
+                    </td>  
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr class="text-bold">
+                <td style="vertical-align: middle">
+                    Grand Total
+                </td>  
+                <td style="vertical-align: middle; text-align:center">
+                    @Model.strGrandTotCol
+                </td>
+                <td style="vertical-align: middle; text-align:center">
+                    @Model.strGrandTotOut
+                </td>
+                <td style="vertical-align: middle; text-align:center">
+                    @Model.strGrandTotNet
+                </td> 
+            </tr>
+        </tfoot>
+    </table>
+
+}

@@ -1,0 +1,366 @@
+﻿
+@model RhemaCMS.Models.ViewModels.vm_cl.MemberChurchlifeModel
+
+@if (Model.taskIndex == 0)
+{
+
+    @if (Model.oMemberChurchlife != null)
+    {
+        <input type="hidden" asp-for="oAppGloOwnId" />
+        <input type="hidden" asp-for="oChurchBodyId" />
+        <input type="hidden" asp-for="oChurchMemberId" />
+
+        <input type="hidden" asp-for="oMemberChurchlife.Id" />
+        <input type="hidden" asp-for="oMemberChurchlife.ChurchBodyId" id="_ChurchBodyId" />
+        <input type="hidden" asp-for="oMemberChurchlife.AppGlobalOwnerId" id="_AppGlobalOwnerId" />
+        <input type="hidden" asp-for="oMemberChurchlife.ChurchMemberId" />
+
+        <input type="hidden" asp-for="strChurchBody" id="_strChurchBody" />
+
+        <input type="hidden" asp-for="oMemberChurchlife.Created" />
+        <input type="hidden" asp-for="oMemberChurchlife.LastMod" />
+        <input type="hidden" asp-for="oMemberChurchlife.CreatedByUserId" />
+        <input type="hidden" asp-for="oMemberChurchlife.LastModByUserId" />
+
+        <input type="hidden" asp-for="setIndex" id="_setIndex_MPC" />
+        <input type="hidden" asp-for="taskIndex" id="_taskIndex_MPC" />
+
+
+        <div id="divModalContainer1" class="jumbotron-fluid shadow-none form-group justify-content-center" style="width: 90%; margin: 0 auto 0 auto ; padding: 0;  ">
+            <div class="form-row">
+                <div class="col-md mb-1">
+                    <small asp-for="oMemberChurchlife.IsCurrentMember" class="control-label"> Membership </small>
+                    @if (Model.oMemberChurchlife.IsCurrentMember)
+                    {
+                        <input type="text" class="form-control text-sm bg-success text-center" value="Current Member" readonly>
+                    }
+
+                    else if (Model.oMemberChurchlife.IsDeceased)
+                    {
+                        <input type="text" class="form-control text-sm bg-danger text-center" value="Deceased" readonly>
+                    }
+                    else
+                    {
+                        <input type="text" class="form-control text-sm bg-danger text-center" value="Past Member" readonly>
+                    }
+                </div>
+                <div class="col-md mb-1">
+                    <small asp-for="oMemberChurchlife.Reason" class="control-label"> Member Longevity  </small>
+                    <input type="text" class="form-control text-sm" asp-for="strMemLongevity_Yrs" readonly>
+                </div>
+                <div class="col-md mb-1">
+                    <small asp-for="oMemberChurchlife.DateJoined" class="control-label"> Date Enrolled </small>
+                    <input type="text" class="form-control text-sm" asp-for="strJoinedDate" readonly>
+                </div>
+                <div class="col-md mb-1">
+                    <small asp-for="oMemberChurchlife.EnrollMode" class="control-label"> Enroll Mode </small>
+                    <input type="text" class="form-control text-sm" asp-for="strEnrollMode" readonly>
+                </div>
+                <div class="col-md-12 mb-1">
+                    <small asp-for="oMemberChurchlife.EnrollReason" class="control-label"> Attached Reason </small>
+                    <input type="text" maxlength="100" class="form-control text-sm" asp-for="oMemberChurchlife.EnrollReason" readonly>
+                </div>
+            </div>
+
+            @if (!Model.oMemberChurchlife.IsCurrentMember)
+            {
+                <div class="form-row">
+                    <div class="col-md-6 mb-1">
+                        <small asp-for="oMemberChurchlife.DateDeparted" class="control-label"> Date Departed </small>
+                        <input type="text" class="form-control text-sm" asp-for="strDepartedDate" readonly>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <small asp-for="strDepartMode" class="control-label"> Mode of Departure </small>
+                        <input type="text" class="form-control text-sm" asp-for="strDepartMode" readonly>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <small asp-for="oMemberChurchlife.DepartReason" class="control-label"> Attached Reason </small>
+                        <input type="text" maxlength="100" class="form-control text-sm" asp-for="oMemberChurchlife.DepartReason" readonly>
+                    </div>
+                </div>
+            }
+
+            <div class="form-row">
+                <div class="col-md-6 pt-1 mb-1" id="_divIsMemBaptizedvdMCL_CL">
+                    <small asp-for="oMemberChurchlife.IsMemBaptized" class="control-label">&nbsp;</small>
+                    <label class="chk_container">
+                        <span class="text-sm font-weight-normal"> Member Baptized </span>
+                        <input id="chk_IsMemBaptized_vdMCL_CL" type="checkbox" asp-for="oMemberChurchlife.IsMemBaptized" disabled />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <div class="col-md-6 mb-1" id="_divIsMemConfirmed_vdMCL_CL">
+                    <small asp-for="oMemberChurchlife.IsMemConfirmed" class="control-label">&nbsp;</small>
+                    <label class="chk_container">
+                        <span class="text-sm font-weight-normal"> Membership Confirmed </span>
+                        <input id="chk_IsMemConfirmed_vdMCL_CL" type="checkbox" asp-for="oMemberChurchlife.IsMemConfirmed" disabled />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                @if (!string.IsNullOrEmpty(Model.oMemberChurchlife.NonConfirmReason))
+                {
+                    <div class="col-md-12 mb-1" id="_divNonConfirmReason_vdMCL_CL">
+                        <small asp-for="oMemberChurchlife.NonConfirmReason" class="control-label"> Reason for Not Confirmed </small>
+                        <input type="text" maxlength="50" class="form-control text-sm" asp-for="oMemberChurchlife.NonConfirmReason" readonly>
+                    </div>
+                }
+
+            </div>
+
+            <div class="form-row">
+                <div class="col-md-6 mb-1" id="_divIsMemCommunicant_vdMCL_CL">
+                    <small asp-for="oMemberChurchlife.IsMemCommunicant" class="control-label">&nbsp;</small>
+                    <label class="chk_container">
+                        <span class="text-sm font-weight-normal"> Member Communicant ?</span>
+                        <input id="chk_IsMemCommunicant_vdMCL_CL" type="checkbox" asp-for="oMemberChurchlife.IsMemCommunicant" disabled />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <div class="col-md-6 mb-1" id="_divIsPioneer_vdMCL_CL">
+                    <small asp-for="oMemberChurchlife.IsPioneer" class="control-label">&nbsp;</small>
+                    <label class="chk_container">
+                        <span class="text-sm font-weight-normal"> Pioneer (Founding member) </span>
+                        <input id="chk_IsPioneer_vdMCL_CL" type="checkbox" asp-for="oMemberChurchlife.IsPioneer" disabled />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                @if (!string.IsNullOrEmpty(Model.oMemberChurchlife.NonCommReason))
+                {
+                    <div class="col-md-12 mb-1" id="_divNonCommReason_vdMCL_CL">
+                        <small asp-for="oMemberChurchlife.NonCommReason" class="control-label"> Reason for Non-Communicant </small>
+                        <input type="text" maxlength="50" class="form-control text-sm" asp-for="oMemberChurchlife.NonCommReason" readonly>
+                    </div>
+                }
+
+            </div>
+
+            <div class="form-row mb-1">
+                <div class="col-md">
+                    <small asp-for="oMemberChurchlife.ChurchBodyServiceId" class="control-label"> Church Service </small>
+                    <input type="text" maxlength="30" class="form-control text-sm" asp-for="strChurchBodyService" readonly>
+                </div>
+                <div class="col-md-4">
+                    <small asp-for="oMemberChurchlife.HealthConditionStatus" class="control-label"> Health Condition </small>
+                    <input type="text" maxlength="30" class="form-control text-sm" asp-for="strHealthCondition" readonly>
+                </div>
+            </div>
+
+            <div class="form-row mb-1">
+                <div class="col-md">
+                    <small asp-for="oMemberChurchlife.Notes" class="control-label"> Member Churchlife Profile (Biography) </small>
+                    <textarea maxlength="500" asp-for="oMemberChurchlife.MemberlifeSummary" class="form-control text-sm" rows="6" readonly></textarea>
+                </div>
+            </div>
+
+        </div>
+
+    }
+
+}
+
+else
+{
+    <div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center" style="width: 90%; margin: 0 auto 0 auto ; padding: 0;  ">
+        <form needs-validation novalidate id="currFormCM_MCL_CL" method="post" enctype="multipart/form-data" asp-action="AddModCM_MCL_CL" class=" form-group bg-transparent">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @if (Model.oMemberChurchlife != null)
+            {
+                <input type="hidden" asp-for="oAppGloOwnId" />
+                <input type="hidden" asp-for="oChurchBodyId" />
+                <input type="hidden" asp-for="oChurchMemberId" />
+
+                <input type="hidden" asp-for="oMemberChurchlife.Id" />
+                <input type="hidden" asp-for="oMemberChurchlife.ChurchBodyId" id="_ChurchBodyId" />
+                <input type="hidden" asp-for="oMemberChurchlife.AppGlobalOwnerId" id="_AppGlobalOwnerId" />
+                <input type="hidden" asp-for="oMemberChurchlife.ChurchMemberId" />
+
+                <input type="hidden" asp-for="strChurchBody" id="_strChurchBody" />
+
+                <input type="hidden" asp-for="oMemberChurchlife.Created" />
+                <input type="hidden" asp-for="oMemberChurchlife.LastMod" />
+                <input type="hidden" asp-for="oMemberChurchlife.CreatedByUserId" />
+                <input type="hidden" asp-for="oMemberChurchlife.LastModByUserId" />
+
+                <input type="hidden" asp-for="subSetIndex" id="_subSetIndex_MPC" />
+
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC" />
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC1" />
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC_MCL_CL" />
+
+                <input type="hidden" asp-for="taskIndex" id="_taskIndex_MPC" />
+
+
+
+                <div class="form-row mb-3">
+                    <div class="col-md pt-1" id="_divIsCurrent_moMCL_CL">
+                        <small asp-for="oMemberChurchlife.IsCurrentMember" class="control-label">Membership</small>
+                        <label class="chk_container">
+                            <span class="text-sm font-weight-normal"> Current Member  </span>
+                            <input id="chk_IsCurrentMember_moMCL_CL" type="checkbox" asp-for="oMemberChurchlife.IsCurrentMember" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="col-md pt-1" id="_divIsDeceased_moMCL_CL">
+                        <small asp-for="oMemberChurchlife.IsDeceased" class="control-label">&nbsp;</small>
+                        <label class="chk_container">
+                            <span class="text-sm font-weight-normal"> Deceased </span>
+                            <input id="chk_IsDeceased_moMCL_CL" type="checkbox" asp-for="oMemberChurchlife.IsDeceased" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md" id="_divDateJoined_moMCL_CL">
+                        <small asp-for="oMemberChurchlife.DateJoined" class="control-label"> Date Enrolled </small>
+                        <input id="_DateJoined_moMCL_CL" type="date" class="form-control text-sm" asp-for="oMemberChurchlife.DateJoined" onchange="calcMemLongevity(this);">
+                    </div>
+                    <div class="col-md" id="_divDateDeparted_moMCL_CL">
+                        <small asp-for="oMemberChurchlife.DateDeparted" class="control-label"> Date Departed </small>
+                        <input id="_DateDeparted_moMCL_CL" type="date" class="form-control text-sm" asp-for="oMemberChurchlife.DateDeparted" onchange="calcMemLongevity(this);">
+                    </div>
+                    <div class="col-md">
+                        <small asp-for="strMemLongevity_Yrs" class="control-label"> Member Longevity (years) </small>
+                        <input id="_strMemLongevity_Yrs" type="text" class="form-control text-sm" asp-for="strMemLongevity_Yrs" readonly>
+                    </div>
+                </div>
+                <div class="form-row mb-3" id="_div_EnrollMode_moMCL_CL">
+                    <div class="col-md">
+                        <small asp-for="oMemberChurchlife.EnrollMode" class="control-label"> Mode of Enrollment </small>
+                        <select id="_EnrollMode_moMCL_CL" class="form-control text-sm" asp-for="oMemberChurchlife.EnrollMode" asp-items="Model.lkpEnrollModes">
+                            <option value="" selected disabled> Enroll Mode </option>
+                        </select>
+                    </div>
+                    <div class="col-md-8" id="_divEnrollReason_moMCL_CL">
+                        <small asp-for="oMemberChurchlife.EnrollReason" class="control-label"> Any Reason for Enrollment ? </small>
+                        <input type="text" maxlength="100" class="form-control text-sm" asp-for="oMemberChurchlife.EnrollReason">
+                    </div>
+                </div>
+                <div class="form-row mb-3" id="_divDepartReason_moMCL_CL">
+                    <div class="col-md">
+                        <small asp-for="oMemberChurchlife.DepartMode" class="control-label"> Mode of Departure </small>
+                        <select id="_DepartMode_moMCL_CL" class="form-control text-sm" asp-for="oMemberChurchlife.DepartMode" asp-items="Model.lkpDepartModes">
+                            <option value="" selected disabled> Depart Mode </option>
+                        </select>
+                    </div>
+                    <div class="col-md-8">
+                        <small asp-for="oMemberChurchlife.DepartReason" class="control-label"> Any Reason for Departure ? </small>
+                        <input type="text" maxlength="100" class="form-control text-sm" asp-for="oMemberChurchlife.DepartReason">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md pt-1 mb-1" id="_divIsMemBaptizedmoMCL_CL">
+                        <small asp-for="oMemberChurchlife.IsMemBaptized" class="control-label">&nbsp;</small>
+                        <label class="chk_container">
+                            <span class="text-sm font-weight-normal"> Member Baptized </span>
+                            <input id="chk_IsMemBaptized_moMCL_CL" type="checkbox" asp-for="oMemberChurchlife.IsMemBaptized" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-4 mb-1" id="_divIsMemConfirmed_moMCL_CL">
+                        <small asp-for="oMemberChurchlife.IsMemConfirmed" class="control-label">&nbsp;</small>
+                        <label class="chk_container">
+                            <span class="text-sm font-weight-normal"> Membership Confirmed </span>
+                            <input id="chk_IsMemConfirmed_moMCL_CL" type="checkbox" asp-for="oMemberChurchlife.IsMemConfirmed" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="col-md mb-1" id="_divNonConfirmReason_moMCL_CL">
+                        <small asp-for="oMemberChurchlife.NonConfirmReason" class="control-label"> Any Reason for Not Confirmed ? </small>
+                        <input type="text" maxlength="50" class="form-control text-sm" asp-for="oMemberChurchlife.NonConfirmReason">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-4 mb-1" id="_divIsMemCommunicant_moMCL_CL">
+                        <small asp-for="oMemberChurchlife.IsMemCommunicant" class="control-label">&nbsp;</small>
+                        <label class="chk_container">
+                            <span class="text-sm font-weight-normal"> Member Communicant ?</span>
+                            <input id="chk_IsMemCommunicant_moMCL_CL" type="checkbox" asp-for="oMemberChurchlife.IsMemCommunicant" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="col-md mb-1" id="_divNonCommReason_moMCL_CL">
+                        <small asp-for="oMemberChurchlife.NonCommReason" class="control-label"> Any Reason for Non-Communicant ? </small>
+                        <input type="text" maxlength="30" class="form-control text-sm" asp-for="oMemberChurchlife.NonCommReason">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md mb-3" id="_divIsPioneer_moMCL_CL">
+                        <small asp-for="oMemberChurchlife.IsPioneer" class="control-label">&nbsp;</small>
+                        <label class="chk_container">
+                            <span class="text-sm font-weight-normal"> Pioneer (Founding member) </span>
+                            <input id="chk_IsPioneer_moMCL_CL" type="checkbox" asp-for="oMemberChurchlife.IsPioneer" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberChurchlife.ChurchBodyServiceId" class="control-label"> Church Service </small>
+                        <select id="_ChurchBodyServiceId_moMCL_CL" class="form-control text-sm" asp-for="oMemberChurchlife.ChurchBodyServiceId" asp-items="Model.lkpChurchBodyServices">
+                            <option value="" selected disabled> Preferred Service </option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <small asp-for="oMemberChurchlife.HealthConditionStatus" class="control-label"> Health Condition </small>
+                        <select id="_HealthConditionStatus_moMCL_CL" class="form-control text-sm" asp-for="oMemberChurchlife.HealthConditionStatus" asp-items="Model.lkpHealthConditionStatuses">
+                            <option value="" selected disabled> Current Health Status </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberChurchlife.Notes" class="control-label"> Member Churchlife Profile (Biography) </small>
+                        <textarea maxlength="500" asp-for="oMemberChurchlife.MemberlifeSummary" class="form-control text-sm" rows="6"></textarea>
+                    </div>
+                </div>
+
+
+                <br />
+                <hr class="cus-div" style="width:100%; border: 1px solid #808080;" />
+
+                @if (Model.oChurchBody?.OrgType == "CN" && Model.oMemberChurchlife.ChurchBodyId == Model.oChurchBodyId_Logged)
+                {
+                    <div class="form-row mb-3 mt-3">
+                        <div class="col-md-3">
+                            <small class="font-weight-normal" asp-for="strOwnedByStatus"> Scope </small>
+                            <input type="text" class="form-control text-xs" asp-for="strOwnStatus" placeholder="Scope" readonly>
+                            <input type="hidden" asp-for="oMemberChurchlife.ChurchBodyId" />
+                        </div>
+                        <div class="col-md">
+                            <small class="font-weight-normal" asp-for="oMemberChurchlife.SharingStatus"> Sharing Status </small>
+                            <select id="_CountryId" class="form-control text-xs" asp-for="oMemberChurchlife.SharingStatus" asp-items="Model.lkpSharingStatuses_Any" aria-describedby="fd_SharingStatus" required>
+                                <option selected disabled value=""> Select scope </option>
+                            </select>
+                            <div class="invalid-feedback" id="fd_SharingStatus"> Select sharing status </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-row mb-3 mt-3">
+                        <div class="col-md-3">
+                            <small class="font-weight-normal" asp-for="strOwnershipStatus"> Scope </small>
+                            <input type="text" class="form-control text-xs" asp-for="strOwnStatus" placeholder="Scope" readonly>
+                            <input type="hidden" asp-for="oMemberChurchlife.SharingStatus" />
+                        </div>
+                        <div class="col-md">
+                            @{ var strOwnCB = "Owned by " + (!string.IsNullOrEmpty(Model.strOwnedByCBLevel) ? "(" + Model.strOwnedByCBLevel + ")" : "");}
+                            <small class="font-weight-normal" asp-for="strOwnedByChurchBody"> @strOwnCB </small>
+                            <input type="text" class="form-control text-xs" asp-for="strOwnedByCB" placeholder="Owned by" readonly>
+                            <input type="hidden" asp-for="oMemberChurchlife.ChurchBodyId" />
+                        </div>
+                    </div>
+                }
+
+            }
+
+        </form>
+    </div>
+}

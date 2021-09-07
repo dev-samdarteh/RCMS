@@ -1,0 +1,92 @@
+﻿
+@model RhemaCMS.Models.ViewModels.vm_cl.ChurchCalendarModel
+
+
+
+<table id="tabData_CCE" class="table table-bordered table-striped">
+    <thead>
+        <tr align="center">
+            <th align="left" style="text-align: left ">
+                Subject
+            </th>
+            <th align="left" style="text-align: left ">
+                Church Activity
+            </th>
+            <th>
+                Venue
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.oCalendarEvents[0].EventFrom)*@ From
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.oCalendarEvents[0].EventTo)*@ To
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.oCalendarEvents[0].IsFullDay)*@ Full Day
+            </th>
+            <th>
+                Active
+            </th>
+
+            <th width="80px">
+                <a class="btn btn-light " asp-controller="ChurchCalendar" asp-action="Index_CCE" asp-route-reqChurchBodyId="@Model.oChurchBody.Id">
+                    <i class="fas fa-refresh text-secondary"  ></i>
+                </a>
+                @*<a href="#" class="btn btn-light  btn-sm" onclick="AddEditCurrData_CCE(0)" style=" font-weight:bold; font-size:small"><i class="fa fa-plus fa-sm"></i></a>*@
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.oCalendarEvents)
+        {
+            <tr  class="pl-1">
+                <td >
+                    @Html.DisplayFor(modelItem => item.Subject)
+                </td>
+                <td >
+                    @{
+                        var descActv = item.ChurchlifeActivity_NVP != null ? item.ChurchlifeActivity_NVP.NVPValue : "";
+                    } 
+                    @Html.DisplayFor(modelItem => descActv)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Venue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EventFrom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EventTo)
+                </td>
+                <td class="text-center">
+                    @if (item.IsFullDay)
+                    {
+                        <i class="fa fa-check fa-lg" style="color:deepskyblue"></i>
+                    }
+                    else if (item.IsFullDay == false)
+                    {
+                        <i class="fa fa-times fa-lg" style=" color: lightgrey "></i>
+                    }
+                </td>
+                <td class="text-center">
+                    @if (item.IsEventActive)
+                    {
+                        <i class="fa fa-check fa-lg" style="color:limegreen "></i>
+                    }
+                    else if (item.IsEventActive == false)
+                    {
+                        <i class="fa fa-times fa-lg" style=" color: tomato  "></i>
+                    }
+                </td>
+                 
+                <td class="text-center">
+                    <a href="#" class="btn btn-sm btn-outline-light ml-1" data-backdrop="static" data-keyboard="false" 
+                       onclick="AddEditCurrData_CCE(  @item.Id)"><i class="fa fa-pencil fa-sm" style="color: darkslategray;"></i></a>
+
+                    @*<a href="#" class="text-danger ml-1" onclick="ConfirmDeleteCurr_ProgEvent(@item.Id)"><i class="fas fa-trash-alt small"></i></a>*@
+                </td>
+            </tr>
+        }
+    </tbody> 
+</table>
+

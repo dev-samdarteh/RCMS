@@ -1,0 +1,493 @@
+﻿
+@model RhemaCMS.Models.ViewModels.vm_cl.MemberBioModel
+
+<div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center pt-0" style="width:85%; margin: 0 auto 0 auto ; padding:0;  ">
+    <form needs-validation novalidate id="currFormCM_BD" method="post" enctype="multipart/form-data" asp-action="AddOrEditCM_BD" class="form-group bg-transparent p-2 pl-3 pr-3 mt-0" >
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="oChurchMember.Id" id="_hdnCurrIdCM_BD" />
+        <input type="hidden" asp-for="oChurchMember.ChurchBodyId" id="_ChurchBodyId" />
+        <input type="hidden" asp-for="oChurchMember.AppGlobalOwnerId" id="_AppGlobalOwnerId" />
+
+        <input type="hidden" asp-for="bl_AUT_GN" id="_bl_AUT_GN" />
+        <input type="hidden" asp-for="oChurchMember.MemberScope" />
+
+        <input type="hidden" asp-for="oChurchMember.Created" />
+        <input type="hidden" asp-for="oChurchMember.LastMod" />
+        <input type="hidden" asp-for="oChurchMember.CreatedByUserId" />
+        <input type="hidden" asp-for="oChurchMember.LastModByUserId" />
+
+        <input type="hidden" asp-for="@Model.setIndex" id="_setIndex" />
+        <input type="hidden" asp-for="@Model.subSetIndex" id="_subSetIndex" />
+
+        <input type="hidden" asp-for="@Model.oChurchBodyId_Logged" id="_oChurchBodyId_Logged" />
+        <input type="hidden" asp-for="@Model.oAppGloOwnId_Logged" id="_oAppGloOwnId_Logged" />
+        <input type="hidden" asp-for="@Model.oUserId_Logged" id="_oUserId_Logged" />
+
+
+        <input type="hidden" asp-for="oChurchMember.PhotoUrl" id="_hdnCurrLogoId" />
+
+        <br />
+
+        @if (Model.oChurchMember != null)
+        {
+
+            <div class="form-row mb-2">
+                <div class="col-md">
+                    <small class="font-weight-normal" asp-for="strChurchBody"> Member belongs to: </small>
+                    <p class="text-sm font-weight-bold" type="text" asp-for="strChurchBodyDetail">@Model.strChurchBodyDetail</p>
+                    <hr class="cus-div" style="width:100%; border: 1px solid #b7b5b5;" />
+                </div>
+            </div>
+
+
+            @if (Model.oChurchMember.PhotoUrl != null)
+            {
+                var photoPath = "~/img_db/" + (Model.oChurchMember.PhotoUrl ?? "df_user_p.png");
+
+                <div class="col-md cus-rel-center mb-2">
+                    <div class="overlay-wrapper">
+                        <div class="btn-group float-right">
+                            <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-edit text-primary"></i>
+                            </button>
+                            <div class="dropdown-menu p-1">
+                                <input type="file" class="form-control-file text-sm" value="Choose photo" asp-for="UserPhotoFile">
+                                <input type="hidden" asp-for="oChurchMember.PhotoUrl" id="_hdnCurrLogoId" />
+                            </div>
+                        </div>
+
+                        <div class="text-center mb-2">
+                            <img class="profile-user-img img-fluid img-circle" style="min-width: 150px; min-height:150px; max-width: 150px; max-height:150px;"
+                                 src="@Url.Content(photoPath)" alt="User profile photo">
+                        </div>
+
+                    </div>
+                </div>
+            }
+
+
+            @if (Model.oChurchMember.Id > 0 && !string.IsNullOrEmpty(Model.strAccountStatus))
+            {
+                <div class="form-row mb-2">
+                    <div class="col-md-4 float-right">
+                        <small asp-for="oChurchMember.Status" class="control-label"> Member Profile Status </small>
+                        @if (Model.oChurchMember.Status == "A")
+                        {
+                            <input type="text" class="form-control text-sm bg-success" asp-for="strAccountStatus" readonly>
+                        }
+                        else if (Model.oChurchMember.Status == "H")
+                        {
+                            <input type="text" class="form-control text-sm bg-warning" asp-for="strAccountStatus" readonly>
+                        }
+                        else if (Model.oChurchMember.Status == "D")
+                        {
+                            <input type="text" class="form-control text-sm bg-danger" asp-for="strAccountStatus" readonly>
+                        }
+                        else
+                        {
+                            <input type="text" class="form-control text-sm bg-secondary" asp-for="strAccountStatus" readonly>
+                        }
+
+                    </div>
+                </div>
+            }
+
+            <div class="form-row mb-2">
+                <div class="col-md-2 ">
+                    <small asp-for="oChurchMember.Title" class="control-label">Title</small>
+                    <select class="form-control text-sm" asp-for="oChurchMember.Title" asp-items="Model.lkpPersTitles" required>
+                        <option selected value=""> Select Title </option>
+                    </select>
+                </div>
+                <div class="col-md">
+                    <small asp-for="oChurchMember.FirstName " class="control-label">First Name</small>
+                    <input asp-for="oChurchMember.FirstName" class="form-control text-sm" placeholder="First Name" required />
+                </div>
+                <div class="col-md">
+                    <small asp-for="oChurchMember.MiddleName " class="control-label">Middle Name</small>
+                    <input asp-for="oChurchMember.MiddleName" class="form-control text-sm" placeholder="Middle Name" />
+                </div>
+                <div class="col-md-4">
+                    <small asp-for="oChurchMember.LastName " class="control-label">Last Name</small>
+                    <input asp-for="oChurchMember.LastName" class="form-control text-sm" placeholder="Last Name" required />
+                </div>
+            </div>
+            <div class="form-row mb-2">
+                <div class="col-md-4 mb-2">
+                    <small asp-for="oChurchMember.Gender" class="control-label">Gender</small>
+                    <select id="_Gender" class="form-control text-sm" asp-for="oChurchMember.Gender" asp-items="Model.lkpGenderTypes" required>
+                        <option selected disabled value=""> Gender </option>
+                    </select>
+                </div>
+                <div class="col-md">
+                    <small asp-for="oChurchMember.MaidenName " class="control-label">Maiden Name</small>
+                    <input asp-for="oChurchMember.MaidenName" class="form-control text-sm" placeholder="Maiden Name" />
+                </div>
+            </div>
+            <div class="form-row mb-2">
+
+                @*<div class="col-md">
+                    <small asp-for="oChurchMember.MemberClass" class="control-label">Member Class</small>
+                    @if (Model.oChurchMember.Id > 0)
+                    {
+                        <input type="text" class="form-control text-sm" asp-for="strMemberScope" placeholder="Member Class" aria-describedby="fd_strMemberScope" readonly />
+                    }
+                    else
+                    {
+                        <select class="form-control text-sm" asp-for="oChurchMember.MemberClass" asp-items="Model.lkpMemberClasses">
+                            <option selected disabled value=""> Member Class </option>
+                        </select>
+                    }
+                </div>*@
+                @*<div class="col-md-4">
+                    <small asp-for="strMemType" class="control-label"> Member Type </small>
+
+                    <input type="text" class="form-control text-sm" asp-for="strMemType" placeholder="Member Type" aria-describedby="fd_strMemType" readonly />
+                    @if (Model.strMemType.Equals("Unassigned"))
+                    {<small id="fd_strMemType" class="form-text text-muted"> You may assign type after saving </small>}
+                </div>*@
+
+                @*<div class="col-md-4">
+                    <small asp-for="oChurchMember.DateOfBirth " class="control-label">Date of Birth</small>
+                    <input type="date" asp-for="oChurchMember.DateOfBirth" class="form-control text-sm" placeholder="Date of Birth" onchange="calcMemAge(this);" />
+                </div>
+                <div class="col-md-2">
+                    <small asp-for="oChurchMember.DateOfBirth" class="control-label"> Age </small>
+                    <input id="_strMemberAge" asp-for="strMemberAge" class="form-control text-sm" readonly />
+                </div>*@
+
+                <div class="col-md-4 mb-2" id="_divMaritalStatus">
+                    <small asp-for="oChurchMember.MaritalStatus" class="control-label">Marital Status</small>
+                    <select id="_MaritalStatus" class="form-control text-sm" asp-for="oChurchMember.MaritalStatus" asp-items="Model.lkpMaritalStatuses" required>
+                        <option selected disabled value=""> Marital Status </option>
+                    </select>
+                </div>
+                <div class="input-group col-md-8 float-right" aria-describedby="fd_AgeBracket">
+                    <div class="col-md-8 m-0 p-0">
+                        <small asp-for="oChurchMember.DateOfBirth " class="control-label">Date of Birth</small>
+                        <input id="_DateOfBirth" type="date" asp-for="oChurchMember.DateOfBirth" class="form-control text-sm" placeholder="Date of Birth" onchange="calcMemAge(this);" />
+                    </div>
+                    <div class="col-md-4 m-0 p-0">
+                        <small asp-for="oChurchMember.DateOfBirth" class="control-label"> Age </small>
+                        <input id="_strMemberAge" asp-for="strMemberAge" class="form-control text-sm" readonly />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row" id="_divMarriageType" hidden>
+                <div class="col-md-4 mb-2">
+                    <small asp-for="oChurchMember.MarriageType" class="control-label">Marriage Type</small>
+                    <select id="_MarriageType" class="form-control text-sm" asp-for="oChurchMember.MarriageType" asp-items="Model.lkpMarriageTypes">
+                        <option selected disabled value=""> Marriage Type </option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-2" id="_divMarriageRegNo" hidden>
+                    <small asp-for="oChurchMember.MarriageRegNo" class="control-label">Marriage Cert. No. </small>
+                    <input id="_MarriageRegNo" type="text" class="form-control text-sm" asp-for="oChurchMember.MarriageRegNo" />
+                </div>
+            </div>
+            <div class="form-row mb-2">
+                <div class="col-md">
+                    <small class="font-weight-normal" asp-for="oChurchMember.GlobalMemberCode"> Member Code</small>
+                    <input type="text" class="form-control text-sm" maxlength="50" asp-for="oChurchMember.GlobalMemberCode" placeholder="Church code" aria-describedby="fd_GlobalMemberCode" readonly>
+                    @if (string.IsNullOrEmpty(Model.oChurchMember.GlobalMemberCode))
+                    {
+                        <small id="fd_GlobalMemberCode" class="form-text text-muted">
+                            Code will be auto-generated when saved.
+                        </small>
+                    }
+                </div>
+                <div class="col-md">
+                    <small class="font-weight-normal" asp-for="oChurchMember.MemberCustomCode"> Member Custom Code </small>
+                    <input id="_MemberCustomCode" type="text" class="form-control text-sm" maxlength="50" asp-for="oChurchMember.MemberCustomCode" placeholder="Church code" aria-describedby="fd_MemberCustomCode">
+                    @if (string.IsNullOrEmpty(Model.oChurchMember.MemberCustomCode) && Model.oChurchMember.Id == 0)
+                    {
+                        <small id="fd_MemberCustomCode" class="form-text text-muted">
+                            Code will be auto-generated if auto-option used.
+                        </small>
+                    }
+                </div>
+                @if (Model.oChurchMember.Id > 0)
+                {
+                    <div class="col-md-2 text-center">
+                        <small class="font-weight-normal" asp-for="oChurchMember.Id"> #Item Id </small>
+                        <input type="text" class="form-control text-sm" maxlength="50" asp-for="oChurchMember.Id" placeholder="#Item Id" readonly>
+                    </div>
+                }
+            </div>
+            <div class="form-row mb-2">
+                <div class="col-md">
+                    <small asp-for="oChurchMember.NationalityId" class="control-label">Nationality</small>
+                    <select id="_NationalityId" class="form-control text-sm" asp-for="oChurchMember.NationalityId" asp-items="Model.lkpCountries">
+                        <option selected disabled value=""> Nationality </option>
+                    </select>
+                </div>
+                <div class="col-md">
+                    <small asp-for="oChurchMember.MotherTongueId" class="control-label">Mother Tongue</small>
+                    <select class="form-control text-sm" asp-for="oChurchMember.MotherTongueId" asp-items="Model.lkpLanguages">
+                        <option selected value=""> Choose Mother Tongue </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row mb-2">
+                <div class="col-md">
+                    <small asp-for="oChurchMember.Hometown" class="control-label">Hometown</small>
+                    <input type="text" class="form-control text-sm" asp-for="oChurchMember.Hometown" />
+                </div>
+                <div class="col-md">
+                    <small asp-for="oChurchMember.HometownRegionId" class="control-label">Hometown Region</small>
+                    <select id="_HometownRegionId" class="form-control text-sm" asp-for="oChurchMember.HometownRegionId" asp-items="Model.lkpCountryRegions">
+                        <option selected value=""> Choose Hometown Region </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row mb-2">
+                <div class="col-md">
+                    <small asp-for="oChurchMember.IdTypeId" class="control-label">National Id Type</small>
+                    <select id="_IdTypeId" class="form-control text-sm" asp-for="oChurchMember.IdTypeId" asp-items="Model.lkpPersonIdTypes">
+                        <option selected value=""> Choose Id Type </option>
+                    </select>
+                </div>
+                <div class="col-md" id="_divNational_IdNum">
+                    <small asp-for="oChurchMember.National_IdNum" class="control-label"> Id Number </small>
+                    <input id="_National_IdNum" type="text" maxlength="50" class="form-control text-sm" asp-for="oChurchMember.National_IdNum" placeholder="National Id Number" />
+                </div>
+            </div>
+            <div class="form-row mb-2">
+                <div class="col-md-4">
+                    <small asp-for="strMemType" class="control-label"> Member Type </small>
+                    @*<input type="text" class="form-control text-sm" asp-for="strMemType" placeholder="Member Type" aria-describedby="fd_strMemType" readonly />
+                    <input type="hidden" asp-for="strMemTypeCode" />*@
+
+                    @if (Model.oChurchMember.Id > 0)
+                    {
+                        <input type="text" class="form-control text-sm" asp-for="strMemType" placeholder="Member Type" aria-describedby="fd_strMemType" readonly />
+                        <input type="hidden" asp-for="strMemTypeCode" />
+
+                    }
+                    else
+                    {
+                        <select class="form-control text-sm" asp-for="strMemTypeCode" asp-items="Model.lkpChurchMemTypes">
+                            <option selected disabled value=""> Member Type </option>
+                        </select>
+                        <input type="hidden" asp-for="@Model._strMemTypeCodeBck" />
+
+                    }
+                </div>
+                <div class="col-md">
+                    <small asp-for="oChurchMember.numMemRankId" class="control-label"> Member Rank </small>
+                    @if (Model.oChurchMember.Id > 0)
+                    {
+                        <input type="text" class="form-control text-sm" asp-for="strMemRank" placeholder="Member Rank" aria-describedby="fd_strMemRank" readonly />
+                        <input type="hidden" class="form-control text-sm" asp-for="numMemRankId" />
+                    }
+                    else
+                    {
+                        <select class="form-control text-sm" asp-for="numMemRankId" asp-items="Model.lkpChurchRanks">
+                            <option selected disabled value=""> Member Rank </option>
+                        </select>
+                    }
+                </div>
+                <div class="col-md">
+                    <small asp-for="oChurchMember.numMemTypeId" class="control-label"> Member Status </small>
+                    @if (Model.oChurchMember.Id > 0)
+                    {
+                        <input type="text" class="form-control text-sm" asp-for="strMemStatus" placeholder="Member Status" aria-describedby="fd_strMemStatus" readonly />
+                        <input type="hidden" class="form-control text-sm" asp-for="numMemStatusId" />
+                    }
+                    else
+                    {
+                        <select class="form-control text-sm" asp-for="numMemStatusId" asp-items="Model.lkpChurchMemStatuses">
+                            <option selected disabled value=""> Member Status </option>
+                        </select>
+                    }
+                </div>
+            </div>
+
+            @if (Model.oChurchMember.Id == 0)
+            {
+                <div class="form-row" id="_div_EnrollMode_moBD">
+                    <div class="col-md-6 mb-2">
+                        <small asp-for="strEnrollModeCode" class="control-label"> Enrollment Mode </small>
+                        <select id="_EnrollMode_moBD" class="form-control text-sm" asp-for="strEnrollModeCode" asp-items="Model.lkpEnrollModes">
+                            <option value="" selected disabled> Enroll Mode </option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-2" id="_divEnrollDate_moMCL_CL">
+                        <small asp-for="dtEnrollDate" class="control-label"> Date Enrolled </small>
+                        <input id="_EnrollDate_moBD" type="date" class="form-control text-sm" asp-for="dtEnrollDate">
+                    </div>
+                    <div class="col-md-12 mb-2" id="_divEnrollReason_moBD">
+                        <small asp-for="strEnrollReason" class="control-label"> Any Reason for Enrollment ? </small>
+                        <input type="text" maxlength="100" class="form-control text-sm" asp-for="strEnrollReason">
+                    </div>
+                </div>
+            }
+
+            <div class="form-row mb-2">
+                <div class="col-md">
+                    <small class="font-weight-normal" asp-for="oChurchMember.Hobbies"> Hobbies </small>
+                    <input type="text" maxlength="50" class="form-control text-sm" asp-for="oChurchMember.Hobbies" placeholder="Hobbies" />
+                </div>
+                <div class="col-md-3">
+                    <small asp-for="oChurchMember.Status" class="control-label"> Profile Status </small>
+                    <select class="form-control text-sm" asp-for="oChurchMember.Status" asp-items="Model.lkpStatuses">
+                        <option selected disabled value=""> Profile Status </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row mb-2">
+                <div class="col-md">
+                    <small class="font-weight-normal" asp-for="oChurchMember.Notes"> Member Brief (Notes) </small>
+                    <textarea maxlength="300" asp-for="oChurchMember.Notes" class="form-control text-sm" rows="3"></textarea>
+                </div>
+            </div>
+
+            @if (string.IsNullOrEmpty(Model.strMemType) || Model.oChurchMember.PhotoUrl == null)
+            {
+                <div class="form-row mb-2">
+
+
+                    @if (Model.oChurchMember.PhotoUrl == null)
+                    {
+                        <div class="col-md">
+                            <div class="form-group">
+                                <small class="font-weight-normal" asp-for="oChurchMember.PhotoUrl"> User Photo </small>
+                                <input type="file" class="form-control-file" value="Choose photo" asp-for="UserPhotoFile">
+                                <input type="hidden" asp-for="oChurchMember.PhotoUrl" id="_hdnCurrLogoId" />
+                            </div>
+                        </div>
+                    }
+
+
+                    @*<div class="col-md-4 ">
+                        <a role="button" class="btn btn-default border border-secondary" id="btnAddContactDetail">
+                            <i class="fa fa-address-book text-secondary mr-1"></i> Add Contact Details
+                        </a>
+                    </div>*@
+                </div>
+
+            }
+
+
+            <!-- only at add new cm else use member profile editor -->
+            @if (Model.oChurchMember.Id == 0 && Model.oMemContactInfo != null)
+            {
+                <hr class="cus-div" style="width:100%; border: 1px solid #b7b5b5;" />
+
+                <div class="card shadow-none pb-3" id="_divMemContactInfo">
+                    <div class="card-header border ">
+                        <a class="collapsed" data-toggle="collapse" href="#collapse-collapsed-memci" aria-expanded="true" aria-controls="collapse-collapsed-memci" id="heading-collapsed-memci">
+                            <i class="fas fa-address-book text-black-50 pr-2"></i>
+                            <i class="fa fa-chevron-down fa-sm pull-right"></i>
+                            <span class="text-sm"> Add Contact Details </span>
+                        </a>
+                        <input id="_hdnMemCI_IdCM_BD" type="hidden" asp-for="oMemContactInfo.Id" />
+                    </div>
+                    <div class="card-body collapse bg-white card-fuchsia card-outline border-left border-right border-bottom" id="collapse-collapsed-memci" aria-labelledby="heading-collapsed-memci">
+
+                        <input type="hidden" asp-for="oMemContactInfo.ChurchBodyId" id="_ChurchBodyId" />
+                        <input type="hidden" asp-for="oMemContactInfo.AppGlobalOwnerId" id="_AppGlobalOwnerId" />
+
+                        <input type="hidden" asp-for="oMemContactInfo.IsPrimaryContact" />
+                        <input type="hidden" asp-for="oMemContactInfo.IsChurchFellow" />
+                        <input type="hidden" asp-for="oMemContactInfo.Created" />
+                        <input type="hidden" asp-for="oMemContactInfo.LastMod" />
+                        <input type="hidden" asp-for="oMemContactInfo.CreatedByUserId" />
+                        <input type="hidden" asp-for="oMemContactInfo.LastModByUserId" />
+
+
+                        <div class="form-row mb-2">
+                            <div class="col-md">
+                                <small asp-for="oMemContactInfo.ResidenceAddress" class="control-label"></small>
+                                <input asp-for="oMemContactInfo.ResidenceAddress" class="form-control text-sm" placeholder="Residence Address" />
+                            </div>
+                        </div>
+                        <div class="form-row mb-2">
+                            <div class="col-md-6">
+                                <small asp-for="oMemContactInfo.Location" class="control-label"></small>
+                                <input asp-for="oMemContactInfo.Location" class="form-control text-sm" placeholder="Location" />
+                            </div>
+                            <div class="col-md-6" id="_divResAddrSameAsPostAddr_MemCI">
+                                @*<small asp-for="oMemContactInfo.ResAddrSameAsPostAddr" class="control-label">&nbsp;</small>*@
+                                <label class="chk_container">
+                                    <small> Postal Address same as Residence Address </small>
+                                    <input id="chk_ResAddrSameAsPostAddr_MemCI" type="checkbox" asp-for="oMemContactInfo.ResAddrSameAsPostAddr" />
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-row mb-2" id="_divPostalAddress_MemCI">
+                            <div class="col-md">
+                                @*<small asp-for="oMemContactInfo.PostalAddress" class="control-label"></small>*@
+                                <input id="_PostalAddress_MemCI" asp-for="oMemContactInfo.PostalAddress" class="form-control text-sm" placeholder="Postal Address" />
+                            </div>
+                        </div>
+                        <div class="form-row mb-2">
+                            <div class="col-md-6">
+                                @*<small asp-for="oMemContactInfo.City" class="control-label"></small>*@
+                                <input asp-for="oMemContactInfo.City" class="form-control text-sm" placeholder="City" />
+                            </div>
+                            <div class="input-group col-md-6">
+                                <input type="text" class="form-control text-sm border-right-0" asp-for="oMemContactInfo.DigitalAddress" placeholder="Digital Address">
+                                <button type="button" class="btn btn-light btn-sm border border-left-0 ">
+                                    <i class="fas fa-map-marker-alt fa-sm text-danger"></i>
+                                </button>
+                            </div>
+                            @*<div class="input-group col-md-6">
+                                <input type="text" class="form-control text-sm border-right-0" asp-for="oMemContactInfo.DigitalAddress" placeholder="Digital Address">
+                                <button class="btn btn-default bg-transparent border-left-0" type="button"><i class="fas fa-map-marker-alt fa-sm text-danger"></i></button>
+                            </div>*@
+                        </div>
+                        <div class="form-row mb-2">
+                            <div class="col-md-6">
+                                @*<small asp-for="oMemContactInfo.CtryAlpha3Code" class="control-label"></small>*@
+                                <select id="_CountryId_MemCI" class="form-control text-sm" asp-for="oMemContactInfo.CtryAlpha3Code" asp-items="Model.lkpCountries">
+                                    <option selected disabled value=""> Choose Country </option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                @*<small asp-for="oMemContactInfo.RegionId" class="control-label"></small>*@
+                                <select id="_RegionId_MemCI" class="form-control text-sm" asp-for="oMemContactInfo.RegionId" asp-items="Model.lkpCountryRegions">
+                                    <option selected value=""> Select Country Region </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row mb-2">
+                            <div class="col-md-4">
+                                @*<small asp-for="oMemContactInfo.Telephone" class="control-label"></small>*@
+                                <input type="tel" asp-for="oMemContactInfo.Telephone" class="form-control text-sm" placeholder="Telephone" />
+                            </div>
+                            <div class="col-md-4">
+                                @*<small asp-for="oMemContactInfo.MobilePhone1" class="control-label"></small>*@
+                                <input id="_MobilePhone1" type="tel" asp-for="oMemContactInfo.MobilePhone1" class="form-control text-sm" placeholder="MobilePhone1" />
+                            </div>
+                            <div class="col-md-4">
+                                @*<small asp-for="oMemContactInfo.MobilePhone2" class="control-label"></small>*@
+                                <input id="_MobilePhone2" type="tel" asp-for="oMemContactInfo.MobilePhone2" class="form-control text-sm" placeholder="MobilePhone2" disabled />
+                            </div>
+                        </div>
+                        <div class="form-row mb-2">
+                            <div class="col-md">
+                                @*<small asp-for="oMemContactInfo.Email" class="control-label"></small>*@
+                                <input type="email" asp-for="oMemContactInfo.Email" class="form-control text-sm" placeholder="Email" />
+                            </div>
+                        </div>
+                        <div class="form-row ">
+                            <div class="col-md">
+                                @*<small asp-for="oMemContactInfo.Website" class="control-label">Website /Blog</small>*@
+                                <input type="url" asp-for="oMemContactInfo.Website" class="form-control text-sm" placeholder="Website" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+
+        }
+
+    </form>
+</div>

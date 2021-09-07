@@ -1,0 +1,2070 @@
+﻿
+@model RhemaCMS.Models.ViewModels.vm_cl.ChurchAttendanceModel
+
+
+@{
+    ViewData["Title"] = (!string.IsNullOrEmpty(ViewBag.AppName) ? ViewBag.AppName : "") + " - Church Attendance";
+}
+
+
+<body id="page-top" class="w-100">
+    <input type="hidden" id="_promptUserMsg" data-value="@ViewBag.promptUserMsg" />
+
+    <!-- Sidebar -->
+    <div id="wrapper">
+        <!-- Sidebar -->
+        @*@{ await Html.RenderPartialAsync("_MemSideMenu");}*@
+
+        <div class="container-fluid-zero-margin " style="">
+            <!-- content -->
+            <div class="panel panel-default">
+                <div class="card mb-3 " style="background-color: transparent; width: 100%; ">
+                    <div class="card-header bg-w " style="color: #2c2f5b ;">
+                        <div>
+                            <i class="fas fa-users fa-lg" style="color: gainsboro"></i>&nbsp;&nbsp;
+                            <span style=" font-size: x-large; text-transform:uppercase"> Church Attendance - </span>
+                            <span style="font-size: x-large; font-variant-caps: titling-caps; color: #0094ff">
+                                @Model.oChurchBody?.Name
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-header rounded-bottom border-0 bg-white" style="color: #0094ff; margin-left:auto; margin: 1px ">
+                        <div>
+                            @if (Model.oChurchBody?.OrgType == "CH") //  || Model.oChurchBody?.ChurchType == "CF")
+                            {
+                                <i class="fas fa-info-circle "></i>
+                                <span>
+                                    Oversight Units : @Model.lsCurrSubChurchUnits.Count()
+                                    &nbsp;&nbsp; | &nbsp;&nbsp;
+                                </span>
+                                <i class="fas fa-info-circle "></i>
+                                <span>
+                                    Total Congregations : @Model.CHCF_TotCong
+                                    &nbsp;&nbsp; | &nbsp;&nbsp;
+                                </span>
+                            }
+
+                            <i class="fas fa-user-friends "></i>
+                            Roll : @Model.CHCF_TotAttend_MemOrVis
+                            &nbsp;&nbsp; | &nbsp;&nbsp;
+                            <i class="fas fa-male fa-lg" style="color:deepskyblue"></i>
+                            Males :  @Model.CHCF_TotAttend_M
+                            &nbsp;&nbsp; | &nbsp;&nbsp;
+                            <i class="fas fa-female fa-lg" style="color:deeppink"></i>
+                            Females :  @Model.CHCF_TotAttend_F
+                            &nbsp;&nbsp; | &nbsp;&nbsp;
+                            <i class="fas fa-question-circle fa-lg" style="color: #8b4717"></i>
+                            Other :  @Model.CHCF_TotAttend_O
+                            @*&nbsp;&nbsp; | &nbsp;&nbsp;
+                                <i class="fas fa-plus fa-lg" style="color: lightgreen"></i>
+                                New Visitors :  @Model.CHCF_TotAttend_M*@
+                        </div>
+                    </div>
+
+                    <div class="card-body small ">
+                        @{
+                            if (!string.IsNullOrEmpty(Model.strCurrTaskDesc))
+                            {
+                                if (Model.strAttnLongevity == "C")
+                                {
+                                    <div class="panel-heading" style="border-bottom: 2px solid lightgray; font-size:large ; font-variant-caps: titling-caps; color: #2c2f5b">
+                                        @Model.strCurrTaskDesc
+                                    </div>
+                                }
+                                else if (Model.strAttnLongevity == "H")
+                                {
+                                    <div class="panel-heading" style="border-bottom: 2px solid lightgray; font-size:large ; font-variant-caps: titling-caps; color: #8b4717">
+                                        @Model.strCurrTaskDesc
+                                    </div>
+                                }
+
+                                <br /><br />
+                            }
+                        }
+
+                        @if (Model.oChurchBody?.OrgType == "CN")
+                        {
+                            switch (Model.currAttendTask)
+                            {
+                                // Detailed_Attendance : any -- M, V or both
+                                case 1:
+                                    {
+                                        @*general... Filter*@
+                                        @using (Html.BeginForm("Index_Headcount", "ChurchAttendance", FormMethod.Post, new { @id = "currForm_Attendee_HCQ" }))
+                                        {
+                                            var strA = "'" + Model.f_strAttendeeTypeCode + "'";
+                                            var strL = "'" + Model.strAttnLongevity + "'";
+
+                                            <div class="p-3 rounded justify-content-center" style="background-color:gainsboro">
+                                                <input type="hidden" asp-for="oChurchBodyId" id="_hdnChuBodyId_HCQ" />
+                                                <input type="hidden" asp-for="strAttnLongevity" id="_strAttnLongevity_HCQ" />
+                                                <input type="hidden" asp-for="f_strAttendeeTypeCode" id="_strAttendeeTypeCode_HCQ" />
+                                                <div class="form-row col-sm  pr-0 p-1 ">
+                                                    @*<div class="form-group col-sm-2">
+                                                            <label class="control-label" asp-for="f_DateAttended">Date Attended</label>
+                                                            <input id="_m_DateAttended_HCQ" asp-for="f_DateAttended" class="form-control" onchange="popChurchEvents_HCQ(this.value)" />
+                                                            <input id="_m_DateAttended" asp-for="f_DateAttended" class="form-control" onchange="popChurchEvents(this.value);" />
+                                                             onchange="AddEditCurr_Attendee(@Model.currAttendTask, @Model.oChurchBody.Id, @strA, @strL, 0, null, null, false, false )" name="f_DateAttended"
+                                                            <span asp-validation-for="f_DateAttended" class="text-danger"></span>
+                                                        </div>*@
+
+                                                    <div class="form-group col-sm-2">
+                                                        <label class="control-label" asp-for="f_DateAttended">Date Attended</label>
+                                                        <input id="_m_DateAttended_HCQ" asp-for="f_DateAttended" class="form-control" onchange="popChurchEvents(this.value);" />
+                                                        <span asp-validation-for="f_DateAttended" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label" asp-for="f_ChurchEventDetailId">Church Event</label>
+                                                        <select id="_m_ChurchEventDetailId_HCQ" asp-for="f_ChurchEventDetailId" class="form-control" asp-items="@Model.lkpChuCalEvents "></select>
+                                                        @* onclick="AddEditCurr_Attendee_HC(1, @Model.oChurchBody.Id, @strL, 0, null, null, false, false )"name="f_ChurchEventDetailId" *@
+                                                        <span asp-validation-for="f_ChurchEventDetailId" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="form-group ">
+                                                        <div class="form-row col-sm ">
+                                                            <div class="form-group col">
+                                                                <label class="control-label">&nbsp;</label>
+                                                                <a href="#" class="btn btn-light btn-sm" data-toggle="tooltip" data-placement="top" title="Reload"
+                                                                   onclick="AddEditCurr_Attendee_HCQ(1, @Model.oChurchBody.Id, @strL, -1, null, null, false, false )">
+                                                                    <i class="fas fa-refresh " style=" color: deepskyblue; "></i>
+                                                                </a>
+
+                                                                @*<a href="#" class="btn btn-light btn-sm" data-toggle="tooltip" data-placement="top" title="Record member attendance"
+                                                                       onclick="AddEditCurr_Attendee_HCQ(1, @Model.oChurchBody.Id, @strL, -1, null, null, false, false )">
+                                                                        <i class="fas fa-refresh " style=" color: deepskyblue; "></i>
+                                                                    </a>*@
+                                                            </div>
+                                                            @*<div class="form-group col">
+                                                                    <label class="control-label">&nbsp;</label>
+                                                                    <input id="btnSaveChanges" type="submit" value="Save" class="btn btn-info btn-sm" />
+                                                                    <button id="btnSaveChangesFD_HCQ" type="button" class="btn btn-info btn-sm save-data" style="width:100px"><i class="fa fa-database"></i> &nbsp; Save </button>
+                                                                </div>*@
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @*<hr class="cus-div" style="width:100%; border: 1px inset white;" />
+                                                    <hr class="cus-div" style="width:100%; border: 1px inset #000;" />*@
+                                            </div>
+                                        }
+
+                                        @*general*@
+                                        <table id="tblAttendees_HC" class="table table-sm  table-light table-bordered table-striped table-responsive-sm table-hover p-1" cellspacing="0"
+                                               style="border: 1px solid #2c2f5b">
+                                            <thead>
+                                                <tr style="text-align: center; background-color: gainsboro">
+                                                    <th width="0" hidden></th>
+                                                    <th width="0" hidden></th>
+                                                    <th width="0" hidden></th>
+                                                    <th style=" vertical-align: middle; text-align: left">
+                                                        Count Area /Church Group *
+                                                    </th>
+                                                    <th style="vertical-align: middle">
+                                                        Male
+                                                    </th>
+                                                    <th style="vertical-align: middle">
+                                                        Female
+                                                    </th>
+                                                    <th style="vertical-align: middle">
+                                                        Other
+                                                    </th>
+                                                    <th style=" vertical-align: middle">
+                                                        Total
+                                                    </th>
+                                                    <th align="center" style=" width: 140px; vertical-align: middle">
+                                                        <a class="btn btn-light btn-sm " asp-controller="ChurchAttendance" asp-action="Index_Headcount" asp-route-reqChurchBodyId="@Model.oChurchBody.Id" asp-route-strLongevity="@Model.strAttnLongevity" asp-route-currAttendTask="@Model.currAttendTask" data-backdrop="static" data-keyboard="false"
+                                                           data-toggle="tooltip" data-placement="bottom" title="Reload table data">
+                                                            <i class="fas fa-refresh" style="color:green "></i>
+                                                        </a>
+                                                        @if (Model.oChurchBody.Id == Model.oLoggedChurchBody.Id)
+                                                        {
+                                                            var strL = "'" + Model.strAttnLongevity + "'";
+                                                            <a href="#" id="btnEdit_HC" class="btn btn-sm btn-outline-light" data-toggle="tooltip" data-placement="top" title="Edit current headcount/attendance"
+                                                               onclick="AddEditCurr_Attendee_HC(1, @Model.oChurchBody.Id, @strL, null, null, null, false, true )">
+                                                                <i class="fa fa-pencil" style=" color: #2c2f5b; "></i>
+                                                            </a>
+                                                        }
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.lsChurchAttendanceModels_HCEdit)
+                                                {
+                                                    <tr style="text-align: center">
+                                                        <td width="0" hidden></td>
+                                                        <td width="0" hidden></td>
+                                                        <td width="0" hidden></td>
+                                                        <td style="vertical-align:middle ; text-align: left ">
+                                                            &nbsp; @*<i class="fas fa-user" style="color:deepskyblue"></i> &nbsp;*@
+                                                            @Html.DisplayFor(modelItem => item.strCountCategory)
+                                                        </td>
+                                                        <td style="vertical-align: middle">
+                                                            @Html.DisplayFor(modelItem => item.CHCF_TotAttend_M)
+                                                        </td>
+                                                        <td style="vertical-align: middle">
+                                                            @Html.DisplayFor(modelItem => item.CHCF_TotAttend_F)
+                                                        </td>
+                                                        <td style="vertical-align: middle">
+                                                            @Html.DisplayFor(modelItem => item.CHCF_TotAttend_O)
+                                                        </td>
+                                                        <td style="vertical-align: middle">
+                                                            @Html.DisplayFor(modelItem => item.CHCF_TotAttend_MemOrVis)
+                                                        </td>
+                                                        <td style=" vertical-align: middle ">
+                                                            @* @{
+                                                                     // var strA = "'" + Model.strCountTypeCode + "'";
+                                                                     var strL = "'" + Model.strAttnLongevity + "'";
+                                                                 }
+                                                                <a href="#" id="btnAddEdit" class="btn  btn-sm btn-outline-light" data-backdrop="static" data-keyboard="false"
+                                                                    onclick="AddEditCurr_Attendee_HC(@strA, @strL, @item.oChurchAttend?.Id, @Model.oChurchBody.Id, false, true )">
+                                                                     <i class="fa fa-eye fa-sm smaller" style="color: darkslategray;"></i>
+                                                                 </a>*@
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-white " style="text-align: center; font-weight: bold ">
+                                                    <th width="0" hidden></th>
+                                                    <th width="0" hidden></th>
+                                                    <th width="0" hidden></th>
+                                                    <th style=" vertical-align: middle; text-align: left">
+                                                        GRAND TOTAL
+                                                    </th>
+                                                    <th align="right" style="vertical-align: middle">
+                                                        @Model.CHCF_TotAttend_M
+                                                    </th>
+                                                    <th align="right" style="vertical-align: middle">
+                                                        @Model.CHCF_TotAttend_F
+                                                    </th>
+                                                    <th align="right" style="vertical-align: middle">
+                                                        @Model.CHCF_TotAttend_O
+                                                    </th>
+                                                    <th align="right" style="vertical-align: middle">
+                                                        @Model.CHCF_TotAttend_MemOrVis
+                                                    </th>
+                                                    <th></th>
+                                                    @*<th align="center" style=" width: 140px; vertical-align: middle">
+                                                            @if (Model.oChurchBody.Id == Model.oLoggedChurchBody.Id)
+                                                            {
+                                                                var strL = "'" + Model.strAttnLongevity + "'";
+                                                                <a href="#" class="btn btn-sm btn-outline-light" data-toggle="tooltip" data-placement="top" title="Add new headcount"
+                                                                   onclick="AddEditCurr_Attendee_HC(2, @Model.oChurchBody.Id, @strL, 0, null, null, false, false )">
+                                                                    <i class="fas fa-plus fa-sm" style=" color: deepskyblue ; "></i>
+                                                                </a>
+                                                            }
+                                                        </th>*@
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+
+                                        break;
+
+                                    }
+                                case 2:  // Detailed_Attendance_Edit : only M,  V uses modal form
+                                    {
+                                        @using (Html.BeginForm("Index_Headcount", "ChurchAttendance", FormMethod.Post, new { @id = "currForm_Attendee_HC" }))
+                                        {
+                                            var strL = "'" + Model.strAttnLongevity + "'";
+
+                                            <div class="p-3 rounded justify-content-center" style="background-color:gainsboro">
+                                                <input type="hidden" asp-for="oChurchBodyId" id="_hdnChuBodyId_HC" />
+                                                <input type="hidden" asp-for="strAttnLongevity" id="_strAttnLongevity_HC" />
+                                                <input type="hidden" asp-for="f_strAttendeeTypeCode" id="_strAttendeeTypeCode_HC" />
+                                                <div class="form-row col-sm  pr-0 p-1 ">
+                                                    <div class="form-group col-sm-2">
+                                                        <label class="control-label" asp-for="f_DateAttended">Date Attended</label>
+                                                        <input id="_m_DateAttended_HC" asp-for="f_DateAttended" class="form-control" onchange="popChurchEvents_HC(this)" />
+                                                        @*  onchange="AddEditCurr_Attendee(@Model.currAttendTask, @Model.oChurchBody.Id, @strA, @strL, 0, null, null, false, false )" name="f_DateAttended"*@
+                                                        <span asp-validation-for="f_DateAttended" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label" asp-for="f_ChurchEventDetailId">Church Event</label>
+                                                        <select id="_m_ChurchEventDetailId_HC" asp-for="f_ChurchEventDetailId" class="form-control" asp-items="@Model.lkpChuCalEvents "></select>
+                                                        @*onchange="AddEditCurr_Attendee_HC(@Model.currAttendTask, @Model.oChurchBody.Id, @strL, 0, null, null, false, false )"*@
+                                                        <span asp-validation-for="f_ChurchEventDetailId" class="text-danger"></span>
+                                                    </div>
+
+                                                    <div class="form-group ">
+                                                        <div class="form-row col-sm ">
+                                                            <div class="form-group col">
+                                                                <label class="control-label">&nbsp;</label>
+                                                                <a href="#" class="btn btn-light btn-sm" data-toggle="tooltip" data-placement="top" title="Relaod"
+                                                                   onclick="AddEditCurr_Attendee_HC(1, @Model.oChurchBody.Id, @strL, -1, null, null, false, false )">
+                                                                    <i class="fas fa-refresh " style=" color: deepskyblue; "></i>
+                                                                </a>
+                                                            </div>
+                                                            <div class="form-group col">
+                                                                <label class="control-label">&nbsp;</label>
+                                                                @*<input id="btnSaveChanges" type="submit" value="Save" class="btn btn-info btn-sm" />*@
+                                                                <button id="btnSaveChangesFD_HC" type="button" class="btn btn-info btn-sm save-data" style="width:100px"><i class="fa fa-database"></i> &nbsp; Save </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                @*<div class="form-row col-sm  pr-0 p-1 ">
+                                                        <div class="form-group col-sm-6">
+                                                            <label class="control-label" asp-for="m_CountGroupId">Church Event</label>
+                                                            <select id="_m_CountGroupId" asp-for="m_CountGroupId" class="form-control" asp-items="@Model.lkpCountGroups "></select>
+                                                            <span asp-validation-for="m_CountGroupId" class="text-danger"></span>
+                                                        </div>
+                                                        <div class="form-group col-sm-2">
+                                                            <label class="control-label" asp-for="m_CHCF_TotAttend_M">Date Attended</label>
+                                                            <input id="_m_CHCF_TotAttend_M" asp-for="m_CHCF_TotAttend_M" class="form-control" />
+                                                            <span asp-validation-for="m_CHCF_TotAttend_M" class="text-danger"></span>
+                                                        </div>
+                                                        <div class="form-group col-sm-2">
+                                                            <label class="control-label" asp-for="m_CHCF_TotAttend_F">Date Attended</label>
+                                                            <input id="_m_CHCF_TotAttend_F" asp-for="m_CHCF_TotAttend_F" class="form-control" />
+                                                            <span asp-validation-for="m_CHCF_TotAttend_F" class="text-danger"></span>
+                                                        </div>
+                                                        <div class="form-group col-sm-2">
+                                                            <label class="control-label" asp-for="m_CHCF_TotAttend_O">Date Attended</label>
+                                                            <input id="_m_CHCF_TotAttend_O" asp-for="m_CHCF_TotAttend_O" class="form-control" />
+                                                            <span asp-validation-for="m_CHCF_TotAttend_O" class="text-danger"></span>
+                                                        </div>
+                                                        <div class="form-group col-sm-2">
+                                                            <label class="control-label" asp-for="m_CHCF_TotVis">Date Attended</label>
+                                                            <input id="_m_CHCF_TotVis" asp-for="m_CHCF_TotVis" class="form-control" />
+                                                            <span asp-validation-for="m_CHCF_TotVis" class="text-danger"></span>
+                                                        </div>
+                                                        <div class="form-group ">
+                                                            <div class="form-row col-sm ">
+                                                                <div class="form-group col">
+                                                                    <label class="control-label">&nbsp;</label>
+                                                                    <a href="#" class="btn btn-light btn-sm" data-toggle="tooltip" data-placement="top" title="Reset" >
+                                                                        <i class="fas fa-refresh " style=" color: #000; "></i>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="form-group col">
+                                                                    <label class="control-label">&nbsp;</label>
+                                                                    <button id="btnAddNewHC_FD" type="button" class="btn btn-light btn-sm save-data" style="width:100px"><i class="fa fa-database"></i> &nbsp; Add </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>*@
+
+                                                @*<hr class="cus-div" style="width:100%; border: 1px inset white;" />*@
+                                                @*<hr class="cus-div" style="width:100%; border: 1px inset #000;" />
+
+
+                                                    <input type="hidden" asp-for="oChurchBodyId" id="_hdnChuBodyId_HC_T" />
+                                                        <input type="hidden" asp-for="strAttnLongevity" id="_strAttnLongevity_HC_T" />
+                                                        <input type="hidden" asp-for="f_strAttendeeTypeCode" id="_strAttendeeTypeCode_HC_T" />
+                                                        <div class="form-row col-sm  pr-0 p-1 ">
+                                                            <div class="form-group col-sm-2">
+                                                                <label class="control-label" asp-for="m_DateAttended_HC">Date Attended</label>
+                                                                <input id="_m_DateAttended_HC_T" asp-for="m_DateAttended_HC" class="form-control" onchange="popChurchEvents_HC_T(this.value);" />
+                                                                <span asp-validation-for="m_DateAttended_HC" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-sm-6">
+                                                                <label class="control-label" asp-for="m_ChurchEventId_HC">Church Event</label>
+                                                                <select id="_m_ChurchEventId_HC_T" asp-for="m_ChurchEventId_HC" class="form-control" asp-items="@Model.lkpChuCalEvents " onchange="AddEditCurr_Attendee(@Model.currAttendTask, @Model.oChurchBody.Id, @strL, -1, null, null, false, false )"></select>
+                                                                <span asp-validation-for="m_ChurchEventId_HC" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group ">
+                                                                <div class="form-row col-sm ">
+                                                                    <div class="form-group col">
+                                                                        <label class="control-label">&nbsp;</label>
+                                                                        <a href="#" class="btn btn-light btn-sm" onclick="AddEditCurr_Attendee(2, @Model.oChurchBody.Id, @strL, -1, null, null, false, false )"
+                                                                           data-toggle="tooltip" data-placement="top" title="Record member attendance">
+                                                                            <i class="fas fa-refresh " style=" color: deepskyblue; "></i>
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="form-group col">
+                                                                        <label class="control-label">&nbsp;</label>
+                                                                    <button id="btnSaveChanges_FD" type="button" class="btn btn-info btn-sm save-data" style="width:100px"><i class="fa fa-database"></i> &nbsp; Save </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>*@
+
+
+
+                                                <hr class="cus-div" style="width:100%; border: 1px inset #000;" />
+                                                @*<a href="#" id="btnAdd_HC" class="btn btn-sm btn-light" data-toggle="tooltip" data-placement="top" title="Add new headcount" >
+                                                        <i class="fas fa-plus fa-sm" style=" color: deepskyblue ; "></i>
+                                                    </a>*@
+
+
+                                                <table id="tblAttendees_HC_Edit" class="table table-sm  table-bordered table-striped table-responsive-sm table-hover bg-white  pl-0 " cellspacing="0" style="border: 1px solid #2c2f5b">
+                                                    <thead>
+                                                        <tr style="text-align: left;">
+                                                            <th width="0" hidden></th>
+                                                            <th width="0" hidden></th>
+                                                            <th width="0" hidden></th>
+                                                            <th style=" vertical-align: middle">
+                                                                &nbsp; Count Group
+                                                            </th>
+                                                            <th width="30px" align="center" style="vertical-align: middle">
+                                                                Males
+                                                            </th>
+                                                            <th style="vertical-align: middle">
+                                                                Females
+                                                            </th>
+                                                            <th style="vertical-align: middle">
+                                                                Others
+                                                            </th>
+                                                            <th style="text-align: center; vertical-align: middle">
+                                                                Total
+                                                            </th>
+                                                            <th align="center" width="70px" style="vertical-align: middle">
+                                                                @* public IActionResult Index_Headcount(int currAttendTask = 1, int? reqChurchBodyId = null, string strLongevity = "C", int? id = null, int? eventId = null, DateTime? attendDate = null)*@
+                                                                @*<a class="btn btn-light btn-sm " asp-controller="ChurchAttendance" asp-action="Index_Headcount" asp-route-currAttendTask="@Model.currAttendTask" asp-route-reqChurchBodyId="@Model.oChurchBody.Id" asp-route-strLongevity="@Model.strAttnLongevity" asp-route-eventId="@Model.f_ChurchEventId" asp-route-attendDate="@Model.f_DateAttended" data-backdrop="static" data-keyboard="false"
+                                                                       data-toggle="tooltip" data-placement="bottom" title="Reload table data">
+                                                                        <i class="fas fa-refresh" style="color:green "></i>
+                                                                    </a>*@
+
+                                                                <a href="#" class="btn btn-light btn-sm" data-toggle="tooltip" data-placement="top" title="Reload"
+                                                                   onclick="AddEditCurr_Attendee_HC(1, @Model.oChurchBody.Id, @strL, -1, null, null, false, false )">
+                                                                    <i class="fas fa-refresh " style=" color: green; "></i>
+                                                                </a>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tblAttendeesBody_HC_Edit">
+                                                        @for (int i = 0; i < Model.lsChurchAttendanceModels_HCEdit.Count; i++)
+                                                        {
+                                                            <tr id="row_template_HC" style="text-align:left">
+                                                                <td width="0" hidden>@Html.HiddenFor(modelItem => Model.lsChurchAttendanceModels_HCEdit[i].oAttend_Id)</td>
+                                                                <td width="0" hidden>@Html.HiddenFor(modelItem => Model.lsChurchAttendanceModels_HCEdit[i].oChurchBodyId, new { @id = "_oChurchBodyId" })</td>
+                                                                <td width="0" hidden></td>
+                                                                <td style="vertical-align: middle">
+                                                                    @*&nbsp; <i class="fas fa-user" style="color:deepskyblue"></i> &nbsp;*@
+                                                                    @*@Html.DropDownListFor(modelItem => Model.lsChurchAttendanceModels_HCEdit[i].CountCategoryId, Model.lkpCountGroups, new { @class = "form-control" })*@
+                                                                    @*@Html.DropDownListFor(m => m.CountCategoryId, Model.lkpCountGroups, "Select Count-Group", new { @class = "form-control" })*@
+                                                                    @*@Html.DropDownList("CountCategoryId", new SelectList(Model.lkpCountGroups, "Value", "Text", Model.lsChurchAttendanceModels_HCEdit[i].CountCategoryId))*@
+
+                                                                    @Html.DropDownList("lsChurchAttendanceModels_HCEdit[" + i + "].CountCategoryId", new SelectList(Model.lkpCountGroups, "Value", "Text", Model.lsChurchAttendanceModels_HCEdit[i].CountCategoryId), new { @class = "form-control" })
+                                                                </td>
+                                                                <td width="100px" align="right" style="vertical-align: middle">
+                                                                    @Html.TextBoxFor(modelItem => Model.lsChurchAttendanceModels_HCEdit[i].CHCF_TotAttend_M, new { @class = "form-control text-center" })
+                                                                </td>
+                                                                <td width="100px" align="right" style="vertical-align: middle">
+                                                                    @Html.TextBoxFor(modelItem => Model.lsChurchAttendanceModels_HCEdit[i].CHCF_TotAttend_F, new { @class = "form-control text-center" })
+                                                                </td>
+                                                                <td width="100px" align="right" style="vertical-align: middle">
+                                                                    @Html.TextBoxFor(modelItem => Model.lsChurchAttendanceModels_HCEdit[i].CHCF_TotAttend_O, new { @class = "form-control text-center" })
+                                                                </td>
+                                                                <td width="100px" align="right" style="vertical-align: middle">
+                                                                    @Html.TextBoxFor(modelItem => Model.lsChurchAttendanceModels_HCEdit[i].CHCF_TotAttend_MemOrVis, new { @class = "form-control text-center" })
+                                                                </td>
+                                                                <td width="100px">
+                                                                    @if (Model.oChurchBody.Id == Model.oLoggedChurchBody.Id) // && (item.oChurchAttend.AttendeeType != "N" || item.oChurchAttend.AttendeeType == "M"))
+                                                                    {
+                                                                        <a href="#" id="btnDelete_HC" class="btn  btn-sm btn-outline-light" data-backdrop="static" data-keyboard="false"
+                                                                           onclick="AddEditCurr_Attendee_HC(2, @Model.oChurchBody.Id, @strL, @Model.lsChurchAttendanceModels_HCEdit[i].oAttend_Id,null, null, false, true )">
+                                                                            <i class="fa fa-trash fa-sm" style="color: #8b2f2f;"></i>
+                                                                        </a>
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        }
+
+
+                                                        @*<tr id="row_template_HC" style="display: none; text-align:left">
+                                                                <td width="0" hidden><input type="text" class="form-control" placeholder="First Name" name="attendid[]" /></td>
+                                                                <td width="0" hidden><input type="text" class="form-control" placeholder="First Name" name="churchbodyid[]" /></td>
+                                                                <td width="0" hidden><input type="text" class="form-control" placeholder="First Name" name="categoryid[]" /></td>
+                                                                <td style="vertical-align: middle">
+                                                                    &nbsp; <i class="fas fa-user" style="color:deepskyblue"></i> &nbsp;
+                                                                           <input type="text" class="form-control" placeholder="First Name" name="countcategoryid[]" />
+                                                                </td>
+                                                                <td class="form-control" align="right" style="vertical-align: middle">
+                                                                    <input type="text" class="form-control" placeholder="First Name" name="totM[]" />
+                                                                </td>
+                                                                <td class="form-control" align="right" style="vertical-align: middle">
+                                                                    <input type="text" class="form-control" placeholder="First Name" name="totF[]" />
+                                                                </td>
+                                                                <td class="form-control" align="right" style="vertical-align: middle">
+                                                                    <input type="text" class="form-control" placeholder="First Name" name="totO[]" />
+                                                                </td>
+                                                                <td class="form-control" align="right" style="vertical-align: middle">
+                                                                    <input type="text" class="form-control" placeholder="First Name" name="tot[]" />
+                                                                </td>
+                                                                <td>
+                                                                    @if (Model.oChurchBody.Id == Model.oLoggedChurchBody.Id) // && (item.oChurchAttend.AttendeeType != "N" || item.oChurchAttend.AttendeeType == "M"))
+                                                                    {
+                                                                        <a href="#" id="btnDelete_HC" class="btn  btn-sm btn-outline-light" data-backdrop="static" data-keyboard="false"
+                                                                           onclick="AddEditCurr_Attendee_HC(2, @Model.oChurchBody.Id, @strL, 0, null, null, false, true )">
+                                                                            <i class="fa fa-trash fa-sm" style="color: #8b2f2f;"></i>
+                                                                        </a>
+                                                                    }
+                                                                </td>
+                                                            </tr>*@
+
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr class="bg-white " style="font-weight: bold ">
+                                                            <th width="0" hidden></th>
+                                                            <th width="0" hidden></th>
+                                                            <th width="0" hidden></th>
+                                                            <th style=" vertical-align: middle">
+                                                                @*&nbsp; GRAND TOTAL*@
+                                                            </th>
+                                                            <th align="right" style="vertical-align: middle">
+                                                                @*@Model.CHCF_TotAttend_M*@
+                                                            </th>
+                                                            <th align="right" style="vertical-align: middle">
+                                                                @*@Model.CHCF_TotAttend_F*@
+                                                            </th>
+                                                            <th align="right" style="vertical-align: middle">
+                                                                @*@Model.CHCF_TotAttend_O*@
+                                                            </th>
+                                                            <th align="right" style="vertical-align: middle">
+                                                                @*@Model.CHCF_TotAttend_MemOrVis*@
+                                                            </th>
+                                                            <th align="center" style=" width: 140px; vertical-align: middle">
+                                                                @if (Model.oChurchBody.Id == Model.oLoggedChurchBody.Id)
+                                                                {
+                                                                    <a href="#" id="_btnAddNewHC_FD" class="btn btn-sm btn-info" data-toggle="tooltip" data-placement="top" title="Add new headcount"
+                                                                       onclick="AddEditCurr_Attendee_HC(2, @Model.oChurchBody.Id, @strL, 0, null, null, false, false )">
+                                                                        <i class="fas fa-plus fa-sm" style=" color: white ; "></i>
+                                                                    </a>
+                                                                }
+                                                            </th>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        }
+
+                                        break;
+                                    }
+                            }
+                        }
+
+                        else if (Model.oChurchBody?.OrgType == "CH")
+                        {
+                            <div class="panel panel-default" style=" background-color:white; overflow:auto; margin-top:10px ">
+                                <table id="tblCong" class="table table-sm table-bordered table-responsive-sm table-hover p-1" cellspacing="0" cellpadding="0"
+                                       style="border: 1px solid #2c2f5b; ">
+                                    @*  <table id="tblCong" class="table table-sm table-responsive-sm table-bordered table-hover nowrap w-100 bg-white" cellspacing="0" style=" ">*@
+                                    <thead>
+                                        <tr class="bg-secondary" style="text-align:center ; color: #ededed; ">
+                                            <th align="left" style="text-align:left; vertical-align: middle;  "> &nbsp; Name of Head Unit /Congregation </th>
+                                            <th style="vertical-align: middle"> Congregations (+) </th>
+                                            <th style="vertical-align: middle"> Members </th>
+                                            @*<th style="vertical-align: middle"> New Members* </th>*@
+                                            <th style="vertical-align: middle"> Leader </th>
+                                            <th align="center" width="50px" class="justify-content-center " style="vertical-align: middle">
+                                                <a class="btn btn-light btn-sm w-100" asp-controller="MemberPane" asp-action="Index" asp-route-reqChurchBodyId="@Model.oChurchBody.Id">
+                                                    <i class="fas fa-refresh" style="color:green "></i>
+                                                </a>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.lsCurrSubChurchUnits)
+                                        {
+                                            <tr style=" text-align:center ">
+                                                <td align="left" style="vertical-align: middle">
+                                                    <div class="checkbox "> </div>
+                                                    &nbsp;
+                                                    <i class="fas fa-church " style="color: #525252"></i> &nbsp;
+                                                    <a asp-controller="ChurchAttendance" asp-action="Index_Headcount" asp-route-reqChurchBodyId="@item.Id"
+                                                       asp-route-strAttendee="@Model.strCountTypeCode" asp-route-strLongevity="@Model.strAttnLongevity">
+                                                        @item.Name
+                                                    </a>
+                                                </td>
+                                                <td style="vertical-align: middle">
+                                                    @Html.DisplayFor(modelItem => item.CH_TotSubUnits)
+                                                </td>
+                                                <td style="vertical-align: middle">
+                                                    @Html.DisplayFor(modelItem => item.CH_TotMem)
+                                                </td>
+                                                @*<td style="vertical-align: middle">
+                                                        @Html.DisplayFor(modelItem => item.CH_TotNewMem)
+                                                    </td>*@
+                                                @if (@item.oCH_InChargeMLR != null)
+                                                {
+                                                    <td style="vertical-align: middle">
+                                                        <a asp-controller="ChurchMembers" asp-action="AddOrEdit" asp-route-id="@item.oCH_InChargeMLR?.ChurchMemberId">
+                                                            @item.strCH_InCharge
+                                                        </a>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td style="vertical-align: middle">
+                                                        @Html.DisplayFor(modelItem => item.strCH_InCharge)
+                                                    </td>
+                                                }
+
+                                                <td style="text-align: center; vertical-align: middle ">
+                                                    <a class="btn  btn-sm btn-outline-light" asp-controller="ChurchAttendance" asp-action="Index_Headcount" asp-route-reqChurchBodyId="@item.Id">
+                                                        <i class="fa fa-ellipsis-h fa-sm smaller" style="color: #2c2f5b;"></i>
+                                                    </a>
+
+                                                    @*<a href="#" class="btn btn-sm btn-outline-danger" onclick="ConfirmDelete(@item.MemberId)"><i class="fa fa-trash-alt fa-sm smaller"></i></a>*@
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    @*<tfoot>
+                                            <tr class="bg-white" style="text-align: center; color: white; ">
+                                                <th style="border-bottom: 5px solid whitesmoke;"> </th>
+                                                <th style="border-bottom: 5px solid whitesmoke;"> </th>
+                                                <th style="border-bottom: 5px solid whitesmoke;"> </th>
+                                                <th style="border-bottom: 5px solid whitesmoke;"> </th>
+                                                <th style="border-bottom: 5px solid whitesmoke;"> </th>
+                                                <th style="border-bottom: 5px solid whitesmoke;"> </th>
+                                                <th style="border-bottom: 5px solid whitesmoke;"> </th>
+                                                <th style="border-bottom: 5px solid whitesmoke;"> </th>
+                                                <th style="border-bottom: 5px solid whitesmoke;"> </th>
+                                                <th style="border-bottom: 5px solid whitesmoke;">
+                                                    <a href="#" class="btn btn-sm btn-light btn-block smaller" onclick="ReloadCurrPage()" style=" color:black; font-weight:bold; font-size:small"><i class="fa fa-recycle fa-spin fa-lg"></i>&nbsp;</a>
+                                                </th>
+                                            </tr>
+                                        </tfoot>*@
+                                </table>
+                                <input type="hidden" id="hdnCurrId" />
+                            </div>
+                        }
+                    </div>
+
+                    @*<div class="card-footer small text-muted">Loaded on @DateTime.Now.ToLongDateString().ToString() at @DateTime.Now.ToShortTimeString().ToString()</div>*@
+
+                </div>
+            </div>
+        </div>
+        <!-- /.content-wrapper -->
+    </div>
+
+    <div style="text-align:center; display:none" id="divLoader">
+        <img src="~/css/images/load.gif" width="100" />
+    </div>
+
+    <!-- /#wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Logout!</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body"> Logout to end your current session. Sure?</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" asp-area="" asp-controller="UserLogin" asp-action="LoginUserAcc">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Modal-->
+    <div class="modal fade" id="divPopModal_AddEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document"
+             style="font-family:Verdana, Geneva, Tahoma, sans-serif;  width:auto ; height:auto; padding: 2px;">
+            <div class="modal-content">
+                <div class="modal-header " style="color:white; background-color:deepskyblue ">
+                    @*style="background-color: lightgrey;*@
+                    <h5 class="modal-title"> Church Attendance   </h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+
+                @*<div class="modal-header bg-light">
+                        <div id="_sticky_fixed_nav" class="justify-content-center align-bottom pb-2 pt-2" style="margin-left:auto; margin-right: auto; width:100%">
+                            <div class="btn-toolbar justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-2" role="group" aria-label="First group">
+                                    <button id="_btnViewAll" type="button" class="btn btn-outline-dark border-secondary" data-toggle="tooltip" data-placement="bottom" title="View everything: all member data"
+                                            style="width:50px; ">
+                                        <i class="fas fa-ellipsis-h fa-sm"></i>
+                                    </button>
+                                    <button id="_btnReloadData" type="button" class="btn btn-outline-dark border-secondary" data-toggle="tooltip" data-placement="bottom" title="Reload member data" style="width:50px">
+                                        <i class="fas fa-refresh fa-sm"></i>
+                                    </button>
+                                </div>
+                                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                                    <button id="_btnPersData" type="button" class="btn btn-outline-info" data-toggle="tooltip" data-placement="bottom" title="Personal Data" style="width:50px">
+                                        <i class="fas fa-user fa-lg"></i>
+                                    </button>
+                                    <button id="_btnLocAddr" type="button" class="btn btn-outline-info" data-toggle="tooltip" data-placement="bottom" title="Address and Location Details" style="width:50px">
+                                        <i class="fas fa-phone fa-lg"></i>
+                                    </button>
+                                    <button id="_btnEducWork" type="button" class="btn btn-outline-info" data-toggle="tooltip" data-placement="bottom" title="Education and Working Life" style="width:50px">
+                                        <i class="fas fa-user-graduate fa-lg"></i>
+                                    </button>
+                                    <button id="_btnConPers" type="button" class="btn btn-outline-info" data-toggle="tooltip" data-placement="bottom" title="Primary Contact Person" style="width:50px">
+                                        <i class="fas fa-user-edit fa-lg"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>*@
+
+                <div id="divModalBody_AddEdit" class="modal-body bg-light" style=" font-size: 10pt; ">
+
+                </div>
+                <div id="_divFooterCommit" class="modal-footer " style="background-color:   lightgrey; left:auto; right: auto">
+                    <a href="#" class="btn btn-outline-light " data-dismiss="modal"> Cancel </a>
+                    <button id="btnSaveChanges" type="button" class="btn btn-light save-data"><i class="fa fa-database "></i> Save changes </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Add/Edit Modal-->
+    <div class="modal fade" id="divPopModal_AddEdit_norm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background-color:transparent">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable  " role="document" style="width:auto ; height:auto">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:lightgray; color:white">
+                    <h5 class="modal-title"> Member Family Relation</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="divModalBody_AddEdit_norm">
+
+                </div>
+
+                @*<div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <a href="#" class="btn btn-success" onclick="AddEditUserProfile()"> Save </a>
+
+                        @*<a class="btn btn-primary" asp-area="" asp-controller="UserLogin" asp-action="LoginUserAcc">Logout</a>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+
+
+    @*<partial name="_CookieConsentPartial" />*@
+</body>
+
+
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+
+
+
+    <script type="text/javascript">
+        $(function () {
+            // This will make every element with the class "date-picker" into a DatePicker element
+            $('.date-picker').datepicker();
+        })
+    </script>
+
+    <script>
+
+        $(document).ready(function () {
+            window.onload = function () {
+               // var _prompt = $("#_promptUser").data("value");
+                var _promptMsg = $("#_promptUserMsg").data("value");
+             //   alert('loaded _promptMsg: ' + _promptMsg);
+                if (_promptMsg != "") {
+
+                   // $("#_promptUser").data("value", false);
+                    $("#_promptUserMsg").data("value", "");
+                }
+              // alert('loaded.');
+            };
+
+            //$('#tblHeadcount').DataTable({
+            //    'processing': true,
+            ////    'destroy': true,
+            ////    'paging': true,
+            ////    'lengthChange': true,
+            ////    'searching': true,
+            ////    'ordering': true,
+            ////    'info': true,
+            ////    'autoWidth': true,
+            //    "columnDefs": [
+            ////        { "orderable": false, "targets": [0] },
+            ////        { "orderable": true, "targets": [1] },
+            ////        { "orderable": true, "targets": [2] },
+            ////        { "orderable": true, "targets": [3] },
+            //        { "orderable": false, "targets": [7] }
+            //    ]
+            //});
+
+
+            $('#tblAttendees_HC').DataTable({
+                processing: true,
+                columnDefs: [{
+                    searchable: false,
+                    orderable: false,
+                    targets: [4, 5, 6, 7, 8]
+                }],
+            });
+
+            $('#tblCong').DataTable({
+                "processing": true,
+                //"columnDefs": [
+                //    { "orderable": false, "targets": [0] },
+                //    { "orderable": false, "targets": [1] },
+                //    { "orderable": false, "targets": [2] },
+                //    { "orderable": false, "targets": [3] },
+                //    { "searchable": false, "orderable": false, "targets": [4] },
+                //    { "searchable": false, "orderable": false, "targets": [5] },
+                //],
+            });
+
+
+
+            $('#tblAttendees_HC_Edit').DataTable({
+                processing: true,
+                columnDefs: [{
+                    searchable: false,
+                    orderable: false,
+                    targets: [4,5,6,7,8]
+                }
+                ],
+            });
+
+
+            //$(document).ready(function ()
+            //{
+            // // alert("hi mem");
+
+            //    $('#tblMember').DataTable({
+            //        "processing": true,
+            //        "columnDefs": [
+            //            {  "width": "5%",  "targets": [1] },
+            //            {  "width": "7%", "searchable": false, "orderable": false, "targets": [9] },
+            //        ],
+            //    });
+            //});
+
+
+
+         $(document).on('change', '.custom-file-input', function (e) {
+                                    e.preventDefault();
+
+                                    // alert("in...");
+
+                                    //  var fullFile = $(this).val();
+                                    //   alert(fullFile);
+                                    //  document.getElementById("imgFile").src = "~/content/img/df_user_p.png";
+
+
+                                    var fileName = $(this).val().split("\\").pop();
+               //alert(fileName);
+            $(this).next('.custom-file-label').html(fileName);
+
+                                    //$('.card-img-top').attr('src', fullFile);
+
+                                });
+
+
+        $(document).on('click', '#btnSaveCurr', function (e) {
+                                    e.preventDefault();
+
+                                    //  alert(this.val());
+                                    var currId = $("#_hdnCurrId").val();
+                // alert("#_hdnCurrId: " + currId);
+
+                //var currFile = $("#_hdnCurrPhotoId").val();
+                //alert("saving upd: " + currFile);
+
+                $("#divLoader").show();
+
+                                    //window.location.href = "/AppGlobalOwner/AddOrEdit";
+
+                                    // var currFormData = $("#currForm").serialize(); // + "&churchLogoFile="+currFile;
+
+                                    var formdata = new FormData($("#currForm").get(0));
+               //  alert(formdata.keys().next());
+
+                 $.ajax({
+                                    //url: '@Url.Action("AddOrEdit", "MemberPane")',
+                                    type: 'POST',
+                         data: formdata,
+                         processData: false,
+                         contentType: false,
+
+                    //type: "POST",
+                    url: "/ChurchMembers/AddOrEdit",
+                   // data: currFormData,
+                    success: function (res) {
+                        //alert("saved upd: " + res);
+
+                        $("#divLoader").hide();
+                                            //$("#divPopModal_AddEdit").modal("hide");
+                                            //alert("saved upd: " + res);
+                                            if (res == true) {
+                                                alert("Saved changes of member successfully");
+
+                                                //if (currId != 0) {
+                                                //    window.location.href = "/MemberPane/AddOrEdit?id=" + currId;
+                                                //}
+                                                //else {
+                                                //    window.location.href = "/MemberPane/Index";
+                                                //}
+                                            }
+                                            else {
+                                                alert("Saving of changes failed. Details: " + ViewBag.UserMsg);
+                                            }
+                                        }
+                                    })
+
+            })
+
+
+        });
+
+
+
+        //window.location.href = '/MemberPane/Index?reqChurchBodyId=' + currChuBodyId;
+        var AddEditCurr_VisPersPro = function (currId) {
+            window.location.href = "/ChurchMembers/AddOrEdit?id=" + currId
+
+        }
+
+        var AddEditCurr_VisChuLife  = function (currId) {
+            window.location.href = "/ChurchMembers/AddOrEdit_Churchlife?id=" + currId
+        }
+
+
+        var AddEditCurr_Attendee_HC = function (currTask, currChuBodyId, _strLongevity, currId, evtId, attnDate, dbReload = false, isViewOnly = false) { //, _statusVis) {
+            //  alert("currId.. isViewOnly =  " + isViewOnly + ' .. ' + _strAttendee + ' .. ' + _strLongevity + ' evtId= ' + evtId + ' evtDate= ' + evtDate);
+          // alert('event: ...');
+
+            if (attnDate == null || attnDate=="-1") {
+                if (currTask == 1) attnDate = $("#_m_DateAttended_HCQ").val();
+                else attnDate = $("#_m_DateAttended_HC").val();
+            }
+
+        if (evtId == null || evtId == "-1") {
+            if (currTask == 1) evtId = $("#_m_ChurchEventDetailId_HCQ").val();
+            else evtId = $("#_m_ChurchEventDetailId_HC").val();
+        }
+
+            if (currTask == 1 && isViewOnly == true)  currTask = 2;  //switch to the dit mode... retain data
+
+            //alert('currId.. newDt =  ' + attnDate + ' . evtId =  ' + evtId);
+
+            var url = '';
+
+            // public IActionResult Index_Headcount(int currAttendTask = 1, int? reqChurchBodyId = null, string strLongevity = "C", int? id = null, int? eventId = null, DateTime? attendDate = null)
+           // if (_strAttendee == "M") {
+                url = "/ChurchAttendance/Index_Headcount?currAttendTask=" + currTask + "&reqChurchBodyId=" + currChuBodyId + "&strLongevity=" + _strLongevity + "&id=" + currId + "&eventId=" + evtId + "&attendDate=" + attnDate;
+
+                window.open(url, "_top");
+
+          //  }
+            // public IActionResult AddOrEdit_Attendees(string strAttendee="V", string strLongevity = "C", int id = 0, int? oCurrChuBodyId = null, bool dbload = true)  strAttendee=" + currTask  "&
+            //else if (_strAttendee == "V") {
+            //    url = "/ChurchAttendance/AddOrEdit_Attendees?strAttendee=" + _strAttendee + "&strLongevity=" + _strLongevity + "&id=" + currId + "&oCurrChuBodyId=" + currChuBodyId + "&dbload=" + dbReload;
+
+            //    if (isViewOnly == false) {
+            //        $('#divPopModal_AddEdit').modal({
+            //            backdrop: 'static',
+            //            keyboard: false
+            //        });
+            //    }
+
+            //    //$(document).on('load', '#divModalBody_AddEdit', function (e) {
+            //    //     alert("currId add_edit b : " + currId);
+            //    //     $("#_hdnCurrId").val(currId);
+            //    //     $("#divPopModal_AddEdit").modal('show');
+            //    //})
+
+            //    $("#divModalBody_AddEdit").load(url, function () {
+            //        //  alert("currId add_edit b : " + currId);
+            //        $("#_hdnCurrId").val(currId);
+            //        // alert(url);
+
+            //        if (isViewOnly == true) {
+            //            disable_hideEditControls();
+            //        }
+            //        else {
+            //            $('#_divFooterCommit').prop('hidden', false);
+            //        }
+
+            //        $("#divPopModal_AddEdit").modal('show');
+            //    });
+            //}
+        };
+
+
+        var AddEditCurr_Attendee_HCQ = function (currTask, currChuBodyId, _strLongevity, currId, evtId, attnDate, dbReload = false, isViewOnly = false) { //, _statusVis) {
+            //  alert("currId.. isViewOnly =  " + isViewOnly + ' .. ' + _strAttendee + ' .. ' + _strLongevity + ' evtId= ' + evtId + ' evtDate= ' + evtDate);
+          //  alert('event: ...');
+
+            if (attnDate == null) { attnDate = $("#_m_DateAttended_HCQ").val(); }
+            if (evtId == null) { evtId = $("#_m_ChurchEventDetailId_HCQ").val(); }
+            //alert("currId.. newDt =  " + newDt);
+
+            var url = '';
+
+                url = "/ChurchAttendance/Index_Headcount?currAttendTask=" + currTask + "&reqChurchBodyId=" + currChuBodyId + "&strLongevity=" + _strLongevity + "&id=" + currId + "&eventId=" + evtId + "&attendDate=" + attnDate;
+
+                window.open(url, "_top");
+
+        };
+
+
+
+        var AddEditCurr_Attendee = function (_strAttendee, _strLongevity, currId, currChuBodyId, dbReload = false, isViewOnly = false) { //, _statusVis) {
+           // alert("currId.. edit via MemPane: isViewOnly =  " + isViewOnly + ' .. '+ _strAttendee + ' .. ' + _strLongevity);
+           //public IActionResult AddOrEdit_Attendees(string strAttendee, string strLongevity = "C", int id = 0, int? oCurrChuBodyId = null, bool dbload = true)
+            var url = '';
+            if (_strAttendee == 'M') {
+                // public IActionResult AddOrEdit_Attendees_MemEdit(int? reqChurchBodyId = null, string strLongevity = "C")
+                url = "/ChurchAttendance/AddOrEdit_Attendees_MemEdit?reqChurchBodyId=" + currChuBodyId + "&strLongevity=" + _strLongevity;
+            }
+            else
+            {
+                url = "/ChurchAttendance/AddOrEdit_Attendees?id=" + currId + "&oCurrChuBodyId=" + currChuBodyId + "&dbload=" + dbReload + "&strAttendee=" + _strAttendee; + "&strLongevity=" + _strLongevity;
+            }
+           // var url = "/ChurchPane/AddOrEdit?id=" + currId + "&dbload=" + dbReload;
+           //alert("clicked: " + url);
+
+            if (isViewOnly == false) {
+                $('#divPopModal_AddEdit').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+            }
+
+            //$(document).on('load', '#divModalBody_AddEdit', function (e) {
+            //     alert("currId add_edit b : " + currId);
+            //     $("#_hdnCurrId").val(currId);
+            //     $("#divPopModal_AddEdit").modal('show');
+            //})
+
+
+            $("#divModalBody_AddEdit").load(url, function () {
+             //  alert("currId add_edit b : " + currId);
+                $("#_hdnCurrId").val(currId);
+               // alert(url);
+
+                if (isViewOnly == true) {
+                    disable_hideEditControls();
+                }
+                else {
+                    $('#_divFooterCommit').prop('hidden', false);
+                }
+
+                $("#divPopModal_AddEdit").modal('show');
+            });
+            // window.location.href = "/AppGlobalOwner/Index";
+        };
+
+
+        var disable_hideEditControls = function () {
+            $('#_divFooterCommit').prop('hidden', true);
+
+            $("#currForm_Attendee :input").prop("disabled", true);
+        }
+
+        $(document).on('click', '#btnSaveChanges', function (e) {
+            e.preventDefault();
+
+         // alert('save.. ? ');
+            //alert($("#_setIndex").val());
+
+           var currVisitorId = $("#_hdnCurrId").val();
+            var currChuBodyId = $("#_hdnChuBodyId").val();
+           // var isNewConVis = $("#_hdnIsNewConVis").val();
+            var _strLongevity = $("#_strAttnLongevity").val();
+            var _strAttendee = $("#_strCountTypeCode").val();
+
+         //   alert('save.. cb: ' + currChuBodyId + '.. id: ' + currVisitorId + '.. isMigratedVis: ' + isMigratedVis);
+            SaveCurr_Attendee(currVisitorId, currChuBodyId, _strAttendee, _strLongevity);
+        })
+
+        var SaveCurr_Attendee = function (currId, _strAttendee, _strLongevity) {
+          //  alert('saving... ' + currId + ' .. cb:' + currChuBodyId);
+          //  var currId = $("#_currDivId").val();
+            // alert('currId : ' + currId);
+
+
+          //  CommitChanges_MLS();
+
+          // var formdata = $("#currForm_Attendee").serialize();
+
+            var formdata = new FormData($("#currForm_Attendee").get(0));
+
+
+          //  alert('currId : ' + currVisitorId + ' .. cb:' + currChuBodyId);
+
+            $.ajax({
+
+                type: 'POST',
+                url: "/ChurchAttendance/AddOrEdit_Attendees",
+                data: formdata,   //{ data: currFormData, taskIndx: oTask },  //
+                // contentType: 'application/x-www-form-urlencoded; charset=UTF-8',  //
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                   //  alert(res.userMess );
+                    if (res.taskSuccess == true) {
+                        var currChuBodyId = $("#_hdnChuBodyId").val();
+                        //var currParDiv = $("#_parDivId").val();
+                      //  alert('Successful');
+                     //  alert('saved... msg: ' + res.userMess + ' id: ' + currId + ' .. cb:' + currChuBodyId);
+                        //reset fields... was it update or new... reset only at new
+                        DisplaySuccessInfo(res.userMess, currId, currChuBodyId, _strAttendee, _strLongevity, true);
+
+                        //if (currId > 0) {
+                        //    DisplaySuccessInfo(res.userMess, currId, currChuBodyId, false);
+                        //}
+                        //else { DisplaySuccessInfo(res.userMess, currId, currChuBodyId, true); }
+                    }
+                    else {
+                         alert(res.userMess); //"Member transfer request failed. Details: " + ViewBag.UserMsg);
+                        $.alert({
+                            title: 'Unsuccessful!',
+                            content: res.userMess,
+                            type: 'red',
+                            typeAnimated: true,
+                        });
+                    }
+                }
+            })
+        }
+
+
+        $(document).on('click', '#btnSaveChangesFD_HC', function (e) {
+            e.preventDefault();
+
+              alert('save.. FD? ');
+            //alert($("#_setIndex").val());
+
+            // var currVisitorId = $("#_hdnCurrId").val();
+            //  var currChuBodyId = $("#_hdnChuBodyId").val();
+            // var isNewConVis = $("#_hdnIsNewConVis").val();
+            //  var _strLongevity = $("#_strAttnLongevity").val();
+            //  var _strAttendee = $("#_strAttendeeTypeCode").val();
+
+            //   alert('save.. cb: ' + currChuBodyId + '.. id: ' + currVisitorId + '.. isMigratedVis: ' + isMigratedVis);
+            SaveCurr_AttendeeFD_HC(); //currVisitorId, currChuBodyId, _strAttendee, _strLongevity);
+        })
+
+
+        var SaveCurr_AttendeeFD_HC = function () {  // (_strAttendee, _strLongevity) {
+            //  alert('saving... ' + currId + ' .. cb:' + currChuBodyId);
+
+           // var formdata = $("#currForm_Attendee_HC").serialize();
+
+
+            //var tbl = $('#tblAttendees_MemEdit').DataTable();
+            //var tbl_data = tbl.$('input, select').serializeArray();
+            ////   alert("tab len: " + tbl_data.length);
+            ////$.each(tbl_data, function (i, tab_f) {
+            ////    alert('tab...');
+            ////    alert(tab_f.name + ' == ' + tab_f.value);
+            ////});
+
+
+            ////{ title = "_rowdata" }  $('input[name!=security]', this).serialize();
+
+            //var formdata = $("#currForm_Attendee").serializeArray();
+            //// var formdata = $('#currForm_Attendee').find('input[title!=_rowdata]').serializeArray();
+            //// var formdata = $("#currForm_Attendee :not(.row-hide) > :input").serializeArray();
+            ////  var formdata = $("#currForm_Attendee :not(.row-hide)").serializeArray();
+            ////   var formdata = $("#currForm_Attendee").not(".row-hide").serializeArray();
+
+            ////   alert("len 1: " + formdata.length);
+            ////$.each(formdata, function (i, field) {
+            ////       alert(field.name + ' == ' + field.value);
+            ////})
+            ////  $.each(formdata, function (i, field) {
+            ////   alert(field.name + ' == ' + field.value);
+
+            //$.each(tbl_data, function (i, tab_f) {
+            //    // alert('tab...');
+            //    // alert(tab_f.name + ' == ' + tab_f.value);
+
+            //    // if (field.name == tab_f.name) {
+            //    // formdata.push({ name: tab_f.name, value: tab_f.value });
+
+            //    // formdata.append(tab_f.name, tab_f.value);
+
+
+            //    var attr_found = false;
+            //    $.each(formdata, function (i, field) {
+            //        //
+            //        if (field.name == tab_f.name) {
+            //            // alert(field.name + ' == ' + tab_f.name);
+            //            field.value = tab_f.value;
+            //            attr_found = true;
+            //            return false;
+            //        }
+            //    });
+
+            //    // alert('attr_found: ' + attr_found);
+            //    if (attr_found == false) {
+            //        //  alert('adding.. ' + tab_f.name)
+            //        //  formdata.append(tab_f.name, tab_f.value);
+            //        formdata.push({ name: tab_f.name, value: tab_f.value });
+            //    }
+
+
+            //    // field.value = tab_f.value;
+            //    // formdata[field.name] = tab_f.value;
+            //    // }
+            //});
+
+            // alert('...' + field.name + ' == ' + field.value);
+
+            //alert(formdata[field.name] + ' == ' + field.value);
+            //  });
+
+            //    alert("len 2: " + formdata.length);
+            //$.each(formdata, function (i, field) {
+            //    alert(field.name + ' == ' + field.value);
+            //})
+            // alert('done...'  );
+            // alert('formdata: ' + formdata);
+
+            //var data = table.$('input, select').serialize();
+
+
+
+            var formdata = $("#currForm_Attendee_HC").serialize();
+           // var formdata = new FormData($("#currForm_Attendee").get(0));
+
+
+            //  alert('data : ' + formdata.substring(0, 10));  // + ' .. cb:' + currChuBodyId);
+
+            $.ajax({
+                // public async Task<IActionResult> Index_Attendees(ChurchAttendanceVM vmMod, IFormCollection f)
+                type: 'POST',
+                url: "/ChurchAttendance/Index_Headcount",
+                data: formdata,   //{ data: currFormData, taskIndx: oTask },  //
+                // contentType: 'application/x-www-form-urlencoded; charset=UTF-8',  //
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                // contentType: false,
+                // processData: false,
+                success: function (res) {
+                    //  alert(res.userMess );
+                    if (res.taskSuccess == true) {
+                        var currChuBodyId = $("#_hdnChuBodyId_HC").val();
+                        var _strLongevity = $("#_strAttnLongevity_HC").val();
+                      //  var _strAttendee = $("#_strAttendeeTypeCode_HC").val();
+                        //var currParDiv = $("#_parDivId").val();
+                        //  alert('Successful');
+                        //  alert('saved... msg: ' + res.userMess + ' id: ' + currId + ' .. cb:' + currChuBodyId);
+                        //reset fields... was it update or new... reset only at new
+
+                        // return Json(new { taskSuccess = true, userMess = ViewBag.UserMsg, currTask = vmMod.currAttendTask, oCurrId = -1, evtId = oEvId, evtDate = dtEv});
+                        DisplaySuccessInfo_HC(res.userMess, res.currTask, res.oCurrId, currChuBodyId, _strLongevity, res.evtId, res.evtDate, false);
+
+                        //if (currId > 0) {
+                        //    DisplaySuccessInfo(res.userMess, currId, currChuBodyId, false);
+                        //}
+                        //else { DisplaySuccessInfo(res.userMess, currId, currChuBodyId, true); }
+                    }
+                    else {
+                        alert(res.userMess); //"Member transfer request failed. Details: " + ViewBag.UserMsg);
+                        $.alert({
+                            title: 'Unsuccessful!',
+                            content: res.userMess,
+                            type: 'red',
+                            typeAnimated: true,
+                        });
+                    }
+                }
+            })
+        }
+
+
+        var DisplaySuccessInfo_HC = function (msg, task,  currId, currChuBodyId, strLongevity, evtId, attnDt, reset = false) {
+            // alert('reset: ' + reset);
+            $.alert({
+                title: 'Done!',
+                type: 'green',
+                typeAnimated: true,
+                content: msg,
+                closeIcon: true,
+                closeIconClass: 'fa fa-close'
+            });
+
+            if (reset) {
+                //   public IActionResult AddOrEdit_Attendees(string strAttendee, string strLongevity = "C", int id = 0, int? oCurrChuBodyId = null, bool dbload = true)
+                AddEditCurr_Attendee_HC(task, currChuBodyId, strLongevity, currId, evtId, attnDt, reset);
+            }
+            //else {
+            //    ReloadCurrPage_Attendee(currChuBodyId, strAttendee, strLongevity); //window.location.href = "/ChurchBodyConfig/Index?oCurrChuBodyId=" + currChuBodyId + "&id=" + currId;
+            //}
+
+
+        };
+
+
+
+        var DisplaySuccessInfo = function (msg, currId, currChuBodyId, strAttendee, strLongevity, reset = false) {
+             // alert('reset: ' + reset);
+
+            if (reset) {
+                //   public IActionResult AddOrEdit_Attendees(string strAttendee, string strLongevity = "C", int id = 0, int? oCurrChuBodyId = null, bool dbload = true)
+                AddEditCurr_Attendee(strAttendee, strLongevity, currId, currChuBodyId, true);
+            }
+            else {
+                ReloadCurrPage_Attendee(currChuBodyId, strAttendee, strLongevity); //window.location.href = "/ChurchBodyConfig/Index?oCurrChuBodyId=" + currChuBodyId + "&id=" + currId;
+            }
+
+            $.alert({
+                title: 'Done!',
+                type: 'green',
+                typeAnimated: true,
+                content: msg,
+                closeIcon: true,
+                closeIconClass: 'fa fa-close'
+            });
+        };
+
+        //  public IActionResult Index_Headcount(string strAttendee, string strLongevity, int? reqChurchBodyId = null)
+        var ReloadCurrPage_Attendee = function (currChuBodyId, _strAttendee, _strLongevity) { // (currSetIndex, parId = null) {         //, chuCategId = null, showAllCong = true) {
+           // alert('load..');
+            window.location.href = '/ChurchAttendance/Index_Headcount?reqChurchBodyId=' + currChuBodyId + '&strAttendee=' + _strAttendee + '&strLongevity=' + _strLongevity;
+
+        }
+
+
+
+
+
+
+    </script>
+
+
+    <script>
+
+    var hideAllDivs = function () {
+      //  alert('hiding');
+        jQuery('.cus-panel').hide();
+        jQuery('.cus-div').hide();
+        //jQuery("[aria-describedby='slick-slide01']")
+    }
+
+    var showAllDivs = function () {
+       // alert('showing');
+        jQuery('.cus-panel').show();
+        jQuery('.cus-div').show();
+        //jQuery("[aria-describedby='slick-slide01']")
+    }
+
+    $(document).on('click', '#_btnViewAll', function (e) {
+        showAllDivs();
+
+        //$('#_divPersData').prop('hidden', false);
+        //$('#_divGenChurchLife').prop('hidden', false);
+        //$('#_divMemLocAddr').prop('hidden', false);
+        //$('#_divMemContact').prop('hidden', false);
+    })
+    $(document).on('click', '#_btnPersData', function (e) {
+        hideAllDivs();
+        jQuery('#_divPersData').show();
+        jQuery('#_divPersData_2').show();
+    })
+
+        //
+        $(document).on('click', '#_btnLocAddr', function (e) {
+        hideAllDivs();
+        jQuery('#_divLocAddr').show(); //$('#_divMemLocAddr').prop('hidden', false);
+    })
+        $(document).on('click', '#_btnEducWork', function (e) {
+        hideAllDivs();
+            jQuery('#_divEducWork').show(); //$('#_divMemLangSpkn').prop('hidden', false);
+    })
+        $(document).on('click', '#_btnConPers', function (e) {
+        hideAllDivs();
+            jQuery('#_divConPers').show(); //$('#_divMemEducHist').prop('hidden', false);
+        })
+
+
+
+                    //var AddEditCurrData_norm = function (currId) {
+                    //  //  alert("currId add: " + currId);
+                    //    var url = "/ChurchMembers/AddOrEdit_MemFamRel?id=" + currId;
+                    //    //var url = "/MemberPane/AddOrEdit?id=" + currId;
+                    //   // alert("clicked mem  pane: " + url);
+
+                    //    $('#divPopModal_AddEdit_norm').modal({
+                    //        backdrop: 'static',
+                    //        keyboard: false
+                    //    });
+
+                    //    $("#divModalBody_AddEdit_norm").load(url, function () {
+                    //    $("#divPopModal_AddEdit_norm").modal('show');
+                    //    });
+                    //    };
+
+
+
+        $(document).on('change', '#chk_IsCongregation_Summ', function (e) {
+            e.preventDefault();
+            var _isAvail = $("#chk_IsCongregation_Summ").is(":checked");     // alert('chk: ' + _isAvail);
+            $('#chk_IsGenChurchGroup_Summ').prop('disabled', _isAvail);
+            $('#chk_IsInterGenChurchGroup_Summ').prop('disabled', _isAvail);
+
+            if ($("#chk_IsGenChurchGroup_Summ").is(":disabled")) { $('#chk_IsGenChurchGroup_Summ').prop('checked', false) };
+            if ($("#chk_IsInterGenChurchGroup_Summ").is(":disabled")) { $('#chk_IsInterGenChurchGroup_Summ').prop('checked', false) };
+
+            //
+            loadSummCategory();
+        })
+
+
+        $(document).on('change', '#chk_IsGenChurchGroup_Summ', function (e) {
+            e.preventDefault();
+            loadSummCategory();
+        })
+
+        $(document).on('change', '#chk_IsInterGenChurchGroup_Summ', function (e) {
+            e.preventDefault();
+            loadSummCategory();
+        })
+
+            var loadSummCategory = function () {
+                 var hdnChuBodyId = $("#_hdnChuBodyId").val();
+                var _isCong = $("#chk_IsCongregation_Summ").val();
+                var _isGen = $("#chk_IsGenChurchGroup_Summ").val();
+                var _isInterGen = $("#chk_IsInterGenChurchGroup_Summ").val();
+
+                //public JsonResult GetChurchGroupsByCategoryType(int? oCurrChuBodyId, bool isCong, bool isGen, bool isInterGen, bool addEmpty = false)
+                var url = '@Url.Content("~/")' + 'ChurchAttendance/GetChurchGroupsByCategoryType';
+                $('#_strCountCategory').empty();
+                $.getJSON(url, { oCurrChuBodyId: hdnChuBodyId, isCong: _isCong, isGen: _isGen, isInterGen: _isInterGen, addEmpty: true}, function (data) {
+                    if (Object.keys(data).length > 0)
+                    {
+                        var items = '';
+                        $.each(data, function (i, oItem) {
+                            items += "<option value='" + oItem.value + "'>" + oItem.text + "</option>";   // alert(items);
+                        });
+                       // items += "<option value=''> Select </option>";
+                        $('#_strCountCategory').html(items);
+                    }
+            }
+
+
+     $(document).on('change', '#_NationalityId', function (e) {
+            e.preventDefault();
+
+            var ctryId = $("#_NationalityId").val();
+          //  alert('ctryId: ' + ctryId);
+
+            var url = '@Url.Content("~/")' + 'ChurchMembers/GetCountryRegionsByCountry';
+            $('#_HometownRegionId').empty();
+            //GetCountryRegionsByCountry( int? ctryId, bool addEmpty = false)
+             $.getJSON(url, { ctryId: ctryId, addEmpty: true}, function (data) {
+                if (Object.keys(data).length > 0)
+                {
+                    var items = '';
+                    $.each(data, function (i, ctryReg) {
+                        items += "<option value='" + ctryReg.value + "'>" + ctryReg.text + "</option>";   // alert(items);
+                    });
+                   // items += "<option value=''> Select </option>";
+                    $('#_HometownRegionId').html(items);
+                }
+            });
+
+         //_MotherTongueId
+         var url = '@Url.Content("~/")' + 'ChurchMembers/GetLanguagesByCountry';
+         $('#_MotherTongueId').empty();
+             $.getJSON(url, { ctryId: ctryId, addEmpty: true}, function (data) {
+                if (Object.keys(data).length > 0)
+                {
+                    var items = '';
+                    $.each(data, function (i, oVal) {
+                        items += "<option value='" + oVal.value + "'>" + oVal.text + "</option>";   // alert(items);
+                    });
+                   // items += "<option value=''> Select </option>";
+                    $('#_MotherTongueId').html(items);
+                }
+             });
+     });
+
+
+
+
+
+
+     $(document).on('change', '#_CountryId_LocAddr', function (e) {
+            e.preventDefault();
+
+            var ctryId = $("#_CountryId_LocAddr").val();
+          //  alert('ctryId: ' + ctryId);
+
+            var url = '@Url.Content("~/")' + 'ChurchMembers/GetCountryRegionsByCountry';
+            $('#_RegionId_LocAddr').empty();
+            //GetCountryRegionsByCountry( int? ctryId, bool addEmpty = false)
+             $.getJSON(url, { ctryId: ctryId, addEmpty: true}, function (data) {
+                if (Object.keys(data).length > 0)
+                {
+                    var items = '';
+                    $.each(data, function (i, ctryReg) {
+                        items += "<option value='" + ctryReg.value + "'>" + ctryReg.text + "</option>";   // alert(items);
+                    });
+                   // items += "<option value=''> Select </option>";
+                    $('#_RegionId_LocAddr').html(items);
+                }
+            });
+
+
+     });
+
+     $(document).on('change', '#_CountryId_MemPrimCont', function (e) {
+            e.preventDefault();
+
+            var ctryId = $("#_CountryId_MemPrimCont").val();
+          //  alert('ctryId: ' + ctryId);
+
+            var url = '@Url.Content("~/")' + 'ChurchMembers/GetCountryRegionsByCountry';
+            $('#_RegionId_MemPrimCont').empty();
+            //GetCountryRegionsByCountry( int? ctryId, bool addEmpty = false)
+             $.getJSON(url, { ctryId: ctryId, addEmpty: true}, function (data) {
+                if (Object.keys(data).length > 0)
+                {
+                    var items = '';
+                    $.each(data, function (i, ctryReg) {
+                        items += "<option value='" + ctryReg.value + "'>" + ctryReg.text + "</option>";   // alert(items);
+                    });
+                   // items += "<option value=''> Select </option>";
+                    $('#_RegionId_MemPrimCont').html(items);
+                }
+            });
+        });
+
+     $(document).on('change', '#_MaritalStatus', function (e) {
+            e.preventDefault();
+
+         var strVal = $("#_MaritalStatus").val();
+         //alert('marr stat: ' + strVal);
+         //  strVal = $("#_MaritalStatus").text(); //.val();
+         //   alert('marr stat: ' + strVal);
+            $('#_MarriageType').prop('disabled', idType != 'M');  //networked
+
+         if (strVal != 'M') {
+             $("#_MarriageType").val('');
+             $("#_MarriageRegNo").val('');
+         }
+     });
+
+    $(document).on('change', '#_MarriageType', function (e) {
+            e.preventDefault();
+
+         var strVal = $("#_MarriageType").val();
+        // alert('marr stat: ' + strVal);
+         //  strVal = $("#_MaritalStatus").text(); //.val();
+         //   alert('marr stat: ' + strVal);
+            $('#_MarriageRegNo').prop('disabled', idType != 'O');  //networked
+
+         if (strVal != 'O') {
+             $("#_MarriageRegNo").val('');
+         }
+    });
+
+     $(document).on('change', '#_IDTypeId', function (e) {
+            e.preventDefault();
+
+         var idType = $("#_IDTypeId").val().trim();
+          //  alert('idType: ' + idType);
+            $('#_NationalIDNum').prop('disabled', idType == '');  //networked
+
+         if (idType == '') {  $("#_NationalIDNum").val(''); }
+     });
+
+    //chk_Deceased
+        $(document).on('change', '#chk_IsCurrentMem', function (e) {
+            e.preventDefault();
+            var _isAvail = $("#chk_IsCurrentMem").is(":checked");     // alert('chk: ' + _isAvail);
+            $('#chk_IsDeceased').prop('disabled', _isAvail);
+            $('#_divDepart').prop('hidden', _isAvail);
+
+            if ($("#chk_IsDeceased").is(":disabled")) { $('#chk_IsDeceased').prop('checked', false) };
+            if ($("#_divDepart").is(":hidden")) { $("#_Departed").val(''); $("#_DepartReason").val('') };
+        })
+
+        $(document).on('change', '#chk_IsCurrentStat', function (e) {
+            e.preventDefault();
+            var _isAvail = $("#chk_IsCurrentStat").is(":checked");
+            $('#_divStatUntil').prop('hidden', _isAvail);
+
+            if ($("#_divStatUntil").is(":hidden")) { $("#_StatUntil").val($("#_StatSince").val()); };
+        })
+
+        $(document).on('change', '#chk_IsCurrentRank', function (e) {
+            e.preventDefault();
+            var _isAvail = $("#chk_IsCurrentRank").is(":checked");
+            $('#_divRankUntil').prop('hidden', _isAvail);
+
+            if ($("#_divRankUntil").is(":hidden")) { $("#_RankUntil").val(''); };
+        })
+
+    $(document).on('change', '#chk_ResAddrSameAsPostAddr_LocAddr', function (e) {
+            e.preventDefault();
+            var _isAvail = $("#chk_ResAddrSameAsPostAddr_LocAddr").is(":checked");     // alert('chk: ' + _isAvail);
+            $('#_PostalAddress_LocAddr').prop('disabled', _isAvail);
+
+            if ($("#_PostalAddress_LocAddr").is(":disabled")) { $("#_PostalAddress_LocAddr").val(''); };
+    })
+
+     $(document).on('change', '#chk_IsMemCommunicant', function (e) {
+            e.preventDefault();
+            var _isAvail = $("#chk_IsMemCommunicant").is(":checked");     // alert('chk: ' + _isAvail);
+            //$('#chk_IsDeceased').prop('disabled', _isAvail);
+            $('#_divNonCommReason').prop('hidden', _isAvail);
+
+             if ($("#_divNonCommReason").is(":hidden")) { $("#_NonCommReason").val('')};
+        })
+
+    //mem contact
+        $(document).on('change', '#_ChurchFellow_MemCon', function (e) {
+            e.preventDefault();
+
+            var idType = $("#_ChurchFellow_MemCon").val().trim();
+            //  alert('idType: ' + idType);
+            $('#divInternalContactId_MemCon').prop('hidden', idType == '');  //networked
+
+            if (idType == '') { $("#_InternalContactId_MemCon").val(''); }
+        });
+
+
+        var calcPersAge = function (dob) {
+            var strAge = '';
+            if (dob != null) {
+                var dt = dob.value;
+                 //alert("dob: " + dt);
+                strAge = calcMemDateDiff(dt, new Date());
+            }
+          // alert('age: ' + strAge);
+            $("#_strVisitorAge").val(strAge);
+        }
+
+        var calcPersLongevity = function (dt_enroll) {
+            var strLong = '';
+            if (dt_enroll != null) {
+                var dt = dt_enroll.value;
+               // alert("dt_enroll: " + dt);
+                strLong = calcMemDateDiff(dt, new Date());
+            }
+             // alert('long: ' + strLong);
+            $("#_strLongevity").val(strLong);
+        }
+
+        var calcMemDateDiff = function (dt1, dt2) {
+           // var dt = dt1.value;
+           // alert("dt: " + dt1);
+            //var mdate = $("#birth_date").val().toString();
+            var mdate = dt1.toString();
+            var yearThen = parseInt(mdate.substring(0, 4), 10);
+            var monthThen = parseInt(mdate.substring(5, 7), 10);
+            var dayThen = parseInt(mdate.substring(8, 10), 10);
+
+            //var dt2 = new Date();
+            var birthday = new Date(yearThen, monthThen - 1, dayThen);
+
+            var differenceInMilisecond = dt2.valueOf() - birthday.valueOf();
+
+            var year_age = Math.floor(differenceInMilisecond / 31536000000);
+            //  var day_age = Math.floor((differenceInMilisecond % 31536000000) / 86400000);
+
+            //if ((today.getMonth() == birthday.getMonth()) && (today.getDate() == birthday.getDate())) {
+            //    alert("Happy B'day!!!");
+            //}
+            var strDiff = '';
+            if (year_age >= 0) {
+                //var month_age = Math.floor(day_age / 30);
+
+                //day_age = day_age % 30;
+
+                if (isNaN(year_age)) { // || isNaN(month_age) || isNaN(day_age)) {
+                    strDiff = 'N/A';
+
+                    // $("#_strMemberAge").text("Invalid birthday - Please try again!");
+                }
+                else {
+                    strDiff = year_age + ' years';
+
+                    //$("#exact_age").html("You are<br/><span id=\"age\">" + year_age + " years " + month_age + " months " + day_age + " days</span> old");
+                }
+            }
+
+            return strDiff;
+
+            // alert('age: ' + strAge);
+            //$("#_strMemberAge").val(strAge);
+        }
+
+
+
+
+
+        $(document).on('change', '#_strFilter_AttendeeName', function (e) {
+            e.preventDefault();
+
+            var churchBodyId = $("#_hdnChuBodyId").val();
+            var strAttendee = $("#_strCountTypeCode").val();
+            var strLong = $("#_strAttnLongevity").val();
+            var strName = $("#_strFilter_AttendeeName").val();
+            var strPho = $("#_strFilter_AttendeePhone").val();
+
+          //  alert('ctryId: ' + ctryId);
+            //public JsonResult GetAttendanceByFilters(int? oChurchBodyId, string strAttendee, string strLongevity, string strAttendName, string strAttendPho)
+            var url = '@Url.Content("~/")' + 'ChurchAttendance/GetAttendanceListByAttendeeFilters';
+            //$('#_HometownRegionId').empty();
+            //GetCountryRegionsByCountry( int? ctryId, bool addEmpty = false)
+            $.getJSON(url, { oChurchBodyId: churchBodyId, strAttendee: strAttendee, strLongevity: strLong, strAttendName: strName, strAttendPho: strPho}, function (data) {
+                if (Object.keys(data).length > 0)
+                {
+                   // var items = '';
+                    var strId = '';
+                    var items = ''; // $('#tblAttendFilter_Body').html().trim();
+                    $.each(data, function (i, sVal) {
+                       // items += "<option value='" + ctryReg.value + "'>" + ctryReg.text + "</option>";   // alert(items);
+                        items += '<tr >';
+                        items += '<td id="' + strId + '" name="_' + strId + '">' + sVal.strAttendeeName + '</td>';
+                        items += '<td id="' + strId + '" name="_' + strId + '">' + sVal.strChurchEventDesc + '</td>';
+                        items += '<td id="' + strId + '" name="_' + strId + '">' + sVal.strPhone + '</td>';
+                        items += '<td id="' + strId + '" name="_' + strId + '">' + sVal.strDateAttended + '</td>';
+
+                        items += '</tr>';
+
+                       // alert('strAttendeeName: ' + sVal.strAttendeeName)
+                    });
+
+                    $('#tblAttendFilter_Body').html(items);
+                   //// items += "<option value=''> Select </option>";
+                   // $('#_HometownRegionId').html(items);
+
+
+                    //var lang_items = '';
+
+                    //var langSel = $("#_LanguageSpokenId option:selected").val();
+                    //var isChkVal = $("#chk_PrimaryLanguage").is(":checked");
+                    //var _isChk = ''; if (isChkVal) _isChk = 'checked="true"';
+
+                    ////  alert('langSel: ' + langSel);
+                    ////alert( items);
+                    //// alert(_isChk);
+                    //if (!(items.includes('lang_' + langSel, 0))) {
+                    //    if (!(items.includes('checked="true"', 0) && $("#chk_PrimaryLanguage").is(":checked"))) {
+                    //        items += '<tr >';
+                    //        items += '<td id="' + langSel + '" name="lang_' + langSel + '">' + $("#_LanguageSpokenId option:selected").text() + '</td>';
+                    //        items += '<td id="' + $("#_ProficiencyLevel option:selected").val() + '">' + $("#_ProficiencyLevel option:selected").text() + '</td>';
+                    //        items += '<td class="text-center"><input type="checkbox" id=chk_"' + langSel + '" disabled ' + _isChk + '/></td>';
+
+                    //        items += '<td class="text-center"><a href="#" id="row_del_MLS" class="btn btn-link btn-sm"><i class="fa fa-close fa-sm" style="color: darkred" ></i></a></td> ';
+                    //        items += '</tr>';
+
+                    //        $('#_tblBodyAddLangSpkn').html(items);
+                    //        //reset
+                    //        $("#_LanguageSpokenId")[0].selectedIndex = 0; $("#_ProficiencyLevel")[0].selectedIndex = 0; $('#chk_PrimaryLanguage').prop('checked', false);
+                    //    }
+                    //    else {
+                    //        $.alert({
+                    //            title: 'Sorry!',
+                    //            content: 'Member can have only one primary language',
+                    //            type: 'orange',
+                    //            typeAnimated: true,
+                    //        });
+                    //    }
+
+                    //    // alert(items); <input type='checkbox'id='"+item.Id+"' name='chooseRecipient' class='my_chkBox' /></td>
+
+                    //}
+
+
+
+
+
+
+
+
+                }
+            });
+
+     });
+
+
+        $(document).on('change', '#_strFilter_AttendeePhone', function (e) {
+            e.preventDefault();
+
+            var churchBodyId = $("#_hdnChuBodyId").val();
+            var strAttendee = $("#_strCountTypeCode").val();
+            var strLong = $("#_strAttnLongevity").val();
+            var strName = $("#_strFilter_AttendeeName").val();
+            var strPho = $("#_strFilter_AttendeePhone").val();
+
+          //  alert('ctryId: ' + ctryId);
+            //public JsonResult GetAttendanceByFilters(int? oChurchBodyId, string strAttendee, string strLongevity, string strAttendName, string strAttendPho)
+            var url = '@Url.Content("~/")' + 'ChurchAttendance/GetAttendanceListByAttendeeFilters';
+            $('#_HometownRegionId').empty();
+            //GetCountryRegionsByCountry( int? ctryId, bool addEmpty = false)
+            $.getJSON(url, { oChurchBodyId: churchBodyId, strAttendee: strAttendee, strLongevity: strLong, strAttendName: strName, strAttendPho: strPho}, function (data) {
+                if (Object.keys(data).length > 0)
+                {
+                    var items = '';
+                    $.each(data, function (i, ctryReg) {
+                        items += "<option value='" + ctryReg.value + "'>" + ctryReg.text + "</option>";   // alert(items);
+                    });
+                   // items += "<option value=''> Select </option>";
+                    $('#_HometownRegionId').html(items);
+                }
+            });
+
+     });
+
+        $(function () {
+            $("#_FirstName").autocomplete({
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/ChurchAttendance/GetAttendListByFilters_AC/",
+                        data: "{'strAttendName':'" + request + "'}",
+                        datatype: "json",
+                        type: "POST",
+                        contentType: "application/json; charset-utf-8",
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return item;
+                            }))},
+                    });
+                },
+                minLenth:1
+            });
+        });
+
+
+
+        var popChurchEvents = function (dob) {
+            alert('dob..... ' );
+           if (dob != null) {
+               alert('dob: ' + dob);
+               var churchBodyId = $("#_hdnChuBodyId_HC").val();
+               var url = '@Url.Content("~/")' + 'ChurchAttendance/GetChurchEventsByAttendDate';
+               $('#_m_ChurchEventDetailId_HC').empty();
+               //   $('#tblAttendees_MemEditBody').html('');
+               //public JsonResult GetChurchEventsByAttendDate(int oCurrChuBodyId, string strDate, bool addEmpty = false)
+               $.getJSON(url, { oCurrChuBodyId: churchBodyId, strDate: dob, addEmpty: true }, function (data) {
+                   if (Object.keys(data).length > 0) {
+                       var items = '';
+                       $.each(data, function (i, oData) {
+                           items += "<option value='" + oData.value + "'>" + oData.text + "</option>";   // alert(items);
+                       });
+                       // items += "<option value=''> Select </option>";
+                       $('#_m_ChurchEventDetailId_HC').html(items);
+                   }
+               });
+
+
+               //  var dt = dob.value;
+               //alert("dob: " + dt);
+               //  strAge = calcMemDateDiff(dt, new Date());
+           }
+           else { alert('null date');}
+
+            // alert('age: ' + strAge);
+           // $("#_strMemberAge").val(strAge);
+                }
+
+
+                $(document).on('_m_DateAttended_HC_T.change', 'input.datepicker', function () {
+                    alert('changed');
+                });
+
+
+         var popChurchEvents_HC_T = function (dob) {
+            alert('dob..... ' );
+           if (dob != null) {
+               alert('dob: ' + dob);
+               var churchBodyId = $("#_hdnChuBodyId_HC_T").val();
+               var url = '@Url.Content("~/")' + 'ChurchAttendance/GetChurchEventsByAttendDate';
+               $('#_m_ChurchEventDetailId_HC_T').empty();
+               //   $('#tblAttendees_MemEditBody').html('');
+               //public JsonResult GetChurchEventsByAttendDate(int oCurrChuBodyId, string strDate, bool addEmpty = false)
+               $.getJSON(url, { oCurrChuBodyId: churchBodyId, strDate: dob, addEmpty: true }, function (data) {
+                   if (Object.keys(data).length > 0) {
+                       var items = '';
+                       $.each(data, function (i, oData) {
+                           items += "<option value='" + oData.value + "'>" + oData.text + "</option>";   // alert(items);
+                       });
+                       // items += "<option value=''> Select </option>";
+                       $('#_m_ChurchEventDetailId_HC_T').html(items);
+                   }
+               });
+
+
+               //  var dt = dob.value;
+               //alert("dob: " + dt);
+               //  strAge = calcMemDateDiff(dt, new Date());
+           }
+           else { alert('null date');}
+
+            // alert('age: ' + strAge);
+           // $("#_strMemberAge").val(strAge);
+            }
+
+
+
+       var popChurchEvents_HCQ = function (dob) {
+           if (dob != null) {
+               alert('dob: ' + dob);
+               var churchBodyId = $("#_hdnChuBodyId_HCQ").val();
+               var url = '@Url.Content("~/")' + 'ChurchAttendance/GetChurchEventsByAttendDate';
+               $('#_m_ChurchEventDetailId_HCQ').empty();
+               //   $('#tblAttendees_MemEditBody').html('');
+               //public JsonResult GetChurchEventsByAttendDate(int oCurrChuBodyId, string strDate, bool addEmpty = false)
+               $.getJSON(url, { oCurrChuBodyId: churchBodyId, strDate: dob, addEmpty: true }, function (data) {
+                   if (Object.keys(data).length > 0) {
+                       var items = '';
+                       $.each(data, function (i, oData) {
+                           items += "<option value='" + oData.value + "'>" + oData.text + "</option>";   // alert(items);
+                       });
+                       // items += "<option value=''> Select </option>";
+                       $('#_m_ChurchEventDetailId_HCQ').html(items);
+                   }
+               });
+           } else {alert('null date')}
+            }
+
+
+
+      $(document).on('click', '#row_del_HC', function (e) {
+                    //$("#tblAttendees_Edit_HC").on("click", "#row_del_MLS", function () {
+                    // alert('del...');
+                    $(this).closest("tr").remove();
+      });
+
+
+
+
+                $(document).on('click', '#btnAddNewHC_FD', function (e) {
+                    e.preventDefault();
+
+                    // _m_CHCF_TotVis _m_CHCF_TotAttend_O _m_CHCF_TotAttend_F _m_CHCF_TotAttend_M _m_CountGroupId
+                    $('#tblAttendees_HC_Edit').prop('hidden', false);
+                    var items = $('#tblAttendeesBody_HC_Edit').html().trim();
+                    //var lang_items = '';
+
+                    var currAddRow = $("#_m_CountGroupId").val();
+                   // var isChkVal = $("#chk_PrimaryLanguage").is(":checked");
+                  //  var _isChk = ''; if (isChkVal) _isChk = 'checked="true"';
+
+                    //  alert('langSel: ' + langSel);
+                    //alert( items);
+                    // alert(_isChk);
+                    if (currAddRow != '' && !(items.includes(currAddRow, 0))) { //&& items.includes($("#_LanguageSpokenId").text(), 0))) { && items.includes($("#chk_PrimaryLanguage").val(), 0))) {
+                        //lang_items += '<td id=lang_"' + $("#_LanguageSpokenId option:selected").val() + '">' + $("#_LanguageSpokenId option:selected").text() + '</td>';
+                        //
+                        //if (!(items.includes('checked="true"', 0) && $("#chk_PrimaryLanguage").is(":checked"))) {
+
+                            items += '<tr >';
+                            items += '<td id="' + langSel + '" name="lang_' + langSel + '">' + $("#_LanguageSpokenId option:selected").text() + '</td>';
+                            items += '<td id="' + $("#_ProficiencyLevel option:selected").val() + '">' + $("#_ProficiencyLevel option:selected").text() + '</td>';
+                            items += '<td class="text-center"><input type="checkbox" id=chk_"' + langSel + '" disabled ' + _isChk + '/></td>';
+
+                            items += '<td class="text-center"><a href="#" id="row_del_HC" class="btn btn-link btn-sm"><i class="fa fa-close fa-sm" style="color: darkred" ></i></a></td> ';
+                            items += '</tr>';
+
+                            $('#_tblBodyAddLangSpkn').html(items);
+                            //reset
+                            $("#_LanguageSpokenId")[0].selectedIndex = 0; $("#_ProficiencyLevel")[0].selectedIndex = 0; $('#chk_PrimaryLanguage').prop('checked', false);
+
+
+                               @*<tr id="row_template_HC" style="display: none; text-align:left">
+                                  <td width="0" hidden>@Html.HiddenFor(modelItem => Model.lsChurchAttendanceModels_HCEdit[i].oAttend_Id)</td>
+                                  <td width="0" hidden>@Html.HiddenFor(modelItem => Model.lsChurchAttendanceModels_HCEdit[i].oChurchBodyId, new { @id = "_oChurchBodyId" })</td>
+                                  <td width="0" hidden>@Html.HiddenFor(modelItem => Model.lsChurchAttendanceModels_HCEdit[i].CountCategoryId)</td>
+                                  <td style="vertical-align: middle">
+                                      &nbsp; <i class="fas fa-user" style="color:deepskyblue"></i> &nbsp;
+                                      @Html.DropDownListFor(modelItem => Model.lsChurchAttendanceModels_HCEdit[i].CountCategoryId, Model.lkpCountGroups, new { @id = "_strCountArea", @class = "form-control" })
+                                  </td>
+                                  <td class="form-control" align="right" style="vertical-align: middle">
+                                      @Html.TextBoxFor(modelItem => Model.lsChurchAttendanceModels_HCEdit[i].CHCF_TotAttend_M)
+                                  </td>
+                                  <td class="form-control" align="right" style="vertical-align: middle">
+                                      @Html.TextBoxFor(modelItem => Model.lsChurchAttendanceModels_HCEdit[i].CHCF_TotAttend_F)
+                                  </td>
+                                  <td class="form-control" align="right" style="vertical-align: middle">
+                                      @Html.TextBoxFor(modelItem => Model.lsChurchAttendanceModels_HCEdit[i].CHCF_TotAttend_O)
+                                  </td>
+                                  <td class="form-control" align="right" style="vertical-align: middle">
+                                      @Html.TextBoxFor(modelItem => Model.lsChurchAttendanceModels_HCEdit[i].CHCF_TotAttend_MemOrVis)
+                                  </td>
+                                  <td>
+                                      @if (Model.oChurchBody.Id == Model.oLoggedChurchBody.Id) // && (item.oChurchAttend.AttendeeType != "N" || item.oChurchAttend.AttendeeType == "M"))
+                                      {
+                                          <a href="#" id="btnDelete_HC" class="btn  btn-sm btn-outline-light" data-backdrop="static" data-keyboard="false"
+                                             onclick="AddEditCurr_Attendee_HC(2, @Model.oChurchBody.Id, @strL, @Model.lsChurchAttendanceModels_HCEdit[i].oAttend_Id,null, null, false, true )">
+                                              <i class="fa fa-trash fa-sm" style="color: #8b2f2f;"></i>
+                                          </a>
+                                      }
+                                  </td>
+                              </tr>*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        //}
+                        //else {
+                        //    $.alert({
+                        //        title: 'Sorry!',
+                        //        content: 'Member can have only one primary language',
+                        //        type: 'orange',
+                        //        typeAnimated: true,
+                        //    });
+                        //}
+
+                        // alert(items); <input type='checkbox'id='"+item.Id+"' name='chooseRecipient' class='my_chkBox' /></td>
+
+                    }
+                    else {
+                        $.alert({
+                            title: 'Sorry!',
+                            content: 'Count group already added',
+                            type: 'orange',
+                            typeAnimated: true,
+                        });
+                    }
+
+                });
+
+                $(document).on('click', '#row_del_HC', function (e) {
+                    //$("#_tblLangSpknTab").on("click", "#row_del_MLS", function () {
+                    // alert('del...');
+                    $(this).closest("tr").remove();
+                });
+
+    </script>
+
+    <script>
+        var row = 1;
+        $(function () {
+            $('#btnAdd_HC').click(function (e) {
+                e.preventDefault();
+                alert('adding..')
+                var template = $('#row_template_HC')
+                    .clone()                        // CLONE THE TEMPLATE
+                    .attr('id', 'row' + (row++))    // MAKE THE ID UNIQUE
+                    .appendTo($('#tblAttendees_HC_Edit tbody'))  // APPEND TO THE TABLE
+                    .show();                        // SHOW IT
+            });
+        });
+    </script>
+}
+
+

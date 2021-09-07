@@ -1,0 +1,480 @@
+﻿
+@model RhemaCMS.Models.ViewModels.vm_cl.ChurchTransferModel
+
+
+<div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center" style="width:100%; margin: 0 auto 0 auto ; padding:0;  ">
+    <form needs-validation novalidate id="currForm_ReqMT" method="post" enctype="multipart/form-data" asp-action="AddMod_ReqMT" class=" form-group bg-transparent p-3">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @if (Model.oChurchTransfer != null)
+        {
+            <input type="hidden" asp-for="oAppGloOwnId" />
+            <input type="hidden" asp-for="oChurchBodyId" />
+            <input type="hidden" asp-for="oChurchMemberId" />
+
+            <input type="hidden" asp-for="oChurchTransfer.Id" id="_hdnCurrId_MT" />
+            <input type="hidden" asp-for="oChurchTransfer.AppGlobalOwnerId" id="_AppGlobalOwnerId" />
+            <input type="hidden" asp-for="oChurchTransfer.ChurchBodyId" id="_ChurchBodyId" />
+
+
+            <input type="hidden" asp-for="oChurchTransfer.RequestorMemberId" id="_hdnRequestorMemberId" />
+            <input type="hidden" asp-for="oChurchTransfer.RequestorRoleId" id="_RequestorRoleId" />
+            <input type="hidden" asp-for="oChurchTransfer.FromChurchBodyId" id="_hdnChuBodyId" />
+
+            @*<input type="hidden" asp-for="oChurchTransfer.TransferType" id="_TransferType" />*@
+
+            <input type="hidden" asp-for="oChurchTransfer.CurrentScope" id="_CurrentScope" />
+
+            <input type="hidden" asp-for="userRequestTask" id="_userRequestTask" />
+            <input type="hidden" asp-for="numTransferDxn" id="_dxn" />
+            <input type="hidden" id="_urlSuccessOK" />
+            <input type="hidden" asp-for="setIndex" id="_setIndex" />
+            <input type="hidden" asp-for="serviceTask" id="_serviceTask" />
+
+            <input type="hidden" asp-for="numTempMemTypeCodeFrCB" />
+            <input type="hidden" asp-for="numTempMemRankIdFrCB" />
+            <input type="hidden" asp-for="numTempMemStatusIdFrCB" />
+            <input type="hidden" asp-for="numTempMemTypeCodeToCB" />
+            <input type="hidden" asp-for="numTempMemRankIdToCB" />
+            <input type="hidden" asp-for="numTempMemStatusIdToCB" /> 
+
+            <input type="hidden" asp-for="oChurchTransfer.Created" />
+            <input type="hidden" asp-for="oChurchTransfer.LastMod" />
+            <input type="hidden" asp-for="oChurchTransfer.CreatedByUserId" />
+            <input type="hidden" asp-for="oChurchTransfer.LastModByUserId" />
+
+
+
+
+            @*<hr style="width:100%; border: 1px solid #b7b5b5" />*@
+
+            int? _oAGOId = Model.oAppGloOwnId != null ? Model.oAppGloOwnId : -1; //if (Model.oAppGloOwnId != null) { _oAGOId = (int)Model.oChurchBody.AppGlobalOwnerId; };
+            int? _oCBId = Model.oChurchBodyId != null ? Model.oChurchBodyId : -1; //if (Model.oChurchBody.Id != -1) { _oCBId = (int)Model.oChurchBody.Id; }
+
+
+    <div class="m-0 p-0">
+        <div class="card-header card-outline card-fuchsia border-left-0 border-right-0 border-bottom-0 mb-3 title text-bold text-center ">
+            <span class="text-black-50">Request: </span>@Model.strTransfMemberDesc
+        </div>
+
+        <div class="card border pl-5 pr-5 pt-3 pb-3 shadow-sm" id="_divOpenReqDetails_CT">
+            <div class="card-header card-outline mb-3 title text-bold text-center text-black-50 ">
+                <i class="fas fa-info-circle text-info mr-1"></i>
+                Request Details
+            </div>
+
+            <ul class="list-group list-group-unbordered border-bottom-0">
+                <li class="list-group-item pl-1 pr-1 border-top-0">
+                    <div class="form-row ">
+                        <div class="col-md">
+                            <small asp-for="oChurchTransfer.RequestorChurchBodyId" class="control-label"> Requesting Congregation </small>
+                            <input type="text" asp-for="strRequestorChurchBody" class="form-control text-sm border-0" placeholder="Requesting Congregation" readonly />
+
+                            <input type="hidden" asp-for="oChurchTransfer.RequestorChurchBodyId" id="_RequestorChurchBodyId" />
+                        </div>
+                        <div class="col-md">
+                            <small asp-for="oChurchTransfer.ChurchMemberId" class="control-label"> Member on Transfer </small>
+                            <input type="text" asp-for="strFromMemberFullName" class="form-control text-sm border-0" placeholder="Member on Transfer " readonly />
+
+                            <input id="_hdnChurchMemberId_MT" type="hidden" asp-for="oChurchTransfer.ChurchMemberId" />
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item pl-1 pr-1">
+                    <div class="form-row  ">
+                        <div class="col-md">
+                            @{ var strParFromCBLevelTag = !string.IsNullOrEmpty(Model.strFromChurchLevel) ? "From: Member Congregation (" + Model.strFromChurchLevel + ")" : "From: Member Congregation"; }
+                            <small id="_lblFromChurchBody_MT" class="font-weight-normal" asp-for="oChurchBody"> @strParFromCBLevelTag  <i class="fas fa-arrow-right text-danger ml-1"></i>  </small>
+                            <input id="_strFromChurchBody_par_MT" type="text" class="form-control text-sm border-0"
+                                   asp-for="strFromChurchBody" aria-describedby="button-addon2" placeholder="Member-to-Transfer Congregation" readonly />
+
+                            <input id="_numFromChurchBodyId_par_MT" type="hidden" asp-for="oChurchTransfer.FromChurchBodyId" />
+                        </div>
+                        <div class="col-md">
+                            @{ var strParToCBLevelTag = !string.IsNullOrEmpty(Model.strToChurchLevel) ? "To: Receiving Congregation (" + Model.strToChurchLevel + ")" : "To: Receiving Congregation"; }
+                            <small id="_lblToChurchBody_MT" class="font-weight-normal" asp-for="oChurchBody"> @strParToCBLevelTag <i class="fas fa-arrow-left text-success ml-1"></i> </small>
+                            <input id="_strToChurchBody_par_MT" type="text" class="form-control text-sm text-sm border-0"
+                                   asp-for="strToChurchBody" aria-describedby="button-addon2" placeholder="Destination Congregation" readonly />
+
+                            <input id="_numToChurchBodyId_par_MT" type="hidden" asp-for="oChurchTransfer.ToChurchBodyId" />
+                        </div>
+                    </div>
+                </li>
+
+                @if (!string.IsNullOrEmpty(Model.oChurchTransfer.CustomTransMessage))
+                {
+                    <li class="list-group-item pl-1 pr-1">
+                        <div class="form-row  ">
+                            <div class="col-md">
+                                <small asp-for="oChurchTransfer.CustomTransMessage" class="control-label"> Short Message to Church Leadership  </small>
+                                <input maxlength="100" type="text" class="form-control text-sm border-0" asp-for="oChurchTransfer.CustomTransMessage" readonly>
+                            </div>
+                        </div>
+                    </li>
+                }
+
+                <li class="list-group-item pl-1 pr-1">
+                    <div class="form-row">
+                        <div class="col-md mb-3">
+                            <small asp-for="oChurchMember.TransferType" class="control-label">Transfer Type</small>
+                            <input type="text" asp-for="strTransferType" class="form-control text-sm border-0" placeholder="Transfer Type" readonly />
+
+                            <input id="_TransferType" type="hidden" asp-for="oChurchTransfer.TransferType" />
+                        </div>
+
+                        <div class="col-md mb-3">
+                            <small asp-for="oChurchTransfer.RequestDate" class="control-label"> Request Date </small>
+                            <input type="text" asp-for="strRequestDateDesc" class="form-control text-sm border-0" placeholder="Request Date" readonly />
+
+                            <input id="_RequestDate" type="hidden" asp-for="oChurchTransfer.RequestDate" />
+                        </div>
+
+                        @if (Model.oChurchTransfer.ReqStatus == "T" || Model.oChurchTransfer.ReqStatus == "Y" || Model.oChurchTransfer.ReqStatus == "C")   // transferred  or closed
+                        {
+                            <div class="col-md-4 mb-3">
+                                <small asp-for="oChurchTransfer.TransferDate" class="control-label"> Transfer Date </small>
+                                <input type="text" asp-for="strRequestDateDesc" class="form-control text-sm border-0" placeholder="Transfer Date" readonly />
+
+                                <input id="_TransferDate" type="hidden" asp-for="oChurchTransfer.TransferDate" />
+                            </div>
+                        }
+
+                        <div class="col-md-12 ">
+                            <small asp-for="oChurchTransfer.TransferReason" class="control-label"> Transfer Reason </small>
+                            <input maxlength="100" type="text" class="form-control text-sm border-0" asp-for="oChurchTransfer.TransferReason" readonly>
+                        </div>
+                    </div>
+                </li>
+
+                @if (!string.IsNullOrEmpty(Model.oChurchTransfer.Comments))
+                {
+                    <li class="list-group-item pl-1 pr-1">
+                        <div class="form-row ">
+                            <div class="col-md">
+                                <small class="font-weight-normal" asp-for="oChurchTransfer.Comments"> General Comments </small>
+                                <textarea maxlength="200" asp-for="oChurchTransfer.Comments" class="form-control text-sm border-0" rows="3" readonly></textarea>
+                            </div>
+                        </div>
+                    </li>
+                }
+
+
+                <li class="list-group-item pl-1 pr-1 border-bottom-0">
+                    @*@if (Model.oChurchTransfer.CurrentScope == "I" && Model.oChurchTransfer.RequestorChurchBodyId == Model.oChurchBodyId_Logged)
+                {*@
+
+                    <div class="rounded">
+                        <small class="control-label text-black-50 text-bold"> Congregation of Origin </small>
+                        <div class="form-row mb-1 mt-2">
+
+                            @if (Model.oChurchTransfer.CurrentScope == "I" && Model.oChurchTransfer.RequestorChurchBodyId == Model.oChurchBodyId_Logged &&
+                                Model.oChurchTransfer.TempMemStatusIdFrCB != null)
+                            {
+                                <div class="col-md-4">
+                                    <small asp-for="oChurchTransfer.TempMemStatusIdFrCB" class="control-label"> Member Status (Availability after transfer) </small>
+                                    <input type="text" class="form-control text-sm border-0" asp-for="strTempMemStatusIdFrCB" readonly>
+
+                                    <input type="hidden" asp-for="oChurchTransfer.TempMemStatusIdFrCB" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-4">
+                                    <small asp-for="oChurchTransfer.TempMemStatusIdFrCB" class="control-label"> Member Status (Availability after transfer) </small>
+                                    <select class="form-control text-sm" asp-for="oChurchTransfer.TempMemStatusIdFrCB" asp-items="Model.lkpChurchMemStatuses_OT">
+                                        <option selected disabled value=""> Member Type </option>
+                                    </select>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    @*}*@
+                </li>
+
+                @if (Model.oChurchTransfer.ReqStatus != "N" &&
+                 !(string.IsNullOrEmpty(Model.oChurchTransfer.TempMemTypeCodeToCB) && Model.oChurchTransfer.TempMemTypeCodeToCB == null && Model.oChurchTransfer.TempMemStatusIdToCB == null))
+                {
+
+                    <li class="list-group-item pl-1 pr-1 border-bottom-0  border-top">
+                        <div class="rounded mb-3">
+                            <small class="control-label text-black-50 text-bold"> Target Congregation (assigned after transfer) </small>
+                            <div class="form-row mb-1 mt-2">
+
+                                @if (Model.serviceTask == 1 && Model.oChurchTransfer.CurrentScope == "E" && Model.oChurchTransfer.ToChurchBodyId == Model.oChurchBodyId_Logged)
+                                {
+                                    <div class="col-md-4">
+                                        <small asp-for="oChurchTransfer.TempMemTypeCodeToCB" class="control-label"> To: Member Type </small>
+                                        <select class="form-control text-sm" asp-for="oChurchTransfer.TempMemTypeCodeToCB" asp-items="Model.lkpChurchMemTypes">
+                                            <option selected disabled value=""> Member Type </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md">
+                                        <small asp-for="oChurchTransfer.TempMemRankIdToCB" class="control-label"> To: Member Rank </small>
+                                        <select class="form-control text-sm" asp-for="oChurchTransfer.TempMemRankIdToCB" asp-items="Model.lkpChurchRanks">
+                                            <option selected disabled value=""> Member Rank </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <small asp-for="oChurchTransfer.TempMemStatusIdToCB" class="control-label"> To: Member Status </small>
+                                        <select class="form-control text-sm" asp-for="oChurchTransfer.TempMemStatusIdToCB" asp-items="Model.lkpChurchMemStatuses_IN">
+                                            <option selected disabled value=""> Member Status </option>
+                                        </select>
+                                    </div>
+
+                                }
+                                else
+                                {
+                                    <div class="col-md">
+                                        <small asp-for="strTempMemTypeCodeToCB" class="control-label"> Member Type </small>
+                                        <input type="text" class="form-control text-sm border-0" asp-for="strTempMemTypeCodeToCB" readonly>
+
+                                        <input type="hidden" asp-for="oChurchTransfer.TempMemTypeCodeToCB" />
+                                    </div>
+                                    <div class="col-md">
+                                        <small asp-for="strTempMemRankIdToCB" class="control-label"> Member Rank </small>
+                                        <input type="text" class="form-control text-sm border-0" asp-for="strTempMemRankIdToCB" readonly>
+
+                                        <input type="hidden" asp-for="oChurchTransfer.TempMemRankIdToCB" />
+                                    </div>
+                                    <div class="col-md">
+                                        <small asp-for="strTempMemStatusIdToCB" class="control-label"> Member Status </small>
+                                        <input type="text" class="form-control text-sm border-0" asp-for="strTempMemStatusIdToCB" readonly>
+
+                                        <input type="hidden" asp-for="oChurchTransfer.TempMemStatusIdToCB" />
+                                    </div>
+
+
+                                    @*else
+                                {
+                                    <input type="hidden" asp-for="oChurchTransfer.TempMemTypeCodeToCB" />
+                                    <input type="hidden" asp-for="oChurchTransfer.TempMemRankIdToCB" />
+                                    <input type="hidden" asp-for="oChurchTransfer.TempMemStatusIdToCB" />
+                                }*@
+                                    @*}*@
+
+                                }
+
+                            </div>
+                        </div>
+
+                    </li>
+
+                }
+            </ul>
+
+
+            @*@if (((Model.oChurchTransfer.CurrentScope == "I" && Model.oChurchTransfer.RequestorChurchBodyId == Model.oChurchBodyId_Logged) ||
+              (Model.oChurchTransfer.CurrentScope == "E" && Model.oChurchTransfer.ToChurchBodyId == Model.oChurchBodyId_Logged)))
+        {*@
+
+            <hr style="width:100%; border: 2px solid #b7b5b5" />
+
+            <div class="form-row mb-3">
+                <div class="col-md-12 ">
+                    <small asp-for="oChurchTransfer.CurrentScope" class="control-label"> Request Current Location: </small>
+
+                    @{
+                        if (Model.oChurchTransfer.CurrentScope == "I")
+                        {
+                            <input asp-for="strRequestorChurchBody" class="form-control text-sm border-0" readonly />
+                        }
+                        else /*if (Model.oChurchTransfer.CurrentScope == "E")*/
+                        {
+                            <input asp-for="strToChurchBody" class="form-control text-sm border-0" readonly />
+                        }
+                    }
+
+                    <input type="hidden" asp-for="oChurchTransfer.CurrentScope" id="_CurrentScope" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col-md-3">
+                    <small asp-for="oChurchTransfer.WorkSpanStatus" class="control-label"> Work-span </small>
+
+                    @switch (Model.oChurchTransfer.WorkSpanStatus)
+                    {
+                        case ("A"):<input asp-for="strWorkSpanStatus" class="form-control text-center text-sm bg-primary" readonly /> break;
+                        case ("D"): <input asp-for="strWorkSpanStatus" class="form-control text-center text-sm bg-light text-black-50" readonly /> break;
+                        case ("C"): <input asp-for="strWorkSpanStatus" class="form-control text-center text-sm bg-secondary" readonly /> break;
+
+                        default: <input asp-for="strWorkSpanStatus" class="form-control text-center text-sm" readonly />break;
+                    }
+
+                    <input type="hidden" asp-for="oChurchTransfer.WorkSpanStatus" id="_WorkSpanStatus" readonly />
+                </div>
+                <div class="col-md-3">
+                    <small asp-for="oChurchTransfer.CustomTransMessage" class="control-label"> Request Status </small>
+
+                    @switch (Model.oChurchTransfer.ReqStatus)
+                    {
+                        case ("N"):<input asp-for="strReqStatus" class="form-control text-center text-sm" style="background-color:whitesmoke; color:#000" readonly /> break;
+                        case ("P"): <input asp-for="strReqStatus" class="form-control text-center text-sm" style="background-color: deepskyblue; color: #fff" readonly /> break;
+                        case ("K"): <input asp-for="strReqStatus" class="form-control text-center text-sm" style="background-color: darkorange; color: #000" readonly /> break;
+                        case ("I"): <input asp-for="strReqStatus" class="form-control text-center text-sm" style="background-color: gold; color: #000 " readonly /> break;
+                        @*case ("H"): <input asp-for="strReqStatus" class="form-control text-center text-sm" style="background-color: darkorange; color: black" readonly /> break;*@
+                        case ("A"): <input asp-for="strReqStatus" class="form-control text-center text-sm" style="background-color:green; color:#fff" readonly /> break;
+                        @*case ("F"): <input asp-for="strReqStatus" class="form-control text-center text-sm" style="background-color:lightgreen; color:black" readonly />  break;*@
+                        case ("D"): <input asp-for="strReqStatus" class="form-control text-center text-sm" style="background-color:mistyrose; color:firebrick" readonly /> break;
+                        case ("X"): <input asp-for="strReqStatus" class="form-control text-center text-sm" style="background-color:whitesmoke; color:#000" readonly /> break;
+                        case ("R"): <input asp-for="strReqStatus" class="form-control text-center text-sm" style="background-color:lightblue ; color:#000" readonly /> break;
+
+                        @*case ("K"):<input asp-for="strReqStatus" class="form-control" style="background-color:orange; color: #000" readonly /> break;*@
+
+                        case ("T"):<input asp-for="strReqStatus" class="form-control text-center text-sm" style="background-color:lightgreen; color: #000" readonly /> break;
+                        case ("U"): <input asp-for="strReqStatus" class="form-control text-center text-sm" style="background-color:firebrick; color: #fff" readonly /> break;
+                        case ("Y"): <input asp-for="strReqStatus" class="form-control text-center text-sm" style="background-color:green; color:#fff " readonly /> break;
+
+                        case ("C"): <input asp-for="strReqStatus" class="form-control text-center text-sm" style="background-color:slategray; color: #fff " readonly /> break;
+
+                        @*case ("Z"): <input asp-for="strReqStatus" class="form-control text-center text-sm" style="background-color:lightgray; color: #000 " readonly />  break;*@
+
+                        default: <input asp-for="strReqStatus" class="form-control text-center text-sm" style="background-color:#fff; color:#000" readonly />break;
+                    }
+
+                    <input type="hidden" asp-for="oChurchTransfer.ReqStatus" id="_ReqStatus" />
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.oChurchTransfer.ReqStatusComments))
+                {
+                    <div class="col-md-6 mb-3">
+                        <small asp-for="oChurchTransfer.ReqStatusComments" class="control-label"> Attached Comments (Status) </small>
+                        <input maxlength="100" type="text" class="form-control text-sm border-0" asp-for="oChurchTransfer.ReqStatusComments" readonly>
+                    </div>
+                }
+
+                @if (Model.oChurchTransfer.ReqStatus != Model.oChurchTransfer.ApprovalStatus)
+                {
+                    @if (!string.IsNullOrEmpty(Model.oChurchTransfer.ApprovalStatus))
+                    {
+                        <div class="col-md-4 mb-3">
+                            <small asp-for="oChurchTransfer.CustomTransMessage" class="control-label"> Approval Status </small>
+
+                            @switch (Model.oChurchTransfer.ApprovalStatus)
+                            {
+                                @*case ("N"): <input asp-for="strReqApprovalStatus" class="form-control text-center text-sm" style="background-color:white; color:blue" readonly /> break;*@
+                                case ("P"): <input asp-for="strApprovalStatus" class="form-control text-center text-sm" style="background-color: deepskyblue; color: #fff" darkorange; color: #000" readonly /> break;
+                                case ("I"): <input asp-for="strApprovalStatus" class="form-control text-center text-sm" style="background-color:gold; color: #000 " readonly /> break;
+                                @*case ("H"): <input asp-for="strApprovalStatus" class="form-control text-center text-sm" style="background-color: darkorange; color: black" readonly /> break;*@
+                                case ("A"): <input asp-for="strApprovalStatus" class="form-control text-center text-sm" style="background-color:green; color:#fff" readonly /> break;
+                                @*case ("F"): <input asp-for="strApprovalStatus" class="form-control text-center text-sm" style="background-color:lightgreen; color:black" readonly />  break;*@
+                                case ("D"): <input asp-for="strApprovalStatus" class="form-control text-center text-sm" style="background-color:mistyrose; color:firebrick" readonly /> break;
+                                case ("X"): <input asp-for="strApprovalStatus" class="form-control text-center text-sm" style="background-color:whitesmoke; color:#000" readonly /> break;
+                                case ("R"): <input asp-for="strApprovalStatus" class="form-control text-center text-sm" style="background-color:lightblue ; color:#000" readonly /> break;
+                                @*case ("C"): <input asp-for="strApprovalStatus" class="form-control text-center text-sm" style="background-color:mistyrose; color:firebrick" readonly />  break;*@
+
+                                default: <input asp-for="strApprovalStatus" class="form-control text-center text-sm" style="background-color:white; color:black" readonly />break;
+                            }
+
+                            <input type="hidden" asp-for="oChurchTransfer.ApprovalStatus" id="_ApprovalStatus" />
+                        </div>
+                    }
+                    else
+                    { <input type="hidden" asp-for="oChurchTransfer.ApprovalStatus" id="_ApprovalStatus" />}
+
+
+                    @if (!string.IsNullOrEmpty(Model.oChurchTransfer.ApprovalStatusComments))
+                    {
+                        <div class="col-md-8 mb-3">
+                            <small asp-for="oChurchTransfer.ApprovalStatusComments" class="control-label"> Approvers Comments </small>
+                            <input maxlength="100" type="text" class="form-control text-sm border-0" asp-for="oChurchTransfer.ApprovalStatusComments" readonly>
+                        </div>
+                    }
+                }
+                else
+                { <input type="hidden" asp-for="oChurchTransfer.ApprovalStatus" id="_ApprovalStatus" />}
+            </div> 
+
+            </div>
+
+
+            @if (!string.IsNullOrEmpty(Model.oChurchTransfer.ApprovalStatus))
+            {
+                <div class="card border pl-5 pr-5 pt-3 pb-3 border bg-light shadow-sm" id="_divOpenReqApprStepList_CT" style="background-color: gainsboro">
+                    <div class="card-header mb-3 text-center ">
+                        <i class="fas fa-layer-group mr-1"></i>
+                        <span class=" text-md text-bold text-black-50 ">  Approval Steps (Flow) </span>
+                    </div>
+
+                    <!-- Approvals Steps: list -- can open the step on same page >> below div , add modal to pop details -->
+                    @{ await Html.RenderPartialAsync("_vwIndexReqAAS_MT", Model.oCurrApprovalActionStepModel); }
+                </div>
+
+                <div class="card border pl-5 pr-5 pt-3 pb-3 border-info shadow-sm" id="_divOpenReqApprStep_CT">
+                    <div class="card-header mb-3 ">
+                        <i class="fas fa-lightbulb text-success mr-1"></i>
+                        <span class="text-md text-bold text-black-50 "> Current Approval Step</span>
+
+                        <button id="_btnToggleOpenReqApprStep_CT" type="button" class="btn btn-light border float-md-right mr-1 border" data-toggle="tooltip" data-placement="top" title="Show/Hide Approval Steps">
+                            <i class="fa fa-list fa-secondary text-primary"></i>
+                        </button>
+                    </div>
+
+                    <!-- Approval Step ... for the Approvers action -->
+                    <div class="form-row mb-3">
+                        <div class="col-md-6">
+                            <small asp-for="strApproverChurchMember" class="control-label"> Approver </small>
+                            <input maxlength="100" type="text" class="form-control text-sm border-0" asp-for="strCurrApproverChurchMember" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <small asp-for="strApproverChurchRole" class="control-label"> Approver Role </small>
+                            <input maxlength="100" type="text" class="form-control text-sm border-0" asp-for="strCurrApproverChurchRole" readonly>
+                        </div>
+
+                        <div class="col-md-2">
+                            <small asp-for="oChurchTransfer.CustomTransMessage" class="control-label"> Step Status </small>
+
+                            @switch (Model.strActionStepStatusCode)
+                            {
+                                @*case ("N"): <input asp-for="strReqApprovalStatus" class="form-control text-center text-sm" style="background-color:white; color:blue" readonly /> break;*@
+                                case ("P"): <input asp-for="strActionStepStatus" class="form-control text-center text-sm" style="background-color:deepskyblue; color: white" readonly />  break;
+                                case ("I"): <input asp-for="strActionStepStatus" class="form-control text-center text-sm" style="background-color:gold; color: #000 " readonly /> break;
+                                case ("H"): <input asp-for="strActionStepStatus" class="form-control text-center text-sm" style="background-color: darkorange; color: #000" readonly /> break;
+                                case ("A"): <input asp-for="strActionStepStatus" class="form-control text-center text-sm" style="background-color:green; color:#fff" readonly />  break;
+                                @*case ("F"): <input asp-for="strActionStepStatus" class="form-control text-center text-sm" style="background-color:lightgreen; color:black" readonly />  break;*@
+                                case ("D"): <input asp-for="strActionStepStatus" class="form-control text-center text-sm" style="background-color:mistyrose; color:firebrick" readonly />  break;
+                                case ("X"): <input asp-for="strActionStepStatus" class="form-control text-center text-sm" style="background-color:gainsboro; color:#000" readonly /> break;
+                                case ("R"): <input asp-for="strActionStepStatus" class="form-control text-center text-sm" style="background-color:lightblue ; color:#000" readonly /> break;
+                                @*case ("C"): <input asp-for="strActionStepStatus" class="form-control text-center text-sm" style="background-color:mistyrose; color:firebrick" readonly />  break;*@
+
+                                default: <input asp-for="strActionStepStatus" class="form-control text-center text-sm" style="background-color:white; color:#000" readonly /> break;
+                            }
+
+                            <input type="hidden" asp-for="strActionStepStatusCode" id="_strActionStepStatusCode" />
+                            <input type="hidden" asp-for="oCurrApprovalActionId" id="_oCurrApprovalActionId" />
+                            <input type="hidden" asp-for="oCurrApprovalActionStepId" id="_oCurrApprovalActionStepId" />
+                        </div>
+
+                        <input type="hidden" asp-for="oCurrApproverChurchMemberId" id="_oCurrApproverChurchMemberId" />
+                        <input type="hidden" asp-for="oCurrApproverChurchBodyId" id="_oCurrApproverChurchBodyId" />
+                        <input type="hidden" asp-for="oCurrApproverChurchRoleId" id="_oCurrApproverChurchRoleId" />
+                        <input type="hidden" asp-for="oCurrApproverMemberChurchRoleId" id="_oCurrApproverMemberChurchRoleId" />
+                    </div>
+
+                    @if (Model.oCurrApprovalActionStepModel != null)
+                    {
+                        if (Model.oCurrApprovalActionStepModel.oApprovalActionStep != null)
+                        {
+                            if (Model.oCurrApprovalActionStepModel.oApprovalActionStep.ApproverChurchMemberId == Model.oMemberId_Logged)
+                            {
+                                <div class="form-row ">
+                                    <div class="col-md">
+                                        <small class="font-weight-normal " asp-for="oCurrApprovalActionStep.Comments"> Approver Reasons </small>
+                                        <textarea maxlength="200" asp-for="oCurrApprovalActionStep.Comments" class="form-control text-sm border-primary shadow-sm " rows="4"></textarea>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                    else
+                    { <input type="hidden" asp-for="oCurrApprovalActionStep.Comments" id="_Comments" />}
+                </div>
+
+            }
+        </div>
+        }
+
+    </form>
+</div>

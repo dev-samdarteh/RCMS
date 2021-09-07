@@ -1,0 +1,223 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.MemberContactInfoModel
+
+@if (Model.taskIndex == 0)
+{
+    @if (Model.oMemContactInfo != null)
+    {
+        <input type="hidden" asp-for="oAppGloOwnId" />
+        <input type="hidden" asp-for="oChurchBodyId" />
+        <input type="hidden" asp-for="oChurchMemberId" />
+
+        <input type="hidden" asp-for="oMemContactInfo.Id" />
+        <input type="hidden" asp-for="oMemContactInfo.ChurchBodyId" />
+        <input type="hidden" asp-for="oMemContactInfo.AppGlobalOwnerId" />
+        <input type="hidden" asp-for="oMemContactInfo.ChurchMemberId" />
+
+        <input type="hidden" asp-for="oMemContactInfo.IsPrimaryContact" />
+        <input type="hidden" asp-for="oMemContactInfo.IsChurchFellow" />
+        <input type="hidden" asp-for="oMemContactInfo.Created" />
+        <input type="hidden" asp-for="oMemContactInfo.LastMod" />
+        <input type="hidden" asp-for="oMemContactInfo.CreatedByUserId" />
+        <input type="hidden" asp-for="oMemContactInfo.LastModByUserId" />
+
+
+        <div class="form-row mb-3">
+            <div class="col-md">
+                <small asp-for="oMemContactInfo.ResidenceAddress" class="control-label"> Residence Address </small>
+                <input asp-for="oMemContactInfo.ResidenceAddress" class="form-control text-sm" placeholder="Residence Address" readonly />
+            </div>
+        </div>
+        <div class="form-row mb-3">
+            <div class="col-md-6">
+                <small asp-for="oMemContactInfo.Location" class="control-label"> Location </small>
+                <input asp-for="oMemContactInfo.Location" class="form-control text-sm" placeholder="Location" readonly />
+            </div>
+            <div class="col-md-6" id="_divResAddrSameAsPostAddr_vdMemCI">
+                <small asp-for="oMemContactInfo.ResAddrSameAsPostAddr" class="control-label">&nbsp;</small>
+                <label class="chk_container">
+                    <small> Postal Address same as Residence Address </small>
+                    <input id="chk_ResAddrSameAsPostAddr_vdMemCI" type="checkbox" asp-for="oMemContactInfo.ResAddrSameAsPostAddr" disabled />
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+        </div>
+        <div class="form-row mb-3" id="_divPostalAddress_vdMemCI">
+            <div class="col-md">
+                <small asp-for="oMemContactInfo.PostalAddress" class="control-label"> Postal Address</small>
+                <input asp-for="oMemContactInfo.PostalAddress" class="form-control text-sm" placeholder="Postal Address" readonly />
+            </div>
+        </div>
+        <div class="form-row mb-3">
+            <div class="col-md-6">
+                <small asp-for="oMemContactInfo.City" class="control-label"> City </small>
+                <input asp-for="oMemContactInfo.City" class="form-control text-sm" placeholder="City" readonly />
+            </div>
+            <div class="col-md-6">
+                <small asp-for="oMemContactInfo.DigitalAddress" class="control-label"> Digital Address </small>
+                <div class="input-group">
+                    <input type="text" class="form-control text-sm border-right-0" asp-for="oMemContactInfo.DigitalAddress" placeholder="Digital Address" readonly>
+                    <button type="button" class="btn btn-sm border border-left-0 ">
+                        <i class="fas fa-map-marker-alt fa-sm text-danger"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="form-row mb-3">
+            <div class="col-md-6">
+                <small asp-for="oMemContactInfo.CtryAlpha3Code" class="control-label">Country</small> 
+                <input asp-for="strCountry" class="form-control text-sm" placeholder="Country" readonly />
+            </div>
+            <div class="col-md-6">
+                <small asp-for="oMemContactInfo.RegionId" class="control-label"> Country Region</small> 
+                <input asp-for="strRegion" class="form-control text-sm" placeholder="Country Region" readonly />
+            </div>
+        </div>
+        <div class="form-row mb-3">
+            <div class="col-md-4">
+                <small asp-for="oMemContactInfo.Telephone" class="control-label">Telephone</small>
+                <input type="tel" asp-for="oMemContactInfo.Telephone" class="form-control text-sm" placeholder="Telephone" readonly />
+            </div>
+            <div class="col-md-4">
+                <small asp-for="oMemContactInfo.MobilePhone1" class="control-label">MobilePhone1</small>
+                <input id="_vdMobilePhone1" type="tel" asp-for="oMemContactInfo.MobilePhone1" class="form-control text-sm" placeholder="MobilePhone1" readonly />
+            </div>
+            <div class="col-md-4">
+                <small asp-for="oMemContactInfo.MobilePhone2" class="control-label">MobilePhone2</small>
+                <input id="_vdMobilePhone2" type="tel" asp-for="oMemContactInfo.MobilePhone2" class="form-control text-sm" placeholder="MobilePhone2" readonly />
+            </div>
+        </div>
+        <div class="form-row mb-3">
+            <div class="col-md">
+                <small asp-for="oMemContactInfo.Email" class="control-label">Email</small>
+                <input type="email" asp-for="oMemContactInfo.Email" class="form-control text-sm" placeholder="Email" readonly />
+            </div>
+        </div>
+        <div class="form-row ">
+            <div class="col-md">
+                <small asp-for="oMemContactInfo.Website" class="control-label">Website /Blog</small>
+                <input type="url" asp-for="oMemContactInfo.Website" class="form-control text-sm" placeholder="Website" readonly />
+            </div>
+        </div>
+    }
+
+}
+else
+{
+    <div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center" style="width:85%; margin: 0 auto 0 auto ; padding:0;  ">
+        <form needs-validation bg-transparent p-2" novalidate id="currFormCM_MCI" method="post" enctype="multipart/form-data" asp-action="AddModCM_MCI" class=" form-group bg-transparent"
+              style="margin-top:0px; padding-left: 3px; padding-right:3px;">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @if (Model.oMemContactInfo != null)
+            {
+                <input type="hidden" asp-for="oAppGloOwnId" />
+                <input type="hidden" asp-for="oChurchBodyId" />
+                <input type="hidden" asp-for="oChurchMemberId" />
+
+                <input type="hidden" asp-for="oMemContactInfo.Id" />
+                <input type="hidden" asp-for="oMemContactInfo.ChurchBodyId" id="_ChurchBodyId" />
+                <input type="hidden" asp-for="oMemContactInfo.AppGlobalOwnerId" id="_AppGlobalOwnerId" />
+                <input type="hidden" asp-for="oMemContactInfo.ChurchMemberId" />
+
+                <input type="hidden" asp-for="oMemContactInfo.IsPrimaryContact" />
+                <input type="hidden" asp-for="oMemContactInfo.IsChurchFellow" />
+                <input type="hidden" asp-for="oMemContactInfo.Created" />
+                <input type="hidden" asp-for="oMemContactInfo.LastMod" />
+                <input type="hidden" asp-for="oMemContactInfo.CreatedByUserId" />
+                <input type="hidden" asp-for="oMemContactInfo.LastModByUserId" />
+
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC" />
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC1" />
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC_MCI" />
+
+                <input type="hidden" asp-for="taskIndex" id="_taskIndex_MPC" />
+
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemContactInfo.ResidenceAddress" class="control-label"> Residence Address </small>
+                        <input asp-for="oMemContactInfo.ResidenceAddress" class="form-control text-sm " placeholder="Residence Address" />
+                    </div>
+                </div>
+                <div class="form-row mb-3">
+                    <div class="col-md-6">
+                        <small asp-for="oMemContactInfo.Location" class="control-label"> Location </small>
+                        <input asp-for="oMemContactInfo.Location" class="form-control text-sm " placeholder="Location" />
+                    </div>
+                    <div class="col-md-6" id="_divResAddrSameAsPostAddr_moMemCI">
+                        <small asp-for="oMemContactInfo.ResAddrSameAsPostAddr" class="control-label">&nbsp;</small>
+                        <label class="chk_container">
+                            <small> Postal Address same as Residence Address </small>
+                            <input id="chk_ResAddrSameAsPostAddr_moMemCI" type="checkbox" asp-for="oMemContactInfo.ResAddrSameAsPostAddr" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-row mb-3" id="_divPostalAddress_moMemCI">
+                    <div class="col-md">
+                        <small asp-for="oMemContactInfo.PostalAddress" class="control-label"> Postal Address</small>
+                        <input id="_PostalAddress_moMemCI" asp-for="oMemContactInfo.PostalAddress" class="form-control text-sm " placeholder="Postal Address" />
+                    </div>
+                </div>
+                <div class="form-row mb-3">
+                    <div class="col-md-6">
+                        <small asp-for="oMemContactInfo.City" class="control-label"> City </small>
+                        <input asp-for="oMemContactInfo.City" class="form-control text-sm " placeholder="City" />
+                    </div>
+                    <div class="col-md-6">
+                        <small asp-for="oMemContactInfo.DigitalAddress" class="control-label"> Digital Address </small>
+                        <div class="input-group">
+                            <input type="text" class="form-control text-sm  border-right-0" asp-for="oMemContactInfo.DigitalAddress" placeholder="Digital Address">
+                            <button id="_btnLoadDigitalAddress_moMemCI" type="button" class="btn btn-light btn-sm border border-left-0 ">
+                                <i class="fas fa-map-marker-alt fa-sm text-danger"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row mb-3">
+                    <div class="col-md-6">
+                        <small asp-for="oMemContactInfo.CtryAlpha3Code" class="control-label">Country</small>
+                        <select id="_CountryId_moMemCI" class="form-control text-sm " asp-for="oMemContactInfo.CtryAlpha3Code" asp-items="Model.lkpCountries">
+                            <option selected disabled value=""> Choose Country </option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <small asp-for="oMemContactInfo.RegionId" class="control-label"> Country Region</small>
+                        <select id="_RegionId_moMemCI" class="form-control text-sm " asp-for="oMemContactInfo.RegionId" asp-items="Model.lkpCountryRegions">
+                            <option selected value=""> Select Country Region </option>
+                        </select>
+                        <input id="_hdnRegionId_moMemCI" type="hidden" asp-for="oMemContactInfo.RegionId" />
+                    </div>
+                </div>
+                <div class="form-row mb-3">
+                    <div class="col-md-4">
+                        <small asp-for="oMemContactInfo.Telephone" class="control-label">Telephone</small>
+                        <input type="tel" asp-for="oMemContactInfo.Telephone" class="form-control text-sm " placeholder="Telephone" />
+                    </div>
+                    <div class="col-md-4">
+                        <small asp-for="oMemContactInfo.MobilePhone1" class="control-label">MobilePhone1</small>
+                        <input id="_MobilePhone1_moMemCI" type="tel" asp-for="oMemContactInfo.MobilePhone1" class="form-control text-sm " placeholder="MobilePhone1" />
+                    </div>
+                    <div class="col-md-4">
+                        <small asp-for="oMemContactInfo.MobilePhone2" class="control-label">MobilePhone2</small>
+                        <input id="_MobilePhone2_moMemCI" type="tel" asp-for="oMemContactInfo.MobilePhone2" class="form-control text-sm " placeholder="MobilePhone2" disabled />
+                    </div>
+                </div>
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemContactInfo.Email" class="control-label">Email</small>
+                        <input type="email" asp-for="oMemContactInfo.Email" class="form-control text-sm " placeholder="Email" />
+                    </div>
+                </div>
+                <div class="form-row ">
+                    <div class="col-md">
+                        <small asp-for="oMemContactInfo.Website" class="control-label">Website /Blog</small>
+                        <input type="url" asp-for="oMemContactInfo.Website" class="form-control text-sm " placeholder="Website" />
+                    </div>
+                </div>
+            }
+
+        </form>
+    </div>
+}

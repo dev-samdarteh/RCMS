@@ -1,0 +1,132 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_app_ven.UserProfileModel
+
+
+@if (Model != null)
+{
+    int? _oAGOId = -1; if (Model.oAppGloOwnId != null) { _oAGOId = (int)Model.oAppGloOwnId; };
+    int? _oCBId = -1; if (Model.oChurchBodyId != null) { _oCBId = (int)Model.oChurchBodyId; }
+
+    <table id="tabData_CL_UP" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th class="pl-2" style="text-align:left; vertical-align: middle">
+                    User Description
+                </th>
+                <th style="vertical-align: middle">
+                    Username
+                </th>
+                <th style="vertical-align: middle">
+                    Assigned Role
+                </th>
+                <th style="vertical-align: middle">
+                    User Group
+                </th>
+                @* <th align="left" style="vertical-align: middle; text-align:left ">
+                    Expires
+                </th>*@
+                <th style="vertical-align: middle">
+                    Status
+                </th>
+                <th style="text-align: center; width: auto; vertical-align: middle">
+                    @*<a role="button" data-remote="false" class="btn btn-default border-0" data-backdrop="static"
+                       onclick="AddEditCurrData_CL_UP(0, '[New] User Account')">
+                        <i class="fas fa-plus text-info "></i>
+                    </a>*@
+                    <a class="btn btn-default text-success border-0" id="btnAddEdit_CPR" role="button" data-remote="false"
+                       data-backdrop="static" onclick="ReloadCurrPage_CL_UP(0, 0, true)">
+                        <i class="fa fa-refresh fa-secondary"></i>
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lsUserProfileModels)
+            {
+                var strDesc = '"' + item.oUserProfile.UserDesc + '"';
+                <tr>
+                    <td class="pl-2" align="left" style="vertical-align: middle">
+                        @*<a id="btnAddEdit" class="btn btn-link btn-sm" data-remote="false" asp-controller="AppVenAdmin" asp-action="Index_UP" asp-route-oDenomId="@Model.oAppGlolOwnId" asp-route-oCurrChuBodyId="@Model.oChurchBodyId"
+           asp-route-id="@item.oUserProfile.Id" asp-route-setIndex="@Model.setIndex" asp-route-subSetIndex="@Model.subSetIndex" asp-route-pageIndex="2" data-backdrop="static" data-keyboard="false">
+            @item.oUserProfile.UserDesc
+        </a>*@
+
+                        @*<a id="btnAddEdit" class="btn btn-link btn-sm" data-remote="false" asp-controller="AppVenAdmin" asp-action="Index_UP" asp-route-setIndex="1" asp-route-pageIndex="2" data-backdrop="static" data-keyboard="false">
+                            @item.oUserProfile.UserDesc
+                        </a>*@
+                        <a role="button" onclick="ReloadCurrPage_CL_UPO(@item.oUserProfile.Id, @item.oAppGloOwnId, @item.oChurchBodyId, 1, false)">
+                            @item.oUserProfile.UserDesc
+                        </a>
+                        
+                    </td>
+                    <td style="vertical-align: middle">
+                        @item.oUserProfile.Username
+                    </td>
+                   <td style="vertical-align: middle">
+                        @item.strUserRoleName
+                    </td>
+                   <td style="vertical-align: middle">
+                        @item.strUserGroupName
+                    </td>
+                    @*  <td style="vertical-align: middle; text-align:left ">
+                        @item.oUserProfile.strExpr
+                    </td>*@
+                <td style="vertical-align: middle; text-align:center">
+                    @if (item.oUserProfile.UserStatus == "A")
+                    {<span class="badge badge-success text-center text-light font-weight-normal border"> <i class="fas fa-check fa-sm text-light"></i> @item.strUserStatus  </span> }
+                    else
+                    { <span class="badge badge-light text-center text-secondary font-weight-normal border"> <i class="fas fa-times fa-sm"></i> @item.strUserStatus </span>}
+                </td>
+
+                    <td style=" vertical-align: middle ; text-align:center">   
+                          @{  _oAGOId = item.oUserProfile.AppGlobalOwnerId; _oCBId = item.oUserProfile.ChurchBodyId;
+                              _oAGOId = _oAGOId == null ? -1 : _oAGOId; _oCBId = _oCBId == null ? -1 : _oCBId;
+                          }
+
+                            <div class="btn-group">
+                                @* dropdown-toggle*@
+                                <button type="button" class="btn btn-light border-0 bg-transparent" data-toggle="dropdown" data-offset="-52">
+                                    <i class="fas fa-ellipsis-h text-secondary"></i>
+                                </button>
+                                <div class="dropdown-menu" role="menu">
+                                    <a role="button" class="dropdown-item" onclick="AddEditCurrData_CL_UP(@item.oUserProfile.Id, @_oAGOId, @_oCBId, @strDesc, @Model.setIndex)">
+                                        <i class="fa fa-pencil fa-sm "></i> &nbsp; Edit
+                                    </a>
+                                    @if (item.isVendorOwned == false)@* Vendor edits admin profiles and church admins (Model.strAppCurrUser_RoleCateg == "SYS" || Model.strAppCurrUser_RoleCateg == "SUP_ADMN" || Model.strAppCurrUser_RoleCateg == "SYS_ADMN" || Model.strAppCurrUser_RoleCateg == "SYS_CUST" || Model.strAppCurrUser_RoleCateg == "SYS_ADMN" || Model.strAppCurrUser_RoleCateg == "SYS_CUST")  *@
+                                    {
+                                        <a role="button" class="dropdown-item text-danger" onclick="DeleteCurrData_CL_UP(@item.oUserProfile.Id, false, '')">
+                                            <i class="fa fa-trash fa-sm"></i> &nbsp; Delete
+                                        </a>
+                                    }
+                                    <div class="dropdown-divider"></div>
+                                    <a role="button" class="dropdown-item" onclick="ReloadCurrPage_CL_UPO(@item.oUserProfile.Id, @item.oAppGloOwnId, @item.oChurchBodyId, 1, false)"> 
+                                        <i class="fa fa-folder-open fa-sm"></i> &nbsp; Open Profile 
+                                    </a>
+
+                                </div>
+                            </div>
+
+                            @*<div class="btn-group dropright">
+                                <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-ellipsis-v fa-sm"></i>
+                                </button>
+                                <div class="dropdown-menu p-1">
+                                    <a href="#" id="btnAddEdit" data-remote="false" class="btn btn-light btn-sm text-primary" data-backdrop="static"
+                                       onclick="AddEditCurrData_CL_UP(@item.oUserProfile.Id, @_oAGOId, @_oCBId, @Model.setIndex, @Model.subSetIndex, @strDesc)">
+                                        <i class="fa fa-pencil fa-sm "></i> &nbsp; Edit
+                                    </a>
+                                      var DeleteCurrData_UP = function (currId, currSetIndex, currSubSetIndex, forceDeleteConfirm = false, msg = "")  @_oAGOId,  @_oCBId,  
+                                    <a href="#" class="btn btn-light btn-sm text-danger small"
+                                       onclick="DeleteCurrData_CL_UP(@_oAGOId, @_oCBId, @item.oUserProfile.Id, @Model.setIndex, @Model.subSetIndex, false, '')">
+                                        <i class="fa fa-trash fa-sm"></i> &nbsp; Delete
+                                    </a>
+                                </div>
+                            </div>*@ 
+                    </td>
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+
+}

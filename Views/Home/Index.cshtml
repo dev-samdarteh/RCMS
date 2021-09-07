@@ -1,0 +1,331 @@
+﻿@model RhemaCMS.Models.ViewModels.HomeDashboardVM
+
+@{
+    var _strAppName = @ViewData["strAppName"] as string;
+    var _pageTitle = @_strAppName + " - Dashboard";
+    ViewData["Title"] = @_pageTitle;
+
+
+    var _strAppCurrUser_ModCodes = @ViewData["strModCodes"] as string;      // module level assign
+    bool _bl_AppCurrUser_ModAccessVAA0 = (bool)@ViewData["bl_IsModAccessVAA0"];  // as bool;
+    bool _bl_AppCurrUser_ModAccessVAA4 = (bool)@ViewData["bl_IsModAccessVAA4"];  // as bool;
+
+    bool _bl_AppCurrUser_ModAccessDS00 = (bool)@ViewData["bl_IsModAccessDS00"];  // as bool;
+    bool _bl_AppCurrUser_ModAccessAC01 = (bool)@ViewData["bl_IsModAccessAC01"];  // as bool;
+    bool _bl_AppCurrUser_ModAccessMR02 = (bool)@ViewData["bl_IsModAccessMR02"];  // as bool;
+    bool _bl_AppCurrUser_ModAccessCL03 = (bool)@ViewData["bl_IsModAccessCL03"];  // as bool;
+    bool _bl_AppCurrUser_ModAccessCA04 = (bool)@ViewData["bl_IsModAccessCA04"];  // as bool;
+    bool _bl_AppCurrUser_ModAccessFM05 = (bool)@ViewData["bl_IsModAccessFM05"];  // as bool;
+    bool _bl_AppCurrUser_ModAccessRA06 = (bool)@ViewData["bl_IsModAccessRA06"];  // as bool;
+
+    bool _bl_AppCurrUser_ModAccessMin = _bl_AppCurrUser_ModAccessVAA0 || _bl_AppCurrUser_ModAccessVAA4 || 
+                                        _bl_AppCurrUser_ModAccessDS00 || _bl_AppCurrUser_ModAccessAC01 || _bl_AppCurrUser_ModAccessMR02 ||
+                                        _bl_AppCurrUser_ModAccessCL03 || _bl_AppCurrUser_ModAccessCA04 || _bl_AppCurrUser_ModAccessFM05 || _bl_AppCurrUser_ModAccessRA06;
+
+    var _strAppCurrUser_UR = @ViewData["strAssignedRoleNames"] as string;  //@ViewData["strAppCurrUser_ChRole"] as string;
+    var _strAppCurrUser_URCodes = @ViewData["strAssignedRoleCodes"] as string; // @ViewData["strAppCurrUser_RoleCateg"] as string;
+    var _strAppCurrUser_UG = @ViewData["strAssignedGroupNames"] as string;
+    // var _strAppCurrUser_UGCodes = @ViewData["strAssignedGroupNames"] as string;
+    var _strAppCurrUser_UPCodes = @ViewData["strAssignedPermCodes"] as string;
+
+    ///
+    /// dashboard values
+    var _CB_SubCongCount = @ViewData["CB_SubCongCount"] as string;
+    var _CB_MemListCount = @ViewData["CB_MemListCount"] as string;
+    var _CBWeek_NewMemListCount = @ViewData["CBWeek_NewMemListCount"] as string;
+    var _CBWeek_NewConvertsCount = @ViewData["CBWeek_NewConvertsCount"] as string;
+    var _CBWeek_VisitorsCount = @ViewData["CBWeek_VisitorsCount"] as string;
+    var _CBWeek_ReceiptsAmt = @ViewData["CBWeek_ReceiptsAmt"] as string;
+    var _CBWeek_PaymentsAmt = @ViewData["CBWeek_PaymentsAmt"] as string;
+    var _TodaysAuditCount = @ViewData["TodaysAuditCount"] as string;
+
+
+    var _strClientBranchParentName = @ViewData["strClientBranchParentName"] as string;
+
+    ///
+    ViewData["Title"] = _pageTitle; // Model.strAppName + " - Dashboard";
+    Layout = "_Layout";
+}
+
+
+
+<body id="page-top" class="w-100 small">
+    <div class="se-pre-con"></div>
+
+
+    <!-- /.row (main row) -->
+    <!-- solid sales graph -->
+
+    @if (_bl_AppCurrUser_ModAccessDS00 == true || _bl_AppCurrUser_ModAccessVAA4 == true)
+    {
+        <div class="card bg-gradient-white">
+            <div class="card-header border-bottom-0">
+                @{
+                    var _strHeader = !string.IsNullOrEmpty(Model.strChuBodyLoggedDash) ? "" + Model.strChuBodyLoggedDash : "";
+                    var _strHeaderPar = !string.IsNullOrEmpty(_strClientBranchParentName) ? "" + _strClientBranchParentName + "" : "";  // !string.IsNullOrEmpty(Model.strChuBodyParLoggedDash) ? "" + Model.strChuBodyParLoggedDash + "" : "";
+                }
+                <h3 class="card-title">
+                    @*<i class="fas fa-th mr-1"></i>
+                        <span class="text-black-50 text-md"> D-A-S-H B O A R D </span>*@
+
+                    <span id="_strHeader" class="text-md"><i class="fas fa-map-marker-alt fa-sm text-success mr-1"></i> @_strHeader </span>
+                    @if (!string.IsNullOrEmpty(_strHeaderPar))
+                    {
+                        <span class="text-black-50 text-md ml-3 "> ( <i class="fas fa-umbrella fa-xs text-black-50 mr-1"></i> @_strHeaderPar ) </span>
+                    }
+
+                </h3>
+                <div class="card-tools">
+                    <span class="text-black-50 text-md mr-1"> D-A-S-H B O A R D </span><i class="fas fa-th mr-1"></i>
+
+                    @*<button type="button" class="btn btn-sm bg-light " data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn text-danger btn-sm bg-light" data-card-widget="remove">
+                            <i class="fas fa-times"></i>
+                        </button>*@
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Small boxes (Stat box) -->
+                <div class="row">
+                    @if (_bl_AppCurrUser_ModAccessMR02 == true || _bl_AppCurrUser_ModAccessVAA4 == true)
+                    {
+                        @if (Model.strChurchType == "CH") @*_bl_AppCurrUser_ModAccessMR02 == true &&*@
+                        {
+                            <div class="col-lg-2 col-6">
+                                <!-- small box -->
+                                <div class="small-box bg-gradient-indigo">
+                                    <div class="inner">
+                                        <h3>@Model.strCB_SubCongCount </h3>
+                                        <p>@Model.strCL_SubCong</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-church"></i>
+                                    </div>
+                                    <a href="#" class="small-box-footer">
+                                        More info <i class="fas fa-arrow-circle-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+
+
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-gradient-info">
+                                <div class="inner">
+                                    <h3>@Model.strCB_MemListCount</h3>
+                                    @*<h3>53<sup style="font-size: 20px">%</sup></h3>*@
+
+                                    <p>Members</p>
+                                </div>
+                                <div class="icon">
+                                    @*<i class="ion ion-stats-bars"></i>*@
+                                    <i class="fa fa-users"></i>
+                                </div>
+
+                                @*<a class="small-box-footer"
+                                   asp-controller="ChurchMembers" asp-action="IndexCM_SUM" asp-route-oCBid="@Model.oChurchBodyId">
+                                    Details <i class="fas fa-arrow-circle-right"></i>
+                                </a>*@
+
+                                 <a class="small-box-footer"
+                                   asp-controller="ChurchMembers" asp-action="IndexCM_MRSS" asp-route-oCBid="@Model.oChurchBodyId" asp-route-t_ndx="1">
+                                    Details <i class="fas fa-arrow-circle-right"></i>
+                                </a>
+
+                                @*<a class="dropdown-item btn btn-light text-sm"
+                                   asp-controller="ChurchMembers" asp-action="IndexCM_MRSS" asp-route-oCBid="@_oChurchBodyId_Logged" asp-route-t_ndx="1">
+                                    <i class="fas fa-table mr-2"></i> Member Age Distribution
+                                </a>*@
+
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3>@Model.strCBWeek_NewConvertsCount</h3>
+
+                                    <p>New Converts</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-person-add"></i>
+                                </div>
+                                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                    }
+
+
+                    @if (_bl_AppCurrUser_ModAccessFM05 == true || _bl_AppCurrUser_ModAccessVAA4 == true)
+                    {
+                        <div class="col-lg col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-success">
+                                <div class="inner">
+                                    <h3><sup style="font-size: 20px; font-weight:lighter">@Model.strCB_CurrUsed</sup>@Model.strToDateChuPer_TotColTithes</h3>
+
+                                    <p> Total Tithes Collected </p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <a class="small-box-footer"
+                                   asp-controller="FinanceOperations" asp-action="IndexCB_RCSS" asp-route-oCBid="@Model.oChurchBodyId" asp-route-t_ndx="1">
+                                    More info <i class="fas fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-danger">
+                                <div class="inner">
+                                    <h3><sup style="font-size: 20px; font-weight:lighter">@Model.strCB_CurrUsed</sup>@Model.strToDateChuPer_TotOutTithes</h3>
+
+                                    <p>Total Disbursed </p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                @if (_bl_AppCurrUser_ModAccessMR02 == true || _bl_AppCurrUser_ModAccessVAA4 == true)
+                {
+                    <div class="row">
+                        <div class="col-12 col-sm-6 col-md-2">
+                            @*<div class="info-box">*@
+                            <a class="info-box mb-3" style="border-left: 1px solid deepskyblue; border-bottom: 1px solid deepskyblue"
+                               asp-controller="ChurchMembers" asp-action="IndexCM_MRSS" asp-route-oCBid="@Model.oChurchBodyId" asp-route-t_ndx="1">
+                                <span class="info-box-icon elevation-1" style="background-color: deepskyblue"><i class="fas fa-male"></i></span>
+
+                                <div class="info-box-content">
+                                    <span class="info-box-number text-lg font-weight-normal"> @Model.strCB_MemListCount_M </span>
+                                    <span class="info-box-number text-md"> @Model.strCB_MemListCount_MPc  <small>%</small> </span>
+                                    <span class="info-box-text"> Male </span>
+                                </div>
+                            </a>
+                            @*</div>*@
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-2">
+                            @*<div class="info-box mb-3">*@
+                            <a class="info-box mb-3 " style="border-left: 1px solid fuchsia; border-bottom: 1px solid fuchsia"
+                               asp-controller="ChurchMembers" asp-action="IndexCM_MRSS" asp-route-oCBid="@Model.oChurchBodyId" asp-route-t_ndx="1">
+                                <span class="info-box-icon bg-fuchsia elevation-1"><i class="fas fa-female"></i></span>
+
+                                <div class="info-box-content">
+                                    <span class="info-box-number text-lg font-weight-normal"> @Model.strCB_MemListCount_F </span>
+                                    <span class="info-box-number text-md"> @Model.strCB_MemListCount_FPc  <small>%</small> </span>
+                                    <span class="info-box-text"> Female </span>
+                                </div>
+                            </a>
+                            @*</div>*@
+                        </div>
+                        <div class="clearfix hidden-md-up"></div>
+                        <div class="col-12 col-sm-6 col-md-2">
+                            <a class="info-box mb-3" style="border-left: 1px solid green; border-bottom: 1px solid green"
+                               asp-controller="ChurchMembers" asp-action="IndexCM_MRSS" asp-route-oCBid="@Model.oChurchBodyId" asp-route-t_ndx="1">
+                                <span class="info-box-icon bg-success elevation-1"><i class="fas fa-child"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-number text-lg font-weight-normal"> @Model.strCB_MemListCount_C </span>
+                                    <span class="info-box-number text-md"> @Model.strCB_MemListCount_CPc  <small>%</small> </span>
+                                    <span class="info-box-text"> Children </span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-2">
+                            <a class="info-box mb-3" style="border-left: 1px solid #000; border-bottom: 1px solid #000"
+                               asp-controller="ChurchMembers" asp-action="IndexCM_MRSS" asp-route-oCBid="@Model.oChurchBodyId" asp-route-t_ndx="1">
+                                <span class="info-box-icon bg-yellow elevation-1"><i class="fas fa-walking"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-number text-lg font-weight-normal"> @Model.strCB_MemListCount_Y </span>
+                                    <span class="info-box-number text-md"> @Model.strCB_MemListCount_YPc  <small>%</small> </span>
+                                    <span class="info-box-text"> Youth </span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-2">
+                            <a class="info-box mb-3" style="border-left: 1px solid teal; border-bottom: 1px solid teal"
+                               asp-controller="ChurchMembers" asp-action="IndexCM_MRSS" asp-route-oCBid="@Model.oChurchBodyId" asp-route-t_ndx="1">
+                                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user-shield"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-number text-lg font-weight-normal"> @Model.strCB_MemListCount_YA </span>
+                                    <span class="info-box-number text-md"> @Model.strCB_MemListCount_YAPc  <small>%</small> </span>
+                                    <span class="info-box-text"> Young Adult </span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-2">
+                            <a class="info-box mb-3" style="border-left: 1px solid orange; border-bottom: 1px solid orange"
+                               asp-controller="ChurchMembers" asp-action="IndexCM_MRSS" asp-route-oCBid="@Model.oChurchBodyId" asp-route-t_ndx="1">
+                                <span class="info-box-icon bg-orange elevation-1"><i class="fas fa-user-slash"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-number text-lg font-weight-normal"> @Model.strCB_MemListCount_OA </span>
+                                    <span class="info-box-number text-md"> @Model.strCB_MemListCount_OAPc  <small>%</small> </span>
+                                    <span class="info-box-text"> Older Adult </span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                }
+
+
+            </div>
+
+            <!-- /.card-body -->
+            @*
+                <div class="card-footer bg-transparent">
+                    <div class="row">
+                        <div class="col-4 text-center">
+                            <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"
+                                   data-fgColor="#39CCCC">
+
+                            <div class="text-white">Mail-Orders</div>
+                        </div>
+                        <div class="col-4 text-center">
+                            <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"
+                                   data-fgColor="#39CCCC">
+
+                            <div class="text-white">Online</div>
+                        </div>
+                        <div class="col-4 text-center">
+                            <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"
+                                   data-fgColor="#39CCCC">
+
+                            <div class="text-white">In-Store</div>
+                        </div>
+                    </div>
+                </div>
+            *@
+        </div>
+
+    }
+
+
+</body>
+
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    @*<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>*@
+     
+    <script>
+
+        $(document).ready(function () {
+            // Animate loader off screen
+            $(".se-pre-con").fadeOut("slow");
+        });
+    </script>
+     
+
+
+}

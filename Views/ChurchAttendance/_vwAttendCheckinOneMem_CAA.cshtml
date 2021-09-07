@@ -1,0 +1,51 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.ChurchAttendanceModel
+
+<input type="hidden" asp-for="oChurchAttendee.ChurchMemberId" id="_ChurchMemberId" />
+
+<div class="form-row mb-2">
+    <div class="col-sm">
+        <small asp-for="strAttendeeName" class="control-label"> Name of Congregant </small>
+        <input id="_strAttendeeName_Mem" asp-for="strAttendeeName" class="form-control text-sm" readonly />
+    </div>
+    <div class="col-sm-3">
+        <small asp-for="strAttendeeName" class="control-label"> Member Code </small>
+        <input id="_GlobalMemberCode" asp-for="oChurchMember.GlobalMemberCode" class="form-control text-sm" readonly />
+    </div>
+</div>
+<div class="form-row mb-2">
+    <div class="col-sm-9">
+        <div class="form-row mb-2">
+            <div class="col-sm">
+                <small asp-for="strGender" class="control-label">Gender</small>
+                <input id="_strGender_Mem" asp-for="strGender" class="form-control text-sm" readonly />
+            </div>
+            <div class="col-sm">
+                <small asp-for="strMemGeneralStatus" class="control-label"> General Status </small>
+                <input asp-for="strMemGeneralStatus" class="form-control text-sm" id="_strMemGeneralStatus_Mem" readonly />
+            </div>
+        </div>
+        <div class="form-row mb-2">
+            <div class="col-sm">
+                <small asp-for="strNationality" class="control-label">Nationality</small>
+                <input asp-for="strNationality" class="form-control text-sm" id="_strNationality_Mem" readonly />
+            </div>
+        </div>
+        <div class="form-row mb-2">
+            <div class="col-sm-8 ">
+                <small asp-for="strResidenceLoc" class="control-label"> Location </small>
+                <input asp-for="strResidenceLoc" class="form-control text-sm" id="_strResidenceLoc_Mem" readonly />
+            </div>
+            <div class="col-sm-4 ">
+                <small asp-for="strPhone" class="control-label"> Phone </small>
+                <input asp-for="strPhone" class="form-control text-sm" id="_strPhone_Mem" readonly />
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 text-center p-2 justify-content-center" style="vertical-align: middle; ">
+        @{ var photoPath = "~/img_db/" + (Model.strPhotoUrl ?? "df_user_p.png"); }
+        <img class="profile-user-img img-fluid img-circle" style="min-width: 100px; min-height:100px; max-width: 100px; max-height:100px;"
+             src="@Url.Content(photoPath)" alt="Member photo" id="_strPhotoUrl_Mem" />
+
+    </div>
+</div>

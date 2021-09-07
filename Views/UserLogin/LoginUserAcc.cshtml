@@ -1,0 +1,269 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_app_ven.LogOnVM
+
+
+@{
+    /// headers
+    var userMess = @ViewData["strUserLoginFailMess"] as string;
+    var _strAppName =  @ViewData["strAppName"] as string;  //"Rhema-CMS" ; //
+    var _pageTitle = @_strAppName + " - Account Login";
+    ///
+    ViewData["Title"] = @_pageTitle;
+
+    Layout = "_LayoutLogin";
+    var strIsValid = 0;
+    if (Model != null) { strIsValid = Model.IsVal; }
+
+
+    ///
+    var strSalutation = @ViewData["_strChurchSlogan"] as string;
+    if (string.IsNullOrEmpty(strSalutation))
+        strSalutation = Model.strChurchSlogan;
+
+    ///
+    var _imgAppLogo = ViewData["strAppLogo_Filename"] as string;  //
+    var imgUrl_AppLogo = "~/img_db/" + (@_imgAppLogo ?? "df_user_p.png");
+}
+
+    <body>
+
+        <nav class="main-header navbar navbar-expand navbar-light bg-transparent m-0 justify-content-center" style="margin: auto auto auto auto ; padding:0; border-bottom: 3px solid white">
+
+            <!-- Brand Logo  border-bottom-->
+            <a asp-controller="UserLogin" asp-action="LoginUserAcc" class="brand-link bg-transparent">
+                <img src="@Url.Content(imgUrl_AppLogo)" alt="Church logo" class="brand-image img-circle elevation-1 shadow-sm mr-1" style="opacity: .8">
+                <h1 class="text-dark"><strong> @_strAppName </strong></h1>
+            </a>
+
+            @*<a asp-controller="UserLogin" asp-action="LoginUserAcc" class="brand-link">
+                <div class="user-panel mt-0 pb-1 d-flex">
+                <div class="image">
+                    <img src="@Url.Content(imgUrl_AppLogo)" class="img-circle elevation-3" alt="This is Rhema ...where Tech leads!">
+                    <h3>  @_strAppName </h3>
+                </div>
+                <div class="info pr-2 ml-1 text-primary">
+                <h4>  @_strAppName </h4>
+                <p class="text-sm pr-1"><i class="fas fa-map-marker-alt fa-sm"></i>&nbsp;@_strClientBranchName</p>
+                </div>
+                </div>
+            </a>*@
+        </nav>
+
+
+
+        <div class="top-content ">
+            <div class="container ">
+                <div class="inner-bg ml-5 mr-5">
+                    @*<div class="container bg-warning">  float-none*@                    
+                        <div class="form-row center-div-elem ">
+                            <div class="cus-top-center">
+                                @*<div class="col-md center-div-elem">
+            <div id="carouselExampleCaptions" class="carousel slide p-1" data-bs-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"></li>
+                    <li data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"></li>
+                    <li data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner ">
+                    <div class="carousel-item" data-bs-interval="5000" data-slide="true" data-wrap="true">
+                        <img src="~/frontend/dist/img/photo1.png" class="w-75" alt="Rhema Systems">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5> Rhema Systems Limited </h5>
+                            <p> Delivering tailored solutions for today's needs </p>
+                        </div>
+                    </div>
+                    <div class="carousel-item active" data-bs-interval="5000">
+                        <img src="~/frontend/dist/img/photo2.png" class="d-block w-75" alt="Rhema Systems">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5> RHEMA-CMS </h5>
+                            <p> All in one Church Solution </p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" data-bs-interval="5000" data-slide="true" data-wrap="true">
+                        <img src="~/frontend/dist/img/photo3.jpg" class="d-block w-75" alt="Rhema Systems">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5> Rhema Systems Limited </h5>
+                            <p> Your one stop for all tech needs </p>
+                        </div>
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </a>
+            </div>
+        </div>*@
+
+                                <div class="form-box-login text-center">
+                                    @*<div class="container">*@
+
+                                    <div class="center-div-elem">
+                                        <input type="hidden" asp-for="IsVal" id="_basicVerif" />
+                                        <div class="row">
+                                            @{ 
+                                                if (string.IsNullOrEmpty(strSalutation))
+                                                {
+                                                    var ts = DateTime.Now.TimeOfDay;
+                                                    if (ts.Hours >= 0 && ts.Hours < 12) { strSalutation = "Good morning"; }
+                                                    else if (ts.Hours <= 16) { strSalutation = "Good afternoon"; }
+                                                    else if (ts.Hours < 24) { strSalutation = "Good evening"; }
+                                                }
+
+                                                var strToday = "Today is " + String.Format("{0:dddd d MMMM, yyyy}", DateTime.Now);
+                                            }
+                                            <div class="col-sm text-center">
+                                                <h3><strong class="mr-1 ">@strSalutation</strong> <span> and welcome </span></h3>
+                                                <span class="text-muted">
+                                                    @strToday
+                                                </span>
+                                                <div asp-validation-summary="ModelOnly" class="bg-warning text-center text-md-center text-dark m-0 mt-2 p-2 pr-3 pl-0 text-wrap rounded" 
+                                                     style="vertical-align:middle"> </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row m-0 p-0">
+                                            <div class="col-sm form-box">
+                                                <div class="form-top">
+                                                    <div class="form-top-left">
+                                                        <h3><strong>Please login</strong></h3>
+                                                        <p>Enter your church code, username and password </p>
+                                                    </div>
+                                                    <div class="form-top-right">
+                                                        <i class="fas fa-lock-open"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="form-bottom">
+                                                    <form needs-validation novalidate class="login-form" asp-action="LoginUserAcc" asp-route-strIsVal="@strIsValid" role="form">
+                                                        <div class="form-group">
+                                                            <label class="sr-only" for="form-username">Church Code</label>
+                                                            <div class="input-group mb-1">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text" style="background-color:whitesmoke ; border: 1px solid whitesmoke" id="basic-addon1">
+                                                                        <i class="fa fa-home text-gray" style="width: 15px" aria-hidden="true"></i>
+                                                                    </span>
+                                                                </div>
+                                                                <input asp-for="ChurchCode" class="form-username form-control" type="text" placeholder="Church code" aria-label="Church code" aria-describedby="basic-addon1"
+                                                                       style="font-family:Verdana, Geneva, Tahoma, sans-serif ;" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="sr-only" for="form-username">Username</label>
+                                                            <div class="input-group mb-1">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text" style="background-color: whitesmoke; border: 1px solid whitesmoke" id="basic-addon1">
+                                                                        <i class="fa fa-user text-gray" style="width: 15px" aria-hidden="true"></i>
+                                                                    </span>
+                                                                </div>
+                                                                <input asp-for="Username" class="form-username form-control" type="text" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"
+                                                                       style="font-family:Verdana, Geneva, Tahoma, sans-serif;" required>
+                                                            </div>
+                                                        </div>
+
+                                                        @*<div class="form-group">
+            <label class="sr-only" for="form-password">Password</label>
+            <input type="password" asp-for="Password" placeholder="Password" class="form-password form-control" id="form-password" required>
+        </div>*@
+                                                        <div class="form-group">
+                                                            <label class="sr-only" for="form-password">Password</label>
+                                                            <div class="input-group ">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text" style="background-color: whitesmoke; border: 1px solid whitesmoke" id="basic-addon1">
+                                                                        <i class="fa fa-unlock-alt text-gray" style="width: 15px" aria-hidden="true"></i>
+                                                                    </span>
+                                                                </div>
+                                                                <input type="password" asp-for="Password" placeholder="Password" class="form-password form-control" aria-label="Password" aria-describedby="basic-addon1"
+                                                                       style="font-family:Verdana, Geneva, Tahoma, sans-serif;" autocomplete="off" required>
+
+                                                                <div class="input-group-append">
+                                                                    <span class="input-group-text bg-white border-0 ">
+                                                                        <span id="showPwd" toggle="#password-field" class="fa fa-fw fa-eye fa-sm text-gray field-icon toggle-password"
+                                                                              style="margin: auto;"></span>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        @*<input type="text" class="form-control text-sm" asp-for="ChurchCode" placeholder="Parameter Value">
+        <input type="text" class="form-control text-sm" asp-for="Username" placeholder="Parameter Value">*@
+
+                                                        <button type="submit" class="btn btn-dark text-bold mt-1"> Login </button>
+
+                                                        @*<div class="form-row col-sm-12 agile-field-txt m-0 p-0 mt-5">
+            <input type="submit" value="Login" class="btn btn-outline-light btn-lg w-100 text-md" />
+        </div>*@
+
+                                                        <span class="text-center mt-2" style="font-family:Verdana, sans-serif, 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva" >
+                                                            @*<span style="margin:auto; color: darkcyan ;">*@
+                                                                @{ var _setIndex = Model.ChurchCode == "000000" ? 1 : 2;}
+                                                                @*<a class="dropdown-item text-sm" href="#">
+                                                                     <span class="te-sm" > Forgot password... Reset </span>
+                                                                </a>*@
+                                                                <a class="dropdown-item text-sm" asp-controller="UserLogin" asp-action="AddOrEdit_ChangeUserPwd" 
+                                                                   asp-route-churchCode="@Model.ChurchCode" asp-route-username="@Model.Username" asp-route-setIndex="@_setIndex">
+                                                                     <span class="te-sm" > Forgot password... Reset </span>
+                                                                </a>
+
+                                                            @*</span>*@
+                                                        </span>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @*</div>*@
+                                </div>
+
+                            </div>
+                    </div>
+                    @*</div>*@
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </body>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    @*script for show password*@
+    <script type="text/javascript">
+
+        function myFunction() {
+            var x = document.getElementById("Password"); /*/getElementById("Pwd_1");  *('# <%= Pwd.ClientID %>');*/
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+
+        //$(".toggle-password").click(function () {
+        $("#showPwd").click(function () {
+            $(this).toggleClass("fa-eye fa-eye-slash");
+            var input = $("#Password");
+            if (input.attr("type") == "password") {
+                input.attr("type", "text");
+            } else {
+                input.attr("type", "password");
+            }
+        });
+
+    </script>
+
+    <script>
+          window.onload = () => {
+            const myInput = document.getElementById('Password');
+            myInput.onpaste = e => e.preventDefault();
+        }
+    </script>
+}
+

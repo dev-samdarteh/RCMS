@@ -1,0 +1,84 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.RelationshipTypeModel
+
+    <form class="bg-transparent p-2" id="currForm_RLT" method="post" enctype="multipart/form-data" asp-action="AddOrEdit_RLT"> 
+        <input type="hidden" asp-for="@Model.oAppGloOwnId_Logged" id="_oAppGloOwnId_Logged" /> 
+
+
+        @if (Model != null)
+        {
+            <table id="tabData_RLT" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th> Code </th>
+                        <th> Relation </th>
+                        <th> Masculine </th>
+                        <th> Feminine </th>
+                        <th> Generic </th>
+                        @*<th class="p-1 justify-content-center" style="vertical-align: middle; text-align: center; width: 60px ">
+                            <a class="btn btn-default text-success border-0" id="btnAddEdit_CRL" role="button" data-remote="false"
+                               data-backdrop="static" onclick="ReloadCurrPage_CRL(16, 1)">
+                                <i class="fa fa-refresh fa-secondary"></i>
+                            </a>
+                        </th>*@
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.lsRelationshipTypeModels)
+                    {
+                        if (item.oRelationshipType != null)
+                        {
+                            <tr>
+                                <td style="vertical-align: middle">
+                                    @item.oRelationshipType.RelationCode
+                                </td>
+                                <td style="vertical-align: middle">
+                                    @item.strRelationshipType
+                                </td>
+                                <td style="vertical-align: middle">
+                                    @item.strRelationshipTypeMalePairId
+                                </td>
+                                <td style="vertical-align: middle">
+                                    @item.strRelationshipTypeFemalePairId
+                                </td>
+                                <td style="vertical-align: middle">
+                                    @item.strRelationshipTypeGenericPairId
+                                </td>
+                                @*<td class="p-1" style="vertical-align: middle; text-align:center ">
+                                    @{ var strDesc = '"' + item.strRelationshipType + '"'; }
+                                    <div class="btn-group ">
+                                        <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-ellipsis-v text-gray text-lg"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <ul class="list-group list-group-flush ">
+                                                <li class="list-group-item btn-outline-light">
+                                                    <a class="text-dark text-md" role="button" data-backdrop="static"
+                                                       onclick="AddEditCurrData_RLT(0, @item.oRelationshipType.Id, @Model.oAppGloOwnId_Logged, @Model.oChurchBodyId_Logged, @strDesc)">
+                                                        <i class="fa fa-plus text-primary"></i> <span class="text-sm ml-1">Add New</span>
+                                                    </a>
+                                                </li>
+                                                <li class="list-group-item btn-outline-light">
+                                                    <a class="text-dark text-md" role="button" data-backdrop="static"
+                                                       onclick="AddEditCurrData_RLT(@item.oRelationshipType.Id, @item.oRelationshipType.Id, @Model.oAppGloOwnId_Logged, @Model.oChurchBodyId_Logged, @strDesc)">
+                                                        <i class="fa fa-edit text-info"></i> <span class="text-sm ml-1">Edit</span>
+                                                    </a>
+                                                </li>
+                                                <li class="list-group-item btn-outline-light">
+                                                    <a class="text-dark text-md" role="button" data-backdrop="static" onclick="DeleteCurrData_RLT(@item.oRelationshipType.Id, false, '')">
+                                                        <i class="fa fa-trash text-danger"></i> <span class="text-sm ml-1">Delete</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>*@
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+
+        }
+
+
+    </form>

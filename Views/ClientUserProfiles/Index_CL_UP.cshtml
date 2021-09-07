@@ -1,0 +1,754 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_app_ven.UserProfileModel
+
+
+
+<body id="page-top" class="hold-transition sidebar-mini-md sidebar-toggled layout-fixed w-100">
+    <input type="hidden" id="_oSetIndex" data-value="@Model.setIndex" />
+    <input type="hidden" id="_oSubSetIndex" data-value="@Model.subSetIndex" />
+
+    <input type="hidden" id="_oChurchBodyId_Logged" data-value="@Model.oChurchBodyId_Logged" />
+    <input type="hidden" id="_oAppGloOwnId_Logged" data-value="@Model.oAppGloOwnId_Logged" />
+    <input type="hidden" id="_oUserId_Logged" data-value="@Model.oUserId_Logged" />
+
+    <div class="row">
+        <div class="col-md-8 cus-top-center">
+
+            <div class="content-header border-bottom border-info mb-5 pb-0">
+                <div class="row m-0">
+                    <div class="col-sm">
+                        <h3><i class="fas fa-users-cog pr-2"></i> User Account Management </h3>
+                    </div>
+                    @*<div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item active">
+                    <a asp-controller="ClientSetupParameters" asp-action="Index" class="text-info">
+                        <i class="fas fa-refresh mr-1"></i>
+                    </a>
+                </li>
+            </ol>
+        </div>*@
+
+                    @if (Model.setIndex != 0)
+                    {
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item active">
+                                    <a class="dropdown-item text-sm" asp-controller="ClientUserProfiles" asp-action="Index_CL_UP">
+                                        <i class="fas fa-arrow-left mr-2"></i> <span class="te-sm">Back to User Accounts</span>
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a class="dropdown-item text-sm" role="button" onclick="ReloadCurrPage_CL_UP(0, 0, true)">
+                                        <i class="fas fa-refresh mr-2"></i> 
+                                    </a>
+                                </li>
+                            </ol>
+                        </div> 
+                    }
+                </div>
+            </div>
+
+            <section class="content p-3">
+                @if (Model.setIndex == 0)
+                {
+                    <div class="row">
+                        
+                            <div id="section" class="card col-md">
+                                @*<h6 class="card-header card-title bg-gray-light">
+                                    <i class="fas fa-users pr-2 pull-right"></i>
+                                    <i class="fa fa-chevron-down fa-sm pull-right"></i>
+                                    User Profiles
+                                </h6>*@
+
+                                <div class="card-header border-0">
+                                    <h6 class="card-title">
+                                        <span class="text-info">User Profiles</span>
+                                    </h6>
+                                    <i class="fas fa-users text-secondary pr-2 fa-pull-right"> </i>
+
+                                    @*<div class="card-tools">
+                                        <div class="btn-group">
+                                        <button type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
+                                            <i class="fas fa-bars"></i>
+                                        </button>
+                                        <div class="dropdown-menu" role="menu">
+                                            <a role="button" class="dropdown-item"> Add new event</a>
+                                            <a role="button" class="dropdown-item"> Clear events</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a role="button" class="dropdown-item">View calendar</a>
+                                        </div>
+                                    </div>
+
+                                        <button type="button" class="btn btn-info btn-sm" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-success btn-sm" data-card-widget="remove">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    </div>*@
+                                </div>
+                                <div class="card-body card-fuchsia card-outline">
+                                    <div id="divTabData_CL_UP" class="overlay-wrapper mb-1">
+                                        @{ await Html.RenderPartialAsync("_vwIndex_CL_UP", Model); }
+                                    </div>
+                                </div>
+                                <div class="card-footer clearfix">
+                                    <button type="button" class="btn btn-info float-right"
+                                            onclick="AddEditCurrData_CL_UP(0, null, null, '[New] User Account', 0)">
+                                        <i class="fas fa-edit mr-1"></i> <span class="text-sm"> Add New </span>
+                                    </button>
+                                    <button type="button" class="btn btn-default border mr-1 float-right" onclick="ReloadCurrPage_CL_UP(0, 0, true)">
+                                        <i class="fa fa-refresh fa-secondary"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        
+                    </div>
+                }
+
+                else
+                {
+                    <div id="divTabData_CL_UPO" class="overlay-wrapper mb-1">
+                        @{ await Html.RenderPartialAsync("_vwIndex_CL_UPO", Model); }
+                    </div>
+                }
+
+            </section>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="divPopModal_AddEdit" tabindex="-1" role="dialog" aria-labelledby="_modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-gray ">
+                    <h5 class="modal-title"> Editing: </h5> @*@Model.strCurrTask*@
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body bg-light" style="font-family:Verdana, Geneva, Tahoma, sans-serif;
+                            font-size: 10pt" id="divModalBody_AddEdit_lg">
+                </div>
+                <div class="modal-footer " style="background-color: lightgrey; left:auto; right: auto">
+                    <a role="button" class="btn btn-outline-light " data-dismiss="modal"> Cancel </a>
+                    @*<button id="btnSaveChanges" type="submit" class="btn btn-primary save-data font-weight-bold"><i class="fa fa-database fa-sm"></i> Save changes </button>*@
+
+                    <button id="btnSaveChanges" type="submit" class="btn btn-info float-right">
+                        <i class="fas fa-database fa-sm"></i> Save changes
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="divPopModal_AddEdit_lg" tabindex="-1" role="dialog" aria-labelledby="_modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-gray text-light">
+                    <h5 class="modal-title"> Editing: </h5> @*@Model.strCurrTask*@
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body bg-light" style="font-family:Verdana, Geneva, Tahoma, sans-serif;
+                            font-size: 10pt" id="divModalBody_AddEdit_lg">
+                </div>
+                <div class="modal-footer " style="background-color: lightgrey; left:auto; right: auto">
+                    <a href="#" class="btn btn-outline-light " data-dismiss="modal"> Cancel </a>
+                    <button id="btnSaveChanges" type="submit" class="btn btn-light  save-data font-weight-bold"><i class="fa fa-database fa-sm"></i> Save changes </button>
+
+                    @*<button id="btnSaveChanges" class="btn btn-primary" type="submit" >Submit form</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal-->
+    <div class="modal fade" id="divPopModal_Success" tabindex="-1" role="dialog" aria-hidden="true" style="background-color:transparent; min-width:75px">
+        <div class="modal-dialog modal-sm bg-info" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success">
+                    <h5 style="color: white; font-weight:bold"> Done! </h5>
+                </div>
+                <div class="modal-body bg-white" style="align-items:center">
+                    <label id="lblUserMessage" class="text-sm font-weight-normal text-center"></label>
+                </div>
+
+                <div class="modal-footer bg-white">
+                    <a href="#" id="_btnSuccessOK" class="btn btn-success shadow shadow-sm" data-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <!-- CL_UP  16 no ADD, no DEL, only EDIT -->
+<script>
+        $(function () {
+            $("#tabData_CL_UP").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+                //"paging": true,
+                //"lengthChange": false,
+                //"searching": false,
+                //  "orderable": true,
+                //"info": true,
+                "order": [],
+                "columnDefs": [{
+                "targets": [5],
+                "orderable": false,
+                }]
+            });
+        });
+
+    $(function () {
+        $("#tabData_CL_UPR").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+            //"paging": true,
+            //"lengthChange": false,
+            //"searching": false,
+            //"ordering": true,
+            //"info": true,
+            "order": [],
+            "columnDefs": [{
+                "targets": [0, 10, 11, 12],
+                "orderable": false,
+            }]
+        });
+    });
+
+    $(function () {
+        $("#tabData_CL_URP").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+            //"paging": true,
+            //"lengthChange": false,
+            "searching": false,
+            "orderable": false,
+            //"info": true,
+            "order": [],
+            "columnDefs": [{
+                "targets": [0, 12, 13, 14, 15, 16, 17],
+                "orderable": false,
+            }]
+        });
+    });
+
+        var DisplaySuccessInfo = function (msg, reload = false) {
+
+            $.alert({
+                title: 'Done!',
+                type: 'green',
+                typeAnimated: true,
+                content: msg,
+                closeIcon: true,
+                closeIconClass: 'fa fa-close'
+            });
+
+        };
+
+        var DisplayErrorInfo = function (msg, reload = false) {
+
+            $.alert({
+                title: 'Oops!',
+                type: 'red',
+                typeAnimated: true,
+                content: msg,
+                closeIcon: true,
+                closeIconClass: 'fa fa-close'
+            });
+
+        };
+
+
+
+        var ReloadCurrPage_CL_UP = function (currSetIndex = 0, currSubSetIndex = 0, currLoadSectionOnly = true) {  // , currPageIndex = 1, currFilterIndex = 1, currLoadSectionOnly = true)
+          //  alert("currSetIndex: " + currSetIndex)
+            // public ActionResult Index_CL_UP(int? setIndex = 0, int? subSetIndex = 0)
+            var url = "@Url.Action("Index_CL_UP", "ClientUserProfiles")?setIndex=" + currSetIndex + "&subSetIndex=" + currSubSetIndex + "&loadSectionOnly=" + currLoadSectionOnly; // + "&filterIndex=" + currFilterIndex + "&pageIndex=" + currPageIndex;
+
+            if (currLoadSectionOnly) {
+                $("#divTabData_CL_UP").load(url, function () {
+                    $("#tabData_CL_UP").DataTable({
+                        "responsive": true,
+                        "autoWidth": false,
+                        //"paging": true,
+                        //"lengthChange": false,
+                        //"searching": false,
+                        //  "orderable": true,
+                        //"info": true,
+                        "order": [],
+                        "columnDefs": [{
+                            "targets": [5],
+                            "orderable": false,
+                        }]
+                    });
+                });
+            }
+
+            else {
+                window.location = url;
+            }
+
+        }
+
+        var AddEditCurrData_CL_UP = function (currId, currDenomId, currChurchBodyId, _strItemName, setIndex = 0) {  //(currId, currDenomId, currChuBodyId, currSetIndex, currSubSetIndex, _strItemName)
+
+           // alert("addORedit...");
+            //alert("addORedit.. " + currId + " ..currDenomId: " + currDenomId + " ..currChurchBodyId: " + currChurchBodyId + " .._strItemName: " + _strItemName);
+
+            var currUserId_Logged = $("#_oUserId_Logged").data("value");
+            if (currDenomId == null) currDenomId = $("#_oAppGloOwnId_Logged").data("value");
+            if (currChurchBodyId == null) currChurchBodyId = $("#_oChurchBodyId_Logged").data("value");
+
+            if (currId < 0) currId = null;
+            if (currDenomId < 0) currDenomId = null;
+            if (currChurchBodyId < 0) currChurchBodyId = null;
+
+            //
+           // alert("setIndex: " + setIndex)
+            // public IActionResult AddOrEdit_CL_UP(int id = 0, int? oAppGloOwnId = null, int? oChurchBodyId = null, int? oUserId = null, int setIndex = 0)
+            var url = "@Url.Action("AddOrEdit_CL_UP", "ClientUserProfiles")?id=" + currId +
+                        "&oAppGloOwnId=" + currDenomId + "&oChurchBodyId=" + currChurchBodyId + "&oUserId=" + currUserId_Logged + "&setIndex=" + setIndex;
+
+
+            if (currId > 0) { $('#btnSaveChanges').html('Update'); }
+
+          //  alert(url)
+
+            $('#divPopModal_AddEdit').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+            //$('#divPopModal_AddEdit').modal({
+            //    backdrop: false,
+            //    show: true
+            //});
+
+            $('#divPopModal_AddEdit .modal-dialog').draggable({
+                handle: ".modal-header"
+            });
+
+           //  alert('loading modal...')
+            $('#divPopModal_AddEdit .modal-body').load(url, function () {
+
+                $('#divPopModal_AddEdit .modal-title').html(_strItemName);
+                $("#divPopModal_AddEdit").modal('show');
+            });
+
+
+
+             // if (currId > 0) { document.querySelector("#btnSaveChanges").innerHTML = "Update"; }
+           // if (currId > 0) { $("#btnSaveChanges").html("Update"); }
+
+           //           //  alert(url)
+
+           // $("#divPopModal_AddEdit").modal({
+           //                 backdrop: "static",
+           //                 keyboard: false
+           //             });
+
+           //             //$("#divPopModal_AddEdit").modal({
+           //             //    backdrop: false,
+           //             //    show: true
+           //             //});
+
+           // $("#divPopModal_AddEdit .modal-dialog").draggable({
+           //                 handle: ".modal-header"
+           //             });
+
+           //             //alert("loading modal...")
+           //             //$("#_setIndex").val(setIndex);
+           //             //$("#divModalBody_AddEdit").load(url, function () {
+
+           //$("#divPopModal_AddEdit .modal-body").load(url, function () {
+           //    $("#divPopModal_AddEdit .modal-title").html(_strItemName);
+
+           //    // alert("load level..")
+
+           //    //$("#_ChurchLevelId_CL_UP").change();
+           //    //$("#_OrgType_CL_UP").change();
+           //    //$("#chk_IsChurchMainstream_CL_UP").change();
+           //    //triggerChurchLevel_CL_UP();
+           //    //triggerParentRoleCL_CL_UP();
+           //    /// triggerChurchLevel_sup_CL_UP();
+
+           //    //var valType = $("#chk_IsChurchMainstream_CL_UP").is(":checked");
+           //    //$("#_divApplyToChurchUnit_CL_UP").prop("hidden", valType);
+
+           //    $("#divPopModal_AddEdit").modal("show");
+           //});
+
+        };
+
+        var SaveCurr_CL_UP = function () { // (currSetIndex, currSubSetIndex) {
+      //    alert("saving CU... ");
+
+            var f_name = "currForm_CL_UP";
+            var currFormData = new FormData($("#" + f_name).get(0));
+
+            // var currFormData = $("#currForm_CL_UP").serialize();
+
+           // alert("save... submitting...");
+
+            $.ajax({
+                type: "POST",
+                // data: formdata,
+                // processData: false,
+
+                url: "@Url.Action("AddOrEdit_CL_UP", "ClientUserProfiles")",
+
+               // url: "/ClientUserProfiles/AddOrEdit_CL_UP",
+                data: currFormData,   //{ data: currFormData, taskIndx: oTask },  //
+                //contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                contentType: false,
+                processData: false,
+                success: function (res) {
+
+                    if (res.taskSuccess == true) {
+                        //  var currChuBodyId = $("#_hdnChuBodyId").val(); // var currDenomId = $("#_hdnAppGloOwnId").val();  // var currId = $("#_hdnCurrId_AGO").val();
+
+                        DisplaySuccessInfo(res.userMess); //(res.userMess, currDenomId, currChuBodyId, currSetIndex, currSubSetIndex); // "/ClientUserProfiles/Index?oCurrChuBodyId=" + currChuBodyId + "&dxn=" + dxn);
+                        ReloadCurrPage_CL_UP(0, 0);   //via AJAX...
+                        if (res.resetNew == true) {
+                            var _desc = "[New] User Account";
+                            var _denomId = $("#_AppGlobalOwnerId").val();
+                            var _churchBodyId = $("#_ChurchBodyId").val();
+
+                            //   var AddEditCurrData_CL_UP = function (currId, currDenomId, currChurchBodyId, _strItemName, setIndex = 0)
+                            AddEditCurrData_CL_UP(0, _denomId, _churchBodyId, _desc);
+                        }
+                        else {
+                                // alert("closing...")
+                                $("#divPopModal_AddEdit .close").click();
+                       }
+
+                        //window.location.href = "/ClientUserProfiles/Index?oCurrChuBodyId=" + currChuBodyId + "&setIndex=" + currSetIndex;
+                    }
+
+                    else //if (res.taskSuccess == false)
+                    {
+                        DisplayErrorInfo(res.userMess);
+
+                        // alert(res.userMess); //"Member transfer request failed. Details: " + ViewBag.UserMsg);
+                        // $("#lblUserMessage").text(msg);
+                    }
+                }
+            })
+        }
+
+        var DeleteCurrData_CL_UP = function (currId, forceDeleteConfirm = false, msg = "") {
+          //alert("deleting cu")
+
+            var currUserId_Logged = $("#_oUserId_Logged").data("value");
+            var currAGOId_Logged = $("#_oAppGloOwnId_Logged").data("value");
+            var currCBId_Logged = $("#_oChurchBodyId_Logged").data("value");
+
+
+            $.confirm({
+                title: "Confirm delete!",
+                content: (msg == "" ? "Are you sure you want to delete the specified user account" : msg) + " ?",
+                type: "red",
+                typeAnimated: true,
+                buttons: {
+                    cancel: function () {
+                        //$.alert("Canceled!");
+                    },
+                    //info: {
+                    //    btnClass: "btn-blue",
+                    //    action: function(){}
+                    //},
+
+                    delete: {
+                        btnClass: "btn-danger ",
+                        action: function () {
+                            $.ajax({
+                                type: "POST",
+                                url: "@Url.Action("Delete_CL_UP", "ClientUserProfiles")",
+                                // public IActionResult Delete_CL_UP(int? oAppGloOwnId, int? oChurchBodyId, int? loggedUserId, int id, bool forceDeleteConfirm = false)
+                                data: { oAppGloOwnId: currAGOId_Logged, oChurchBodyId: currCBId_Logged, loggedUserId: currUserId_Logged, id: currId, forceDeleteConfirm: forceDeleteConfirm },  //forceDeleteConfirm = -1 {denied-error, info}, 0 {denied-dependencies, info}, 1 {denied-confirm to force-delete, task}
+                                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                                success: function (res) {
+                                    if (res.taskSuccess == true) {          //var currChuBodyId = $("#_hdnChuBodyId").val();
+                                        DisplaySuccessInfo(res.userMess); // currDenomId, currChuBodyId, currSetIndex, currSubSetIndex);        //DisplaySuccessInfo(res.userMess, oAppGloId, currChuBodyId, currSetIndex);
+                                        ReloadCurrPage_CL_UP(0, 0);
+                                    }
+
+                                    else {
+                                        // alert(res.userMess);  (currSetIndex == 1 && !delConfirm)   //
+                                        if (res.tryForceDelete == true) {
+                                            DeleteCurrData_CL_UP(currId, true, res.userMess);
+                                        }
+
+                                        else {
+                                            DisplayErrorInfo(res.userMess);
+                                        }
+                                    }
+                                },
+
+                                error: function () {
+                                    alert("Error occured while deleting data");
+                                }
+                            });
+                        }
+                    },
+                }
+            });
+
+        };
+
+
+        ///////
+        var ReloadCurrPage_CL_UPO = function (currId, currDenomId, currChurchBodyId, setIndex = 0, currLoadSectionOnly = true) {  // , currPageIndex = 1, currFilterIndex = 1, currLoadSectionOnly = true)
+            //
+         //  alert('refresh UPO')
+
+           var currUserId_Logged = $("#_oUserId_Logged").data("value");
+           if (currDenomId == null) currDenomId = $("#_oAppGloOwnId_Logged").data("value");
+           if (currChurchBodyId == null) currChurchBodyId = $("#_oChurchBodyId_Logged").data("value");
+
+          // alert('refresh UPO...')
+           if (currId < 0) currId = null;
+           if (currChurchBodyId < 0) currChurchBodyId = null;
+           if (currDenomId < 0) currDenomId = null;
+
+           // alert("setIndex: " + setIndex)
+            //  public ActionResult Index_CL_UPO(int id = 0, int? oAppGloOwnId = null, int? oChurchBodyId = null, int? oUserId = null, int setIndex = 0, bool loadSectionOnly = false)
+            var url = "@Url.Action("Index_CL_UPO", "ClientUserProfiles")?id=" + currId +
+                "&oAppGloOwnId=" + currDenomId + "&oChurchBodyId=" + currChurchBodyId + "&oUserId=" + currUserId_Logged + "&setIndex=" + setIndex + "&loadSectionOnly=" + currLoadSectionOnly;
+
+         //  alert(url)
+           if (!currLoadSectionOnly) {
+               window.location = url;
+           }
+           else {
+               // load div...
+               $("#divTabData_CL_UPO").load(url, function () {
+                   //$("#tabData_CL_UP").DataTable({
+                   //    "responsive": true,
+                   //    "autoWidth": false,
+                   //    //"paging": true,
+                   //    //"lengthChange": false,
+                   //    //"searching": false,
+                   //    //  "orderable": true,
+                   //    //"info": true,
+                   //    "order": [],
+                   //    "columnDefs": [{
+                   //        "targets": [5],
+                   //        "orderable": false,
+                   //    }]
+                   //});
+               });
+           }
+
+        }
+
+        var ReloadCurrPage_CL_UPR = function (currSetIndex = 0, currSubSetIndex = 0, currLoadSectionOnly = true) {
+
+            ReloadCurrPage_CL_UP(0, 0, true);
+
+            @*var url = "@Url.Action("Index_CL_UPR", "ClientUserProfiles")?setIndex=" + currSetIndex + "&subSetIndex=" + currSubSetIndex + "&loadSectionOnly=" + currLoadSectionOnly; // + "&filterIndex=" + currFilterIndex + "&pageIndex=" + currPageIndex;
+
+            if (currLoadSectionOnly) {
+                $("#divTabData_CL_UPR").load(url, function () {
+                    $("#tabData_CL_UPR").DataTable({
+                        "responsive": true,
+                        "autoWidth": false,
+                        //"paging": true,
+                        //"lengthChange": false,
+                        //"searching": false,
+                        //"ordering": true,
+                        //"info": true,
+                        "order": [],
+                        "columnDefs": [{
+                            "targets": [0, 10, 11, 12],
+                            "orderable": false,
+                        }]
+                    });
+                });
+            }*@
+             
+
+        }
+     
+        var saveCurr_CL_UPR = function () {
+
+      //  alert('save tab')
+
+        //Loop through the Table rows and build a JSON array.
+        //var userProfileRoles = new Array();
+        //$("#tabData_CL_UPR TBODY TR").each(function () {
+        //    var row = $(this);
+        //    var oUPR = {};
+        //    alert('id: ' + row.find("TD").eq(0).html())
+        //    oUPR.Id = row.find("TD").eq(0).html();
+        //    alert('lev: ' + row.find("TD").eq(1).html())
+        //    oUPR.RoleLevel = row.find("TD").eq(1).html();
+        //   // alert('chk: ' + row.find("TD").eq(2).val())
+        //    oUPR.bl_IsRoleAssigned = true; // row.find("TD").eq(2).val();
+        //    alert('role: ' + row.find("TD").eq(3).html())
+        //    oUPR.strUserProfileRole = row.find("TD").eq(3).html();
+
+
+        //    userProfileRoles.push(oUPR);
+        //});
+
+        //var json = [{
+        //                "id": "1",
+        //                "msg": "hi",
+        //                "tid": "2013-05-05 23:35",
+        //                "fromWho": "hello1@email.se"
+        //            },
+        //            {
+        //                "id": "2",
+        //                "msg": "there",
+        //                "tid": "2013-05-05 23:45",
+        //                "fromWho": "hello2@email.se"
+        //            }];
+
+
+        //for (var i = 0; i < json.length; i++) {
+        //    var obj = json[i];
+
+        //    console.log(obj.id);
+        //}
+
+
+        @*alert('done... saving')
+        userProfileRoles.forEach(function (obj) { alert(obj.Id); alert(obj.RoleLevel); alert(obj.bl_IsRoleAssigned);alert(obj.strUserProfileRole); });
+
+        alert('done.. posting')
+        //Send the JSON array to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("AddMod_CL_UPR", "ClientUserProfiles")',
+           // url: "/ClientUserProfiles/AddMod_CL_UPR",
+            data: JSON.stringify(userProfileRoles),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (r) {
+                alert(r + " record(s) inserted.");
+            }
+        });*@
+
+
+        var currFormData = $("#currForm_UPR").serializeArray();
+        //var parameters = [];
+
+        var tbl = $('#tabData_CL_UPR').DataTable();
+        var tbl_data = tbl.$('input, select').serializeArray();
+
+
+        $.each(tbl_data, function (i, tab_f) {
+            var attr_found = false;
+            $.each(currFormData, function (i, field) {
+                //
+                if (field.name == tab_f.name) {
+                    // alert(field.name + ' == ' + tab_f.name);
+                    field.value = tab_f.value;
+                    attr_found = true;
+
+                    // counterIn++;
+                    return false;
+                }
+            });
+
+            // alert('attr_found: ' + attr_found);
+            if (attr_found == false) {
+                currFormData.push({ name: tab_f.name, value: tab_f.value });
+            }
+        });
+
+       // alert('finally... serialized... save');
+          //  alert('finally... save:- ' + counter + " ... counterIn:- " + counterIn)
+
+            $.ajax({
+                    type: 'POST',
+                    url: "@Url.Action("AddMod_CL_UPR", "ClientUserProfiles")",
+                    data: currFormData,
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    success: function (res) {
+
+                        if (res.taskSuccess == true) {
+                            DisplaySuccessInfo(res.userMess); //(res.userMess, currDenomId, currChuBodyId, currSetIndex, currSubSetIndex); // "/ClientSetupParameters/Index?oCurrChuBodyId=" + currChuBodyId + "&dxn=" + dxn);
+                            ReloadCurrPage_CL_UPR(7, 1, 2);   //via AJAX...
+
+                        }
+
+                        else //if (res.taskSuccess == false)
+                        {
+                            $.alert({
+                                title: 'Oops!',
+                                content: res.userMess,
+                                type: 'red',
+                                typeAnimated: true,
+                            });
+                        }
+                    }
+            })
+
+
+    }
+
+
+        ///
+    var ReloadCurrPage_CL_URP = function (currSetIndex = 0, currSubSetIndex = 0, currLoadSectionOnly = true) {
+
+        ReloadCurrPage_CL_UP(0, 0, true);
+
+        @*var url = "@Url.Action("Index_CL_UPR", "ClientUserProfiles")?setIndex=" + currSetIndex + "&subSetIndex=" + currSubSetIndex + "&loadSectionOnly=" + currLoadSectionOnly; // + "&filterIndex=" + currFilterIndex + "&pageIndex=" + currPageIndex;
+
+        if (currLoadSectionOnly) {
+            $("#divTabData_CL_UPR").load(url, function () {
+                $("#tabData_CL_UPR").DataTable({
+                    "responsive": true,
+                    "autoWidth": false,
+                    //"paging": true,
+                    //"lengthChange": false,
+                    //"searching": false,
+                    //"ordering": true,
+                    //"info": true,
+                    "order": [],
+                    "columnDefs": [{
+                        "targets": [0, 10, 11, 12],
+                        "orderable": false,
+                    }]
+                });
+            });
+        }*@
+             
+
+        }
+
+
+
+</script>
+
+    <script>
+        $(document).on('click', '#btnSaveChanges', function (e) {
+            e.preventDefault();
+          //  alert('saving...')
+
+            SaveCurr_CL_UP();
+        });
+
+    
+
+
+
+
+
+    </script>
+
+}

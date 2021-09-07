@@ -1,0 +1,2125 @@
+﻿
+@model RhemaCMS.Models.ViewModels.vm_app_ven.MSTRChurchBodyModel
+
+@{
+    /// headers
+    var _strAppName = @ViewData["strAppName"] as string;
+    var _pageTitle = @_strAppName + " - Church Units";
+    ///
+    ViewData["Title"] = @_pageTitle;
+    //ViewData["Title"] = Model.strAppName + " - Church Units";
+    Layout = "_Layout_sa";
+}
+
+
+<body id="page-top" class="w-100">
+    <div class="se-pre-con"></div>
+
+    @{
+        var _oAGOId = -1; if (Model.oAppGloOwnId != null) { _oAGOId = (int)Model.oAppGloOwnId; };
+        //var _oCBId = -1; if (Model.oChurchBodyId != null) { _oCBId = (int)Model.oChurchBodyId; }
+    }
+
+    @*<input type="hidden" asp-for="@Model.setIndex" id="_setIndex" />
+        <input type="hidden" asp-for="@Model.oChurchBodyId_Logged" id="_oChurchBody_Logged" />
+        <input type="hidden" asp-for="@Model.oAppGlolOwnId_Logged" id="_oAppGloOwnId_Logged" />
+        <input type="hidden" asp-for="@Model.oUserId_Logged" id="_oUserId_Logged" />*@
+
+
+    @*<input type="hidden" id="_oSetIndex" data-value="@Model.setIndex" />
+            <input type="hidden" id="_oAppGloOwnId_Logged" data-value="@Model.oAppGloOwnId_Logged" />
+            <input type="hidden" id="_oChurchBodyId_Logged" data-value="@Model.oChurchBodyId_Logged" />
+            <input type="hidden" id="_oUserId_Logged" data-value="@Model.oUserId_Logged" />
+
+        <input type="hidden" id="_oSetIndex" data-value="@Model.setIndex" />
+        <input type="hidden" id="_oSubSetIndex" data-value="@Model.subSetIndex" />*@
+
+    <input type="hidden" asp-for="oAppGloOwnId" id="_oAppGloOwnId" />
+    <input type="hidden" asp-for="PageIndex" id="_PageIndex" />
+
+
+    <input type="hidden" id="_oChurchBodyId_Logged" data-value="@Model.oChurchBodyId_Logged" />
+    <input type="hidden" id="_oAppGloOwnId_Logged" data-value="@Model.oAppGloOwnId_Logged" />
+    @*<input type="hidden" id="_pageIndex" data-value="@Model.pageIndex" />*@
+    <input type="hidden" id="_oUserId_Logged" data-value="@Model.oUserId_Logged" />
+
+
+
+    <div class="card bg-gradient-light">
+        <div class="card-header border-bottom">
+            <h3 class="card-title text-primary">
+                <i class="fas fa-th mr-1"></i>
+                @Model.strCurrTask
+            </h3>
+            <div class="card-tools">
+                @*<ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index_sa">Home</a></li>
+                        <li class="breadcrumb-item active"> @Model.strCurrTask</li>
+                    </ol>*@
+                <button type="button" class="btn btn-sm bg-light" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-sm bg-danger text-light" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+
+            @*<div class="content-header pb-0">
+                    <div class="container-fluid pb-0">
+                        <div class="row mb-0">
+                            <div class="col-sm-6">
+                                <h3 class="m-0 text-dark"> @Model.strCurrTask</h3>
+                            </div>
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                                    <li class="breadcrumb-item active"> @Model.strCurrTask</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+
+            @*@if (Model.setIndex == 1)
+                {
+                    //var _strDesc = "'" + (Model.subSetIndex == 1 ? "Church unit" : "Faith Category") + "'";*@
+            <div class="card-body bg-transparent w-50" style="margin: 0 auto 0 auto ; padding:0; ">
+                <div class="form-group row">
+                    <small class="font-weight-normal" asp-for="strAppGlobalOwn"><i class="fa fa-filter fa-sm text-gray"></i> &nbsp; Denomination (Church)</small>
+                    @*<label class="font-weight-normal" asp-for="oAppGloOwnId"> <i class="fa fa-filter fa-sm text-gray"></i> &nbsp; Denomination (Church) </label>*@
+                    <select id="_AppGlobalOwnerId" class="form-control" asp-for="oAppGloOwnId" asp-items="Model.lkpAppGlobalOwns" placeholder="Denomination (Church)" aria-describedby="fd_AppGlobalOwnerId" required>
+                        <option selected disabled value="">Select denomination (church)...</option>
+                    </select>
+                    <div class="invalid-feedback" id="fd_AppGlobalOwnerId">
+                        Select the denomination (church)
+                    </div>
+                </div>
+            </div>
+
+            <hr class="cus-div" style="width:100%; border: 1px inset #000;" />
+            <br />
+            <div id="wrapper">
+                <div class="se-pre-con"></div>
+
+                @if (Model.PageIndex == 1)
+                {
+                    //var strHeadUnitDesc = !string.IsNullOrEmpty(Model.strParentCB_HeaderDesc) ? Model.strParentCB_HeaderDesc : " Chuch level ";
+
+                    <table id="tbId_ChurchBody" class="table table-sm  table-bordered table-striped table-responsive-sm table-hover bg-white  pl-0 " cellspacing="0" style="border: 1px solid #2c2f5b">
+                        <thead>
+                            <tr>
+                                <th class="pl-2 " style="vertical-align: middle">
+                                    Congregation
+                                </th>
+                                <th style="vertical-align: middle">
+                                    Location
+                                </th>
+                                <th style="vertical-align: middle; text-align:center">
+                                    Church code
+                                </th>
+                                <th style="vertical-align: middle; text-align:center">
+                                    Church Level @*Congregation Type*@
+                                </th>
+                                <th style="vertical-align: middle">
+                                    Parent Unit
+                                </th>
+                                <th style="vertical-align: middle; text-align:center">
+                                    Status
+                                </th>
+                                <th width="100px" style="vertical-align: middle; text-align:center">
+                                    <a class="btn btn-light btn-sm " asp-controller="AppVenAdmin" asp-action="Index_CB" asp-route-oAppGloOwnId="@Model.oAppGloOwnId" asp-route-pageIndex="1" data-backdrop="static" data-keyboard="false">
+                                        <i class="fa fa-refresh fa-sm text-success"></i>
+                                    </a>
+                                    @if (Model.oAppGloOwnId != null)
+                                    {
+                                        <a href="#" data-remote="false" class="btn btn-light btn-sm text-primary" data-backdrop="static"
+                                           onclick="AddEditCurrData_CB(0, @Model.oAppGloOwnId, @Model.PageIndex, '[New] Church unit')">
+                                            <i class="fa fa-plus fa-primary fa-sm "></i>
+                                        </a>
+                                    }
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.lsChurchBodyModels)
+                            {
+                                var strDesc = "'" + item.strChurchBody + "'";
+
+                                <tr>
+                                    <td class="pl-2" style="vertical-align: middle">
+                                        @Html.DisplayFor(modelItem => item.strChurchBody)
+                                    </td>
+                                    <td>
+                                        @{ var locDesc = (string.IsNullOrEmpty(item.strCongLoc) ? item.strCongLoc : item.strCongLoc2); }
+                                        @Html.DisplayFor(modelItem => locDesc)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.oChurchBody.GlobalChurchCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.strChurchLevel)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.strParentChurchBody)
+                                    </td>
+                                    <td class="text-center">
+                                        @if (item.oChurchBody.Status == "A")
+                                        {<span class="badge badge-success">@Html.DisplayFor(modelItem => item.strStatus)</span> }
+                                    else
+                                    { <span class="badge badge-secondary">@Html.DisplayFor(modelItem => item.strStatus)</span>}
+                                    </td>
+                                    <td style="vertical-align: middle ; text-align:center">
+                                        @*@if (item.oChurchBody.OrgType != "CR") // && item.numCLIndex > Model.oChurchBody_Logged.ChurchLevel.LevelIndex)
+                                            {*@
+                                        <div class="btn-group dropright ">
+                                            <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fa fa-ellipsis-h text-gray text-lg"></i>
+                                            </button>
+                                            <div class="dropdown-menu p-1">
+                                                <a href="#" id="btnAddEdit" data-remote="false" class="btn btn-light btn-sm text-primary" data-backdrop="static"
+                                                   onclick="AddEditCurrData_CB(@item.oChurchBody.Id, @item.oChurchBody.AppGlobalOwnerId, @Model.PageIndex, @strDesc)">
+                                                    <i class="fa fa-pencil fa-sm "></i> &nbsp; Edit
+                                                </a>
+                                                @*<a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light btn-sm" data-backdrop="static"
+                                                       onclick="AddEditCurrData_UP(0, @_oAGOId, @_oCBId, 2, 6, '[New] Church Admin Profile')">
+                                                        <i class="fa fa-cog fa-sm"></i> &nbsp; Church Admin
+                                                    </a>*@
+                                                <a href="#" class="btn btn-light btn-sm text-danger small" onclick="DeleteCurrData_CB(@item.oChurchBody.Id, @Model.PageIndex, false, '')">
+                                                    <i class="fa fa-trash fa-sm  "></i> &nbsp; Delete
+                                                </a>
+                                            </div>
+                                        </div>
+                                        @*}*@
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                }
+
+                <!-- /.content-wrapper -->
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align:center; display:none" id="divLoader">
+        <img src="~/css/images/load.gif" width="100" />
+    </div>
+
+    <!-- /#wrapper -->
+    <!-- Scroll to Top Button-->
+    @*<a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>*@
+
+
+
+    <div id="loaderr">
+
+    </div>
+
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="_modalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="_modalLabel">Logout!</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body"> Logout to end your current session. Sure?</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" asp-area="" asp-controller="UserLogin" asp-action="LoginUserAcc">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="divPopModal_AddEdit_lg" tabindex="-1" role="dialog" aria-labelledby="_modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-secondary">
+                    <h5 class="modal-title"> Editing: </h5> @*@Model.strCurrTask*@
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body bg-light" style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: 10pt" id="divModalBody_AddEdit_lg">
+                </div>
+                <div class="modal-footer " style="background-color: lightgrey; left:auto; right: auto">
+                    <a href="#" class="btn btn-outline-light " data-dismiss="modal"> Cancel </a>
+                    <button id="btnSaveChanges" type="button" class="btn btn-primary save-data">
+                        @*<span class="spinner-border spinner-border-sm" id="_spinner" style="visibility: hidden"></span>*@
+                        <i class="fa fa-database fa-sm mr-1"></i> Save changes
+                    </button>
+
+                    @*<button class="btn btn-primary" type="button" disabled>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span class="sr-only">Loading...</span>
+                    </button>
+
+                    <button class="btn btn-primary" type="button" disabled>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Loading...
+                    </button>*@
+
+
+                    @*<button class="btn btn-primary" type="button" id="btnSaveChanges">
+            <span class="d-none spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Save changes
+        </button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal-->
+    @*<div class="modal fade" id="divPopModal_Success" tabindex="-1" role="dialog" aria-hidden="true" style="background-color:transparent; min-width:75px">
+            <div class="modal-dialog modal-sm bg-info" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 style="color: white; font-weight:bold"> Done! </h5>
+                    </div>
+                    <div class="modal-body bg-white" style="align-items:center">
+                        <label id="lblUserMessage" class="text-sm font-weight-normal text-center"></label>
+                    </div>
+
+                    <div class="modal-footer bg-white">
+                        <a href="#" id="_btnSuccessOK" class="btn btn-success shadow shadow-sm" data-dismiss="modal">Ok</a>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+
+    <div class="modal fade" id="divPopModal_ImpCB" tabindex="-1" role="dialog" aria-labelledby="_modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="max-height: 50%">
+            <div class="modal-content">
+                <div class="modal-header bg-teal text-md text-light">
+                    <h5 class="modal-title"></h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div id="divModalBody_ImpCB" class="modal-body bg-light" style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: 10pt">
+                </div>
+                <div class="modal-footer " style="background-color: lightgrey; left:auto; right: auto">
+                    <a role="button" class="btn btn-outline-light" data-dismiss="modal">
+                        <i class="fas fa-times fa-lg text-secondary"></i> @*   mr-1 Cancel*@
+                    </a>
+                    <button id="btnOK_ImpCB" type="submit" class="btn btn-outline-light bg-light float-right ">
+                        <i class="fas fa-check-double text-success mr-1"></i> OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @*<partial name="_CookieConsentPartial" />   *@
+
+
+</body>
+
+
+@*<link href="https://getbootstrap.com/docs/4.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="canonical" href="https://getbootstrap.com/docs/4.3/components/spinners/">*@
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+
+    <script>
+        //<div class="se-pre-con"></div>
+        $(document).ready(function () {
+            // Animate loader off screen
+            $(".se-pre-con").fadeOut("slow");
+        });
+    </script>
+
+    <script>
+        //$(document).ready(function () {
+        //    //$('#spinner').on('click', function () {
+        //    //    alert('spin ...')
+        //    //    $('body').addClass('busy');
+        //    //});
+
+        //    //$(document).on('click', '#spinner', function (e) {
+        //    //    e.preventDefault();
+        //    //    alert('spin ...')
+        //    //    $('body').addClass('busy');
+        //    //})
+
+
+        //    $(() => {
+        //        $('#button').on('click', e => {
+        //            let spinner = $(e.currentTarget).find('span')
+        //            spinner.removeClass('d-none')
+        //            setTimeout(_ => spinner.addClass('d-none'), 2000)
+                     
+
+        //        })
+        //    })
+
+
+        //});
+
+
+
+        //$(document).ready(function () {
+        //    $("#btnFetch").click(function () {
+        //        var $this = $(this);
+
+        //        //Call Button Loading Function
+        //        BtnLoading($this);
+
+        //        //Call Button Reset Function after AJAX or your code execution
+        //        BtnReset($this);
+        //    });
+        //});
+
+        
+
+
+
+    </script>
+
+
+    <script>
+
+
+
+        $(document).ready(function () {
+            //for table row
+            $("tr:even").css("background-color", "#fff");
+            $("tr:odd").css("background-color", " #f7f6f6 ");
+
+
+            $('#tbId_ChurchBody').DataTable({
+                "processing": true,
+                "columnDefs": [
+                    { "orderable": false, "targets": [0] },
+                    { "searchable": false, "orderable": false, "targets": [6] },
+                ],
+            });
+
+         
+        });
+
+
+
+
+
+
+        var AddEditCurrData_CB = function (currId, currDenomId, _pageIndex, _strItemName) {  //(currId, currDenomId, currChuBodyId, currSetIndex, currSubSetIndex, _strItemName)
+
+            //     alert('addORedit...');
+            //alert('addORedit.. ' + currId + ' ..currDenomId: ' + currDenomId + ' .._pageIndex: ' + _pageIndex + ' .._strItemName: ' + _strItemName);
+
+            var currAGOId_Logged = $("#_oAppGloOwnId_Logged").data("value");
+            var currCBId_Logged = $("#_oChurchBodyId_Logged").data("value");
+            var currUserId_Logged = $("#_oUserId_Logged").data("value");
+
+           // var currParBodyId = null;
+
+            if (currId < 0) currId = null;
+            if (currDenomId < 0) currDenomId = null;
+
+            //if (currChuBodyId < 0) currChuBodyId = null;
+            // if (currSetIndex < 0) currSetIndex = null;
+            //if (currSubSetIndex < 0) currSubSetIndex = null;
+
+               //  public IActionResult AddOrEdit_CB(int id = 0, int? oAppGloOwnId = null, int? oAGOId_Logged = null, int? oCBId_Logged = null, int? oUserId_Logged = null)
+
+                var url = "@Url.Action("AddOrEdit_CB", "AppVenAdmin")?id=" + currId + "&oAppGloOwnId=" + currDenomId + "&pageIndex=" + _pageIndex +
+                                            "&oAGOId_Logged=" + currAGOId_Logged + "&oCBId_Logged=" + currCBId_Logged + "&oUserId_Logged=" + currUserId_Logged;
+
+                     //   alert(url)
+
+                       // if (currId > 0) { document.querySelector('#btnSaveChanges').innerHTML = 'Update'; }
+                        if (currId > 0) { $('#btnSaveChanges').html('<i class="fa fa-database fa-sm mr-1"></i> Update'); }
+
+                      //  alert(url)
+
+                        $('#divPopModal_AddEdit_lg').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        });
+
+                        //$('#divPopModal_AddEdit_lg').modal({
+                        //    backdrop: false,
+                        //    show: true
+                        //});
+
+                        $('#divPopModal_AddEdit_lg .modal-dialog').draggable({
+                            handle: ".modal-header"
+                        });
+
+
+                        //alert('loading modal...')
+                        //$("#_setIndex").val(setIndex);
+                        //$('#divModalBody_AddEdit_lg').load(url, function () {
+                        $('#divPopModal_AddEdit_lg .modal-body').load(url, function () {
+
+                            $('#divPopModal_AddEdit_lg .modal-title').html(_strItemName);
+                           // alert('load level..')
+                            $('#_ChurchLevelId').change();
+
+                            $('#_CountryId_CBCI').change();
+
+                            $("#divPopModal_AddEdit_lg").modal('show');
+                        });
+
+        };
+
+        var DisplaySuccessInfo = function (msg, currDenomId, pageIndex, reload = false, newItemId = null, _hdrdesc='') {   //currSubSetIndex,  proScope, subScope,
+
+            if (reload == false) {
+                if (newItemId != null ) {
+                    $.alert({
+                        title: 'Done!',
+                        type: 'green',
+                        typeAnimated: true,
+                        content: msg,
+                        closeIcon: true,
+                        closeIconClass: 'fa fa-close',
+                        buttons: {
+                            ok: {
+                                btnClass: 'btn-info',
+                                action: function () {
+                                    AddEditCurrData_CB(newItemId, currDenomId, pageIndex, _hdrdesc);
+                                }
+                            }
+                        }
+                    });
+
+                }
+                else {
+                    $.alert({
+                        title: 'Done!',
+                        type: 'green',
+                        typeAnimated: true,
+                        content: msg,
+                        closeIcon: true,
+                        closeIconClass: 'fa fa-close',
+                        btnClass: 'btn-info'
+                    });
+                }
+
+            }
+
+            else {
+                $.alert({
+                    title: 'Done!',
+                    type: 'green',
+                    typeAnimated: true,
+                    content: msg,
+                    closeIcon: true,
+                    closeIconClass: 'fa fa-close',
+                    buttons: {
+                        ok: {
+                            btnClass: 'btn-info',
+                            action: function () {
+                                ReloadCurrPage_CB(currDenomId, pageIndex);
+                            }
+                        }
+                    }
+                });
+            }
+        };
+
+            //public ActionResult Index(int? oDenomId = null, int? oCurrChuBodyId = null, int setIndex = 0, int subSetIndex = 1, int? oParentId = null)
+        var ReloadCurrPage_CB = function (currDenomId = null, _pageIndex = 1) { //, currChuBodyId = null, currSetIndex, currSubSetIndex, parId = null) { //, chuCategId = null, showAllCong = true) {
+                        //alert('load..');
+                      //  alert('load.. ' + currDenomId);
+
+                        //    public ActionResult Index_CB(int? oAppGloOwnId = null, int pageIndex = 1)
+            window.location.href = '@Url.Action("Index_CB", "AppVenAdmin")?oAppGloOwnId=' + currDenomId + '&pageIndex=' + _pageIndex; //+ '&setIndex=' + currSetIndex + '&subSetIndex=' + currSubSetIndex + '&oParentId=' + parId; // + '&oChuCategId=' + chuCategId + '&oShowAllCong=' + showAllCong;
+
+                        //if (parId == '') {
+                        //    window.location.href = '/AppVenAdmin/Index?oCurrChuBodyId=' + currChuBodyId + '&setIndex=' + currSetIndex;
+                        //}
+                        //else {
+                        //    window.location.href = '/AppVenAdmin/Index?oCurrChuBodyId=' + currChuBodyId + '&setIndex=' + currSetIndex + '&oParentId=' + parId;
+                        //}
+        }
+
+
+        function BtnLoading(elem, loadStr) {
+            $(elem).attr("data-original-text", $(elem).html());
+            $(elem).prop("disabled", true);
+            $(elem).html('<i class="spinner-border spinner-border-sm mr-1"></i>' + loadStr);   /// Loading...
+        }
+
+        function BtnReset(elem) {
+            $(elem).prop("disabled", false);
+            $(elem).html($(elem).attr("data-original-text"));
+        }
+
+
+    </script>
+
+
+    <script>
+
+        $(document).on('click', '#btnSaveChanges', function (e) {
+            e.preventDefault();
+
+           // alert('click..');
+
+            //let spinner = $(e.currentTarget).find('span')
+            //spinner.removeClass('d-none')
+            //setTimeout(_ => spinner.addClass('d-none'), 2000)
+
+
+
+           /// var $this = $(this);
+
+            //Call Button Loading Function
+           // BtnLoading($this);
+
+
+          // /// 
+          /////  function BtnLoading(elem) {
+          //  $('#btnSaveChanges').attr("data-original-text", $('#btnSaveChanges').html());
+          //  $('#btnSaveChanges').prop("disabled", true);
+          //  $('#btnSaveChanges').html('<i class="spinner-border spinner-border-sm"></i> Loading...');
+          /////  }
+
+           
+            
+            
+            const form = document.getElementById("currForm_CB");
+
+            if (form.checkValidity() === true) {
+
+               // alert('enabling spin...')
+                var _elem = $(this);
+                BtnLoading(_elem, 'Saving...');
+
+
+               /// alert('saving...');
+
+                SaveCurr_CB(_elem); //currSetIndex, currSubSetIndex);
+            }
+            else {
+               // alert('val 5')
+                event.preventDefault();
+                event.stopPropagation();
+
+                form.classList.add('was-validated');
+            }
+             
+
+            //Call Button Reset Function after AJAX or your code execution
+           /// BtnReset($this);
+
+
+           // }, false);
+        })
+
+        var SaveCurr_CB = function (elem) { // (currSetIndex, currSubSetIndex) {
+            // alert('saving CL... ');
+
+            var currFormData = new FormData($("#currForm_CB").get(0));
+            // var currFormData = $("#currForm_CB").serialize();
+
+
+          //  alert('save... submitting...');
+
+            $.ajax({
+                type: 'POST',
+                // data: formdata,
+                // processData: false,
+
+                url: '@Url.Action("AddOrEdit_CB", "AppVenAdmin")',
+
+               // url: "/AppVenAdmin/AddOrEdit_CB",
+                data: currFormData,   //{ data: currFormData, taskIndx: oTask },  //
+                //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                contentType: false,
+                processData: false,
+                success: function (res) {
+
+                    if (res.taskSuccess == true) {
+                      //  var currChuBodyId = $("#_hdnChuBodyId").val();
+
+                        //var currId = $("#_hdnCurrId_CB").val();
+                      //  var _pageIndex = $("#_hdnPageIndex").val();
+                        //alert("saving currId: " + currId + " ...page: " + res.pageIndex);
+
+                        var currDenomId = $("#_hdnAppGloOwnId").val();
+
+                        var _desc = "'[New] Church unit'";
+                        if (res.resetNew == true) {
+                            //DisplaySuccessInfo = function (msg, currDenomId, pageIndex, reload = false, newItemId = null, _hdrdesc='')
+                            DisplaySuccessInfo(res.userMess, currDenomId, res.pageIndex, false, 0, _desc);
+
+                            // AddEditCurrData_CB = function (currId, currDenomId, _pageIndex, _strItemName)
+                           // AddEditCurrData_CB(0, currDenomId, _pageIndex, _desc); //(0, currDenomId, currChuBodyId, currSetIndex, currSubSetIndex, _desc);
+                        }
+                        else {
+                            DisplaySuccessInfo(res.userMess, currDenomId, 1, true);
+
+                            //$("#btnSaveChanges").prop();
+                           // alert('closing...')
+
+                           // $("#divPopModal_AddEdit_lg .close").click();
+                        }
+                         
+                        //window.location.href = '/AppVenAdmin/Index?oCurrChuBodyId=' + currChuBodyId + '&setIndex=' + currSetIndex;
+                    }
+
+                    else //if (res.taskSuccess == false)
+                    {
+                      //  alert('err: ' + res.userMess);
+
+                        $.alert({
+                            title: 'Oops!',
+                            content: res.userMess,
+                            type: 'red',
+                            typeAnimated: true,
+                        });
+
+                       // alert(res.userMess); //"Member transfer request failed. Details: " + ViewBag.UserMsg);
+                        // $("#lblUserMessage").text(msg);
+                    }
+
+
+                    //let spinner = document.getElementById("_spinner");
+                    //spinner.style.visibility = 'hidden'; //'visible'
+
+
+                  ///  alert('disabling spin...')
+                    //var $this = $('#btnSaveChanges');
+
+                    BtnReset(elem); ///("'#btnSaveChanges'");
+
+                    //$('#btnSaveChanges').prop("disabled", false);
+                    //$('#btnSaveChanges').html($('#btnSaveChanges').attr("data-original-text"));
+                },
+
+                error: function () {
+
+                   // alert('disabling spin...')
+                    //var $this = $('#btnSaveChanges');
+
+                    BtnReset(elem); ///BtnReset("'#btnSaveChanges'");
+
+                    //$('#btnSaveChanges').prop("disabled", false);
+                    //$('#btnSaveChanges').html($(elem).attr("data-original-text"));
+                }
+            })
+        }
+
+        var DeleteCurrData_CB = function (currId, _pageIndex, forceDeleteConfirm = false, msg = "") {
+       // alert('deleting')
+
+       // var currUserId = $("#_oUserId_Logged").val();
+
+        var currUserId_Logged = $("#_oUserId_Logged").data("value");
+      //  var currDenomId = $("#_hdnAppGloOwnId").val();
+        var currDenomId = $("#_oAppGloOwnId").val();
+
+       // var _pageIndex = $("#_hdnPageIndex").val();
+
+     //  alert('currDenomId: ' + currDenomId)
+     //  alert('currUserId: ' + currUserId_Logged)
+
+            $.confirm({
+                title: 'Confirm delete!',
+                content: (msg == '' ? 'Are you sure you want to delete the specified church unit' : msg) + ' ?',
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    cancel: function () {
+                        //$.alert('Canceled!');
+                    },
+
+                    //info: {
+                    //    btnClass: 'btn-blue',
+                    //    action: function(){}
+                    //},
+
+                    delete: {
+                        btnClass: 'btn-danger ',
+                        action: function () {
+                            $.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("Delete_CB", "AppVenAdmin")',
+                               // url: "/AppVenAdmin/Delete_CB",
+                                // public IActionResult Delete_CB(int? loggedUserId, int id, int setIndex, int subSetIndex, bool forceDeleteConfirm = false)
+                               // data: { loggedUserId: currUserId_Logged, id: currId, setIndex: currSetIndex, subSetIndex: currSubSetIndex, forceDeleteConfirm: forceDeleteConfirm },  //forceDeleteConfirm = -1 {denied-error, info}, 0 {denied-dependencies, info}, 1 {denied-confirm to force-delete, task}
+
+                                data: { loggedUserId: currUserId_Logged, id: currId, forceDeleteConfirm: forceDeleteConfirm },  //forceDeleteConfirm = -1 {denied-error, info}, 0 {denied-dependencies, info}, 1 {denied-confirm to force-delete, task}
+                                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                                success: function (res) {
+                                    if (res.taskSuccess == true) {          //var currChuBodyId = $("#_hdnChuBodyId").val();
+                                        DisplaySuccessInfo(res.userMess, currDenomId, _pageIndex, true); // currDenomId, currChuBodyId, currSetIndex, currSubSetIndex);        //DisplaySuccessInfo(res.userMess, oAppGloId, currChuBodyId, currSetIndex);
+                                      //  ReloadCurrPage_CB(currDenomId, _pageIndex); //(currDenomId, currChuBodyId, currSetIndex, currSubSetIndex);                  // (oAppGloId, currChuBodyId, currSetIndex);
+                                    }
+
+                                    else {
+                                        // alert(res.userMess);  (currSetIndex == 1 && !delConfirm)   //
+                                        if (res.tryForceDelete == true) {
+                                            DeleteCurrData_CB(currId, _pageIndex, true, res.userMess);
+                                        }
+
+                                        else {
+                                            //alert(res.userMess);
+                                            $.alert({
+                                                title: 'Oops! Delete failed.',
+                                                content: res.userMess, //'Could not delete specified record(s). Please try again.',
+                                                type: 'red',
+                                            });
+                                        }
+                                    }
+                                },
+
+                                error: function () {
+                                    alert("Error occured while deleting data");
+                                }
+                            });
+                        }
+                    },
+
+                    //,
+                }
+            });
+
+        };
+
+    </script>
+
+
+    <script>
+
+
+        //$(document).on('change', '#chk_IsWaiveSubscription', function (e) {
+        //    e.preventDefault();
+
+        //    var valType = $("#chk_IsWaiveSubscription").is(":checked");
+        //    $('#_SubscriptionKey').prop('disabled', valType);
+        //    $('#_LicenseKey').prop('disabled', valType);
+
+        //    if (valType) {
+        //        $('#_SubscriptionKey').val('');
+        //        $('#_LicenseKey').val('');
+        //    }
+        //    else {
+        //        $('#_SubscriptionKey').val($('_SubscriptionKeyTemp').val());
+        //        $('#_LicenseKey').val($('_LicenseKeyTemp').val());
+        //    }
+        //});
+
+
+        $(document).on('change', '#_AppGlobalOwnerId', function (e) {
+            e.preventDefault();
+
+            var appOwnId = $("#_AppGlobalOwnerId").val();
+
+           // var _pageIndex = $("#_hdnPageIndex").val();
+            var _pageIndex = $("#_PageIndex").val();
+
+          //    alert('mainId: ' + mainId);
+
+            ReloadCurrPage_CB(appOwnId, _pageIndex);
+
+        });
+
+        $(document).on('change', '#_CountryId', function (e) {
+            e.preventDefault();
+
+         var _ctryId = $("#_CountryId").val();
+
+            var hdn_CountryRegionId = $('#hdn_CountryRegionId').val();
+
+         //  alert('ctryId: ' + _ctryId);
+
+            var url = '@Url.Action("GetCountryRegionsByCountry", "AppVenAdmin")'; // '@Url.Content("~/")' + 'AppVenAdmin/GetCountryRegionsByCountry';
+            $('#_CountryRegionId').empty();
+            //GetCountryRegionsByCountry( int? ctryId, bool addEmpty = false)
+            $.getJSON(url, { ctryId: _ctryId, addEmpty: true }, function (data) {
+                if (Object.keys(data).length > 0) {
+                    var items = '';
+                    $.each(data, function (i, ctryReg) {
+                        items += "<option value='" + ctryReg.value + "'>" + ctryReg.text + "</option>";   // alert(items);
+                    });
+                    // items += "<option value=''> Select </option>";
+                 //   alert(items)
+                    $('#_CountryRegionId').html(items);
+
+                    $('#_CountryRegionId').val(hdn_CountryRegionId);
+                }
+            });
+        })
+
+
+         @*$(document).on('change', '#_ParentChurchBodyId', function (e) {
+            e.preventDefault();
+
+             var currDenomId = $("#_oAppGloOwnId").val();
+              var parentCBId = $("#_ParentChurchBodyId").val();
+             //  alert('ctryId: ' + ctryId);
+
+            var url = '@Url.Action("GetCountryByParentChurchBody", "AppVenAdmin")';
+             $('#_CountryId').empty();
+
+             document.getElementById('_CountryId').value = '';
+             $.getJSON(url, { oParentCBId: parentCBId, oAppGloOwnId: currDenomId }, function (res) {
+                 if (res != null) {  // alert(res.taskSuccess);  alert(res.strResId); alert(res.strRes);
+                     document.getElementById('_CountryId').value = res.strResId;
+                 }
+             });
+
+             // And now fire change event when the DOM is ready
+             $('#_CountryId').trigger('change');    // $('#_CountryId').change();
+        })*@
+
+
+
+         @*$(document).on('change', '#_ChurchBodyId_4', function (e) {
+            e.preventDefault();
+
+           //  alert('_ChurchBodyId_4: ' + $("#_ChurchBodyId_4").val())
+
+            var currDenomId = $("#_oAppGloOwnId").val();
+            var parentCBId = $("#_ChurchBodyId_4").val();
+             var hdn_ChurchBodyId_5 = $('#hdn_ChurchBodyId_5').val();
+           //  alert('4. parentCBId: ' + parentCBId);
+
+            var url = '@Url.Action("GetChurchBodyListByParentBody", "AppVenAdmin")';
+            $('#_ChurchBodyId_5').empty();
+
+             //  public JsonResult GetChurchBodyListByParentBody(int? oParentCBId, int? oAppGloOwnId, string strOrgType = null, bool addEmpty = false)
+             $.getJSON(url, { oParentCBId: parentCBId, oAppGloOwnId: currDenomId, strOrgType: 'CH', addEmpty: true }, function (data) {
+                if (Object.keys(data).length > 0) {
+                    var items = '';
+                    $.each(data, function (i, oData) {
+                        items += "<option value='" + oData.value + "'>" + oData.text + "</option>";   // alert(items);
+                    });
+                    // items += "<option value=''> Select </option>";
+                    $('#_ChurchBodyId_5').html(items);
+
+                    $('#_ChurchBodyId_5').val(hdn_ChurchBodyId_5);
+
+
+                    //if ($("#_div_ChurchBodyId_6").is(":hidden") == false) {
+                    //    $('#_ChurchBodyId_5').change();
+                    //}
+                }
+            });
+        })
+
+         $(document).on('change', '#_ChurchBodyId_3', function (e) {
+            e.preventDefault();
+
+            var currDenomId = $("#_oAppGloOwnId").val();
+            var parentCBId = $("#_ChurchBodyId_3").val();
+             var hdn_ChurchBodyId_4 = $('#hdn_ChurchBodyId_4').val();
+           //  alert('_ChurchBodyId_3: ' + $("#_ChurchBodyId_3").val())
+
+            var url = '@Url.Action("GetChurchBodyListByParentBody", "AppVenAdmin")';
+            $('#_ChurchBodyId_4').empty();
+
+             //  public JsonResult GetChurchBodyListByParentBody(int? oParentCBId, int? oAppGloOwnId, string strOrgType = null, bool addEmpty = false)
+             $.getJSON(url, { oParentCBId: parentCBId, oAppGloOwnId: currDenomId, strOrgType: 'CH', addEmpty: true }, function (data) {
+                if (Object.keys(data).length > 0) {
+                    var items = '';
+                    $.each(data, function (i, oData) {
+                        items += "<option value='" + oData.value + "'>" + oData.text + "</option>";   // alert(items);
+                    });
+                    // items += "<option value=''> Select </option>";
+                    $('#_ChurchBodyId_4').html(items);
+
+                    $('#_ChurchBodyId_4').val(hdn_ChurchBodyId_4);
+
+                    if ($("#_div_ChurchBodyId_5").is(":hidden") == false) {
+                        $('#_ChurchBodyId_4').change();
+                    }
+                }
+            });
+         })
+
+         $(document).on('change', '#_ChurchBodyId_2', function (e) {
+            e.preventDefault();
+          //  alert(' triggered...')
+
+            var currDenomId = $("#_oAppGloOwnId").val();
+             var parentCBId = $("#_ChurchBodyId_2").val();
+
+             var hdn_ChurchBodyId_3 = $('#hdn_ChurchBodyId_3').val();
+          //   alert('_ChurchBodyId_2: ' + $("#_ChurchBodyId_2").val())
+
+            var url = '@Url.Action("GetChurchBodyListByParentBody", "AppVenAdmin")';
+            $('#_ChurchBodyId_3').empty();
+
+            //  public JsonResult GetChurchBodyListByParentBody(int? oParentCBId, int? oAppGloOwnId, string strOrgType = null, bool addEmpty = false)
+            $.getJSON(url, { oParentCBId: parentCBId, oAppGloOwnId: currDenomId, strOrgType: 'CH', addEmpty: true }, function (data) {
+                if (Object.keys(data).length > 0) {
+                    var items = '';
+                    $.each(data, function (i, oData) {
+                        items += "<option value='" + oData.value + "'>" + oData.text + "</option>";   // alert(items);
+                    });
+                    // items += "<option value=''> Select </option>";
+                    $('#_ChurchBodyId_3').html(items);
+
+                    $('#_ChurchBodyId_3').val(hdn_ChurchBodyId_3);
+
+                    if ($("#_div_ChurchBodyId_4").is(":hidden") == false) {
+                        $('#_ChurchBodyId_3').change();
+                    }
+                }
+            });
+        })*@
+
+    @* $(document).on('change', '#_ChurchBodyId_1', function (e) {
+        e.preventDefault();
+
+        var currDenomId = $("#_oAppGloOwnId").val();
+        var parentCBId = $("#_ChurchBodyId_1").val();
+
+        //   alert('1. parentCBId: ' + parentCBId);
+
+        var url = '@Url.Action("GetChurchBodyListByParentBody", "AppVenAdmin")';
+        $('#_ChurchBodyId_2').empty();
+
+        //  public JsonResult GetChurchBodyListByParentBody(int? oParentCBId, int? oAppGloOwnId, string strOrgType = null, bool addEmpty = false)
+        $.getJSON(url, { oParentCBId: parentCBId, oAppGloOwnId: currDenomId, strOrgType: 'CH', addEmpty: true }, function (data) {
+            if (Object.keys(data).length > 0) {
+                var items = '';
+                $.each(data, function (i, oData) {
+                    items += "<option value='" + oData.value + "'>" + oData.text + "</option>";   // alert(items);
+                });
+                // items += "<option value=''> Select </option>";
+                $('#_ChurchBodyId_2').html(items);
+                if ($("#_div_ChurchBodyId_3").is(":hidden") == false) {
+                    $('#_ChurchBodyId_2').change();
+                }
+            }
+        });
+    }) *@
+
+
+
+            //$(document).on('change', '#_ChurchLevelId', function (e) {
+            //e.preventDefault();
+
+
+
+            @*var currDenomId = $("#_oAppGloOwnId").val();
+            var churchLevelId = $("#_ChurchLevelId").val();
+
+          // alert('_ChurchLevelId: ' + churchLevelId);
+
+
+            //  public JsonResult GetChurchLevelIndexByChurchLevel(int? oChurchLevelId, int? oAppGloOwnId, bool addEmpty = false)
+            var url = '@Url.Action("GetChurchLevelIndexByChurchLevel", "AppVenAdmin")';
+
+                $('#_ChurchBodyId_2').empty();
+
+             //document.getElementById('_CountryId').value = '';
+            $.getJSON(url, { oChurchLevelId: churchLevelId, oAppGloOwnId: currDenomId }, function (res) {
+                 if (res != null) {  // alert(res.taskSuccess);  alert(res.strResId); alert(res.strRes);
+                    // document.getElementById('_CountryId').value = res.strResId;    // return Json(new { taskSuccess = res, numResLev = _numResLev, strRes = _strRes });
+
+                     var CHLevelIndex = res.numResLev - 1;
+                     $('#_numCLIndex').val(res.numResLev);
+                     $('#_oCBLevelCount').val(CHLevelIndex);
+
+                   // alert('CHLevelIndex: ' + CHLevelIndex);
+                     //
+                     $('#_div_ChurchBodyId_1').prop('hidden', !(CHLevelIndex > 0));
+                     ///
+                     $('#_div_ChurchBodyId_2').prop('hidden', !(CHLevelIndex > 1));
+                     $('#_div_ChurchBodyId_3').prop('hidden', !(CHLevelIndex > 2));
+                     $('#_div_ChurchBodyId_4').prop('hidden', !(CHLevelIndex > 3));
+                     $('#_div_ChurchBodyId_5').prop('hidden', !(CHLevelIndex > 4));
+                     ///
+                     //if ($("#_div_ChurchBodyId_2").is(":hidden") == false) {
+                     //    alert('visible... trigger')
+
+                     initChurchBodyListLookUp();
+                     $('#_CountryId').change();
+
+                        // $('#_CountryId').trigger('change');
+                     //}
+                 }
+            });*@
+
+
+        //})
+
+
+        @*var initChurchBodyListLookUp = function () {
+
+            var url = '@Url.Action("GetInitChurchBodyListByAppGloOwn", "AppVenAdmin")';
+
+            var currDenomId = $("#_oAppGloOwnId").val();
+           // var churchLevelId = $("#_ChurchLevelId").val();
+
+           // var tempChurchId_2 = $('#_ChurchBodyId_2').val();
+
+           var hdn_ChurchBodyId_2 = $('#hdn_ChurchBodyId_2').val();
+
+
+          //  alert('bf: ' + tempChurchId_2)
+          //  alert('bf: ' + tempChurchId_2 + ' ...  bf hdn: ' + hdn_ChurchBodyId_2)
+
+            $('#_ChurchBodyId_2').empty();
+            //   public JsonResult GetInitChurchBodyListByAppGloOwn(int? oAppGloOwnId, bool addEmpty = false)
+            $.getJSON(url, { oAppGloOwnId: currDenomId, addEmpty: true }, function (data) {
+                if (Object.keys(data).length > 0) {
+                    var items = '';
+                    $.each(data, function (i, oData) {
+                        items += "<option value='" + oData.value + "'>" + oData.text + "</option>";   // alert(items);
+                    });
+                    // items += "<option value=''> Select </option>";
+                    $('#_ChurchBodyId_2').html(items);
+
+                  //  alert('af: ' + tempChurchId_2)
+                  //  alert('af: ' + tempChurchId_2 + ' ... af hdn: ' + hdn_ChurchBodyId_2)
+
+                   // alert('hdn2: ' + $('#hdn_ChurchBodyId_2').val())
+
+                    $('#_ChurchBodyId_2').val(hdn_ChurchBodyId_2);
+
+                    if ($("#_div_ChurchBodyId_3").is(":hidden") == false) {
+                       // alert('trig 2...')
+                        $('#_ChurchBodyId_2').change();
+                    }
+                }
+            });
+        }*@
+
+
+    </script>
+
+
+    <script>
+
+        $(document).on('change', '#_CountryId_CBCI', function (e) {
+                e.preventDefault();
+
+         var ctryId = $("#_CountryId_CBCI").val();
+
+
+         @*var url = '@Url.Content("~/")' + 'ChurchMembers/GetCountryRegionsByCountry';*@
+
+         var url = '@Url.Action("GetCountryRegionsByCountry", "AppVenAdmin")';
+
+         $('#_RegionId_CBCI').empty();
+                //GetCountryRegionsByCountry( int? ctryId, bool addEmpty = false)
+                 $.getJSON(url, { ctryId: ctryId, addEmpty: true}, function (data) {
+                    if (Object.keys(data).length > 0)
+                    {
+                        var items = '';
+                        $.each(data, function (i, ctryReg) {
+                            items += "<option value='" + ctryReg.value + "'>" + ctryReg.text + "</option>";   // alert(items);
+                        });
+                       // items += "<option value=''> Select </option>";
+                        $('#_RegionId_CBCI').html(items);
+                    }
+                });
+
+     });
+
+        $(document).on('change', '#chk_ResAddrSameAsPostAddr_CBCI', function (e) {
+            e.preventDefault();
+            // alert('_isAddrSame: ');
+            var _isAddrSame = $("#chk_ResAddrSameAsPostAddr_CBCI").is(":checked");
+            //  alert('_isAddrSame: ' + _isAddrSame);
+            $('#_divPostalAddress_CBCI').prop('hidden', _isAddrSame);
+
+        })
+
+        $(document).on('change', '#_MobilePhone1', function (e) {
+            e.preventDefault();
+
+            var _isDisable = $("#_MobilePhone1").val() == '';
+            $('#_MobilePhone2').prop('disabled', _isDisable);
+        })
+
+    </script>
+
+
+
+
+    <script>
+        ////// invoke this piece to browse for CB...
+        ///
+
+         $(document).on('click', '#btnOK_ImpCB', function (e) {
+            e.preventDefault();
+
+            //  alert('clicked... ')
+
+            $('#_divAlertUser').prop('hidden', 'hidden');
+
+
+            var _resId = $('#_oTargetCBId_TCB').val();
+            // alert('_resId: ' + _resId);
+            if (_resId == null || _resId == '') {
+
+                var res = document.getElementById('_lblTargetCB_TCB').innerHTML;
+                DisplayErrorInfo("Please select the " + res.toLowerCase() + " to insert.");
+
+                return false;
+            }
+
+            //  alert('... inserting')  ... CB
+            if ($("#_strName_TCB").val() != null) {
+                var _strCB = document.getElementById('_strTargetCB_TCB').innerHTML;   // value to insert
+                if (_strCB == null || _strCB == '') _strCB = 'None. (choose congregation)';
+                ///
+                var _strName = "#" + $("#_strName_TCB").val();  // target field to insert
+                $(_strName).prop("disabled", false);
+                $(_strName).val(_strCB);
+                $(_strName).prop("disabled", true)
+            }
+
+            if ($("#_strId_TCB").val() != null) {
+                var _numCBId = $('#_oTargetCBId_TCB').val(); // value to insert
+                ///
+                var _strId = "#" + $("#_strId_TCB").val();  // target field to insert
+                $(_strId).val(_numCBId);
+            }
+
+            //  alert('... inserting')  ... CL    "Church Body (" + Model.strTargetCL + ")";
+            if ($("#_strCLName_TCB").val() != '') {
+                var _strTag = 'Church Body';
+                if ($("#_strCLTag_TCB").val() != '')
+                    _strTag = $("#_strCLTag_TCB").val();
+                var _strCL = _strTag;  // "Church Body";
+                if ($('#_oTargetCLId_TCB').val() != '') {
+                    _strCL = document.getElementById("_oTargetCLId_TCB").options[document.getElementById('_oTargetCLId_TCB').selectedIndex].text;
+                    _strCL = _strTag + " (" + _strCL + ")"; // value to insert
+                }
+                ///
+                var _strCLName = "#" + $("#_strCLName_TCB").val();  // target field to insert
+                $(_strCLName).prop("disabled", false);
+                $(_strCLName).val(_strCL);
+                $(_strCLName).prop("disabled", true)
+            }
+
+            if ($("#_strCLId_TCB").val() != '') {
+                var _numCLId = $('#_oTargetCLId_TCB').val();  // value to insert
+                ///
+                var _strCLId = "#" + $("#_strCLId_TCB").val();  // target field to insert
+                $(_strCLId).val(_numCLId);
+            }
+
+
+             $('#_divAlertUser').prop('hidden', false);
+
+         })
+
+         $(document).on('click', '#_btnLoadTargetCLId_TCB', function (e) {
+                e.preventDefault();
+
+            //    alert('reload clicked... ')
+            $('#_divAlertUser').prop('hidden', 'hidden');
+
+                triggerChurchLevel_TCB();
+               // document.getElementById("_btnLoadTargetCLId_TCB").click();
+            })
+
+         var ImportTargetCB = function (_oAppGloOwnId, _oChurchBodyId, _strId_TCB, _strName_TCB, _strCLId_TCB, _strCLName_TCB, _strCLTag_TCB = "Church Body") {
+
+        //   alert('importing...');
+           // alert('addORedit.. ' + currId + ' ..currDenomId: ' + currDenomId + ' ..currChurchBodyId: ' + currChurchBodyId + ' .._strItemName: ' + _strItemName);
+
+            //alert('currDenomId... ' + currDenomId)
+            //alert('currChurchBodyId... ' + currChurchBodyId)
+
+            //var currAGOId_Logged = $("#_oAppGloOwnId_Logged").data("value");   // _hdnAppGlobalOwnerId
+            //var currCBId_Logged = $("#_oChurchBodyId_Logged").data("value");
+
+            if (_oAppGloOwnId == null)  _oAppGloOwnId = $("#_hdnAppGlobalOwnerId").val();
+            if (_oAppGloOwnId == null) _oAppGloOwnId = $("#_oAppGloOwnId_Logged").data("value");
+
+            if (_oChurchBodyId == null) _oChurchBodyId = $("#_hdnChurchBodyId").val();
+            if (_oChurchBodyId == null) _oChurchBodyId = $("#_oChurchBodyId_Logged").data("value");
+
+            //var currUserId_Logged = $("#_oUserId_Logged").data("value");
+            //
+            var strId = "#" + _strId_TCB;
+            var _currTargetCBId = $(strId).val();
+
+           //alert('strId: ' + strId)
+           //alert('_oAppGloOwnId: ' + _oAppGloOwnId)
+           //alert('_oChurchBodyId: ' + _oChurchBodyId)
+           //alert('currTargetCBId: ' + _currTargetCBId)
+           //alert('_strCLTag_TCB: ' + _strCLTag_TCB)
+          // alert('_strCLId_TCB: ' + _strCLId_TCB)
+
+            if (_oAppGloOwnId < 0) _oAppGloOwnId = null;
+            if (_oChurchBodyId < 0) _oChurchBodyId = null;
+            if (_currTargetCBId < 0) _currTargetCBId = null;
+
+           // public IActionResult GetTargetCB(int ? oAppGloOwnId = null, int ? oChurchBodyId = null, int ? oTargetCBId = null,
+             //   string strId_TCB = "", string strName_TCB = "", string strCLId_TCB = "", string strCLName_TCB = "", string strCLTag_TCB = "Church Body")
+
+            var url = "@Url.Action("GetTargetCB", "AppVenAdmin")?oAppGloOwnId=" + _oAppGloOwnId + "&oChurchBodyId=" + _oChurchBodyId + "&oTargetCBId=" + _currTargetCBId +
+                "&strId_TCB=" + _strId_TCB + "&strName_TCB=" + _strName_TCB + "&strCLId_TCB=" + _strCLId_TCB + "&strCLName_TCB=" + _strCLName_TCB + "&strCLTag_TCB=" + _strCLTag_TCB;
+
+      //  alert(url)
+
+            // if (currId > 0) { document.querySelector('#btnSaveChanges').innerHTML = 'Update'; }
+          //  if (currId > 0) { $('#btnSaveChanges').html('Update'); }
+
+                      //  alert(url)
+
+            //$('#divPopModal_AddEdit').modal({
+            //                backdrop: 'static',
+            //                keyboard: false
+            //            });
+
+                        //$('#divPopModal_AddEdit').modal({
+                        //    backdrop: false,
+                        //    show: true
+                        //});
+
+            $('#divPopModal_ImpCB .modal-dialog').draggable({
+                            handle: ".modal-header"
+                        });
+
+                        //alert('loading modal...')
+                        //$("#_setIndex").val(setIndex);
+                        //$('#divModalBody_AddEdit').load(url, function () {
+
+         var _strTitle = 'Browse Congregation (or Head-unit)';
+
+            $('#divPopModal_ImpCB .modal-body').load(url, function () {
+                $('#divPopModal_ImpCB .modal-title').html(_strTitle);
+
+               ///
+                triggerChurchLevel_TCB();
+
+
+                //$('#_strTargetCB_TCB').change();
+               //triggerParentUnitCL_CU();
+               //triggerChurchLevel_sup_CU();
+               //$('#_OrgType_CU').change();
+
+             $("#divPopModal_ImpCB").modal('show');
+           });
+
+        };
+
+         $(document).on('change', '#_ChurchBodyId_10_TCB', function (e) {
+            e.preventDefault();
+
+            // alert(' CB10 triggered...')
+
+              var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+           // alert('con oCBLevelCount: ' + oCBLevelCount);
+            if (oCBLevelCount == 10) {  // Congregation
+                var str1 = "None. (choose congregation)";
+                if ($('#_ChurchBodyId_10_TCB').val() != '') {
+                    str1 = document.getElementById("_ChurchBodyId_10_TCB").options[document.getElementById('_ChurchBodyId_10_TCB').selectedIndex].text;
+                }
+               // alert('str CON: ' + str1)
+                document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_10_TCB').val());
+                return false;
+            }
+
+           @*//  alert('_ChurchBodyId_10_TCB: ' + $("#_ChurchBodyId_10_TCB").val())
+
+             var currDenomId = $("#_oAppGloOwnId_TCB").val();
+           // var currDenomId = $("#_hdnAppGloOwnId").val();
+             var parentCBId = $("#_ChurchBodyId_10_TCB").val();
+
+             var hdn_ChurchBodyId_11 = $('#_ChurchBodyId_11').val();
+           //  var hdn_ChurchBodyId_11 = $('#hdn_ChurchBodyId_11').val();
+           //  alert('10. parentCBId: ' + parentCBId);
+
+             var url = '@Url.Action("GetChurchBodyListByParentBody", "AppVenAdmin")';
+            $('#_ChurchBodyId_11').empty();
+
+             //  public JsonResult GetChurchBodyListByParentBody(int? oParentCBId, int? oAppGloOwnId, string strOrgType = null, bool addEmpty = false)
+             $.getJSON(url, { oParentCBId: parentCBId, oAppGloOwnId: currDenomId, strOrgType: 'CH', addEmpty: true }, function (data) {
+                if (Object.keys(data).length > 0) {
+                    var items = '';
+                    $.each(data, function (i, oData) {
+                        items += "<option value='" + oData.value + "'>" + oData.text + "</option>";   // alert(items);
+                    });
+                    // items += "<option value=''> Select </option>";
+                    $('#_ChurchBodyId_11').html(items);
+                   // alert('hdn11: ' + hdn_ChurchBodyId_11)
+                    $('#_ChurchBodyId_11').val(hdn_ChurchBodyId_11);
+
+                    var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+                    if (oCBLevelCount > 10) {
+                        $('#_ChurchBodyId_10_TCB').change();
+                    }
+                    else {
+                        if ($('#_ChurchBodyId_10_TCB').val() != '') {
+                            str1 = document.getElementById("_ChurchBodyId_10_TCB").options[document.getElementById('_ChurchBodyId_10_TCB').selectedIndex].text;
+                        }
+
+                     //   alert('str assem: ' + str1)
+                      //  alert('str assem id: ' + $('#_ChurchBodyId_10_TCB').val())
+                        if (str1 == null || str1 == '') str1 = 'choose congregation';
+                        document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                        $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_10_TCB').val());
+                    }
+
+                }
+            });*@
+        })
+
+         $(document).on('change', '#_ChurchBodyId_9_TCB', function (e) {
+            e.preventDefault();
+
+            // alert(' CB9 triggered...')
+
+              var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+           // alert('con oCBLevelCount: ' + oCBLevelCount);
+            if (oCBLevelCount == 9) {  // Congregation
+                var str1 = "None. (choose congregation)";
+                if ($('#_ChurchBodyId_9_TCB').val() != '') {
+                    str1 = document.getElementById("_ChurchBodyId_9_TCB").options[document.getElementById('_ChurchBodyId_9_TCB').selectedIndex].text;
+                }
+               // alert('str CON: ' + str1)
+                document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_9_TCB').val());
+                return false;
+            }
+
+           //  alert('_ChurchBodyId_9_TCB: ' + $("#_ChurchBodyId_9_TCB").val())
+
+             var currDenomId = $("#_oAppGloOwnId_TCB").val();
+           // var currDenomId = $("#_hdnAppGloOwnId").val();
+             var parentCBId = $("#_ChurchBodyId_9_TCB").val();
+
+             //  var hdn_ChurchBodyId_10_TCB = $('#_ChurchBodyId_10_TCB').val();
+           var hdn_ChurchBodyId_10_TCB = $('#hdn_ChurchBodyId_10_TCB').val();
+           //  alert('9. parentCBId: ' + parentCBId);
+
+             var url = '@Url.Action("GetChurchBodyListByParentBody", "AppVenAdmin")';
+            $('#_ChurchBodyId_10_TCB').empty();
+
+             //  public JsonResult GetChurchBodyListByParentBody(int? oParentCBId, int? oAppGloOwnId, string strOrgType = null, bool addEmpty = false)
+             $.getJSON(url, { oParentCBId: parentCBId, oAppGloOwnId: currDenomId, strOrgType: 'CH', addEmpty: true }, function (data) {
+                if (Object.keys(data).length > 0) {
+                    var items = '';
+                    $.each(data, function (i, oData) {
+                        items += "<option value='" + oData.value + "'>" + oData.text + "</option>";   // alert(items);
+                    });
+                    // items += "<option value=''> Select </option>";
+                    $('#_ChurchBodyId_10_TCB').html(items);
+                   // alert('hdn10: ' + hdn_ChurchBodyId_10_TCB)
+                    $('#_ChurchBodyId_10_TCB').val(hdn_ChurchBodyId_10_TCB);
+
+                    var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+                    if (oCBLevelCount > 9) {
+                        $('#_ChurchBodyId_9_TCB').change();
+                    }
+                    else {
+                        if ($('#_ChurchBodyId_9_TCB').val() != '') {
+                            str1 = document.getElementById("_ChurchBodyId_9_TCB").options[document.getElementById('_ChurchBodyId_9_TCB').selectedIndex].text;
+                        }
+
+                     //   alert('str assem: ' + str1)
+                      //  alert('str assem id: ' + $('#_ChurchBodyId_9_TCB').val())
+                        if (str1 == null || str1 == '') str1 = 'None. (choose congregation)';
+                        document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                        $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_9_TCB').val());
+                    }
+
+                }
+            });
+        })
+
+         $(document).on('change', '#_ChurchBodyId_8_TCB', function (e) {
+            e.preventDefault();
+
+            // alert(' CB8 triggered...')
+
+              var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+           // alert('con oCBLevelCount: ' + oCBLevelCount);
+            if (oCBLevelCount == 8) {  // Congregation
+                var str1 = "None. (choose congregation)";
+                if ($('#_ChurchBodyId_8_TCB').val() != '') {
+                    str1 = document.getElementById("_ChurchBodyId_8_TCB").options[document.getElementById('_ChurchBodyId_8_TCB').selectedIndex].text;
+                }
+               // alert('str CON: ' + str1)
+                document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_8_TCB').val());
+                return false;
+            }
+
+           //  alert('_ChurchBodyId_8_TCB: ' + $("#_ChurchBodyId_8_TCB").val())
+
+             var currDenomId = $("#_oAppGloOwnId_TCB").val();
+           // var currDenomId = $("#_hdnAppGloOwnId").val();
+             var parentCBId = $("#_ChurchBodyId_8_TCB").val();
+
+            //   var hdn_ChurchBodyId_9_TCB = $('#_ChurchBodyId_9_TCB').val();
+           var hdn_ChurchBodyId_9_TCB = $('#hdn_ChurchBodyId_9_TCB').val();
+           //  alert('8. parentCBId: ' + parentCBId);
+
+             var url = '@Url.Action("GetChurchBodyListByParentBody", "AppVenAdmin")';
+            $('#_ChurchBodyId_9_TCB').empty();
+
+             //  public JsonResult GetChurchBodyListByParentBody(int? oParentCBId, int? oAppGloOwnId, string strOrgType = null, bool addEmpty = false)
+             $.getJSON(url, { oParentCBId: parentCBId, oAppGloOwnId: currDenomId, strOrgType: 'CH', addEmpty: true }, function (data) {
+                if (Object.keys(data).length > 0) {
+                    var items = '';
+                    $.each(data, function (i, oData) {
+                        items += "<option value='" + oData.value + "'>" + oData.text + "</option>";   // alert(items);
+                    });
+                    // items += "<option value=''> Select </option>";
+                    $('#_ChurchBodyId_9_TCB').html(items);
+                   // alert('hdn9: ' + hdn_ChurchBodyId_9_TCB)
+                    $('#_ChurchBodyId_9_TCB').val(hdn_ChurchBodyId_9_TCB);
+
+                    var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+                    if (oCBLevelCount > 8) {
+                        $('#_ChurchBodyId_8_TCB').change();
+                    }
+                    else {
+                        if ($('#_ChurchBodyId_8_TCB').val() != '') {
+                            str1 = document.getElementById("_ChurchBodyId_8_TCB").options[document.getElementById('_ChurchBodyId_8_TCB').selectedIndex].text;
+                        }
+
+                     //   alert('str assem: ' + str1)
+                      //  alert('str assem id: ' + $('#_ChurchBodyId_8_TCB').val())
+                        if (str1 == null || str1 == '') str1 = 'None. (choose congregation)';
+                        document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                        $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_8_TCB').val());
+                    }
+
+                }
+            });
+        })
+
+         $(document).on('change', '#_ChurchBodyId_7_TCB', function (e) {
+            e.preventDefault();
+
+            // alert(' CB7 triggered...')
+
+              var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+           // alert('con oCBLevelCount: ' + oCBLevelCount);
+            if (oCBLevelCount == 7) {  // Congregation
+                var str1 = "None. (choose congregation)";
+                if ($('#_ChurchBodyId_7_TCB').val() != '') {
+                    str1 = document.getElementById("_ChurchBodyId_7_TCB").options[document.getElementById('_ChurchBodyId_7_TCB').selectedIndex].text;
+                }
+               // alert('str CON: ' + str1)
+                document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_7_TCB').val());
+                return false;
+            }
+
+           //  alert('_ChurchBodyId_7_TCB: ' + $("#_ChurchBodyId_7_TCB").val())
+
+             var currDenomId = $("#_oAppGloOwnId_TCB").val();
+           // var currDenomId = $("#_hdnAppGloOwnId").val();
+             var parentCBId = $("#_ChurchBodyId_7_TCB").val();
+
+            //   var hdn_ChurchBodyId_8_TCB = $('#_ChurchBodyId_8_TCB').val();
+           var hdn_ChurchBodyId_8_TCB = $('#hdn_ChurchBodyId_8_TCB').val();
+           //  alert('7. parentCBId: ' + parentCBId);
+
+             var url = '@Url.Action("GetChurchBodyListByParentBody", "AppVenAdmin")';
+            $('#_ChurchBodyId_8_TCB').empty();
+
+             //  public JsonResult GetChurchBodyListByParentBody(int? oParentCBId, int? oAppGloOwnId, string strOrgType = null, bool addEmpty = false)
+             $.getJSON(url, { oParentCBId: parentCBId, oAppGloOwnId: currDenomId, strOrgType: 'CH', addEmpty: true }, function (data) {
+                if (Object.keys(data).length > 0) {
+                    var items = '';
+                    $.each(data, function (i, oData) {
+                        items += "<option value='" + oData.value + "'>" + oData.text + "</option>";   // alert(items);
+                    });
+                    // items += "<option value=''> Select </option>";
+                    $('#_ChurchBodyId_8_TCB').html(items);
+                   // alert('hdn8: ' + hdn_ChurchBodyId_8_TCB)
+                    $('#_ChurchBodyId_8_TCB').val(hdn_ChurchBodyId_8_TCB);
+
+                    var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+                    if (oCBLevelCount > 7) {
+                        $('#_ChurchBodyId_7_TCB').change();
+                    }
+                    else {
+                        if ($('#_ChurchBodyId_7_TCB').val() != '') {
+                            str1 = document.getElementById("_ChurchBodyId_7_TCB").options[document.getElementById('_ChurchBodyId_7_TCB').selectedIndex].text;
+                        }
+
+                     //   alert('str assem: ' + str1)
+                      //  alert('str assem id: ' + $('#_ChurchBodyId_7_TCB').val())
+                        if (str1 == null || str1 == '') str1 = 'None. (choose congregation)';
+                        document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                        $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_7_TCB').val());
+                    }
+
+                }
+            });
+        })
+
+         $(document).on('change', '#_ChurchBodyId_6_TCB', function (e) {
+            e.preventDefault();
+
+            // alert(' CB6 triggered...')
+
+              var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+           // alert('con oCBLevelCount: ' + oCBLevelCount);
+            if (oCBLevelCount == 6) {  // Congregation
+                var str1 = "None. (choose congregation)";
+                if ($('#_ChurchBodyId_6_TCB').val() != '') {
+                    str1 = document.getElementById("_ChurchBodyId_6_TCB").options[document.getElementById('_ChurchBodyId_6_TCB').selectedIndex].text;
+                }
+               // alert('str CON: ' + str1)
+                document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_6_TCB').val());
+                return false;
+            }
+
+           //  alert('_ChurchBodyId_6_TCB: ' + $("#_ChurchBodyId_6_TCB").val())
+
+             var currDenomId = $("#_oAppGloOwnId_TCB").val();
+           // var currDenomId = $("#_hdnAppGloOwnId").val();
+             var parentCBId = $("#_ChurchBodyId_6_TCB").val();
+
+             // var hdn_ChurchBodyId_7_TCB = $('#_ChurchBodyId_7_TCB').val();
+            var hdn_ChurchBodyId_7_TCB = $('#hdn_ChurchBodyId_7_TCB').val();
+           //  alert('6. parentCBId: ' + parentCBId);
+
+             var url = '@Url.Action("GetChurchBodyListByParentBody", "AppVenAdmin")';
+            $('#_ChurchBodyId_7_TCB').empty();
+
+             //  public JsonResult GetChurchBodyListByParentBody(int? oParentCBId, int? oAppGloOwnId, string strOrgType = null, bool addEmpty = false)
+             $.getJSON(url, { oParentCBId: parentCBId, oAppGloOwnId: currDenomId, strOrgType: 'CH', addEmpty: true }, function (data) {
+                if (Object.keys(data).length > 0) {
+                    var items = '';
+                    $.each(data, function (i, oData) {
+                        items += "<option value='" + oData.value + "'>" + oData.text + "</option>";   // alert(items);
+                    });
+                    // items += "<option value=''> Select </option>";
+                    $('#_ChurchBodyId_7_TCB').html(items);
+                   // alert('hdn7: ' + hdn_ChurchBodyId_7_TCB)
+                    $('#_ChurchBodyId_7_TCB').val(hdn_ChurchBodyId_7_TCB);
+
+                    var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+                    if (oCBLevelCount > 6) {
+                        $('#_ChurchBodyId_6_TCB').change();
+                    }
+                    else {
+                        if ($('#_ChurchBodyId_6_TCB').val() != '') {
+                            str1 = document.getElementById("_ChurchBodyId_6_TCB").options[document.getElementById('_ChurchBodyId_6_TCB').selectedIndex].text;
+                        }
+
+                     //   alert('str assem: ' + str1)
+                      //  alert('str assem id: ' + $('#_ChurchBodyId_6_TCB').val())
+                        if (str1 == null || str1 == '') str1 = 'None. (choose congregation)';
+                        document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                        $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_6_TCB').val());
+                    }
+
+                }
+            });
+        })
+
+         $(document).on('change', '#_ChurchBodyId_5_TCB', function (e) {
+            e.preventDefault();
+
+            // alert(' CB5 triggered...')
+
+              var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+           // alert('con oCBLevelCount: ' + oCBLevelCount);
+            if (oCBLevelCount == 5) {  // Congregation
+                var str1 = "None. (choose congregation)";
+                if ($('#_ChurchBodyId_5_TCB').val() != '') {
+                    str1 = document.getElementById("_ChurchBodyId_5_TCB").options[document.getElementById('_ChurchBodyId_5_TCB').selectedIndex].text;
+                }
+               // alert('str CON: ' + str1)
+                document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_5_TCB').val());
+                return false;
+            }
+
+           //  alert('_ChurchBodyId_5_TCB: ' + $("#_ChurchBodyId_5_TCB").val())
+
+             var currDenomId = $("#_oAppGloOwnId_TCB").val();
+           // var currDenomId = $("#_hdnAppGloOwnId").val();
+             var parentCBId = $("#_ChurchBodyId_5_TCB").val();
+
+            //    var hdn_ChurchBodyId_6_TCB = $('#_ChurchBodyId_6_TCB').val();
+          var hdn_ChurchBodyId_6_TCB = $('#hdn_ChurchBodyId_6_TCB').val();
+           //  alert('5. parentCBId: ' + parentCBId);
+
+             var url = '@Url.Action("GetChurchBodyListByParentBody", "AppVenAdmin")';
+            $('#_ChurchBodyId_6_TCB').empty();
+
+             //  public JsonResult GetChurchBodyListByParentBody(int? oParentCBId, int? oAppGloOwnId, string strOrgType = null, bool addEmpty = false)
+             $.getJSON(url, { oParentCBId: parentCBId, oAppGloOwnId: currDenomId, strOrgType: 'CH', addEmpty: true }, function (data) {
+                if (Object.keys(data).length > 0) {
+                    var items = '';
+                    $.each(data, function (i, oData) {
+                        items += "<option value='" + oData.value + "'>" + oData.text + "</option>";   // alert(items);
+                    });
+                    // items += "<option value=''> Select </option>";
+                    $('#_ChurchBodyId_6_TCB').html(items);
+                   // alert('hdn6: ' + hdn_ChurchBodyId_6_TCB)
+                    $('#_ChurchBodyId_6_TCB').val(hdn_ChurchBodyId_6_TCB);
+
+                    var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+                    if (oCBLevelCount > 5) {
+                        $('#_ChurchBodyId_5_TCB').change();
+                    }
+                    else {
+                        if ($('#_ChurchBodyId_5_TCB').val() != '') {
+                            str1 = document.getElementById("_ChurchBodyId_5_TCB").options[document.getElementById('_ChurchBodyId_5_TCB').selectedIndex].text;
+                        }
+
+                     //   alert('str assem: ' + str1)
+                      //  alert('str assem id: ' + $('#_ChurchBodyId_5_TCB').val())
+                        if (str1 == null || str1 == '') str1 = 'None. (choose congregation)';
+                        document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                        $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_5_TCB').val());
+                    }
+
+                }
+            });
+        })
+
+         $(document).on('change', '#_ChurchBodyId_4_TCB', function (e) {
+            e.preventDefault();
+
+            // alert(' CB4 triggered...')
+
+              var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+           // alert('con oCBLevelCount: ' + oCBLevelCount);
+            if (oCBLevelCount == 4) {  // Congregation
+                var str1 = "None. (choose congregation)";
+                if ($('#_ChurchBodyId_4_TCB').val() != '') {
+                    str1 = document.getElementById("_ChurchBodyId_4_TCB").options[document.getElementById('_ChurchBodyId_4_TCB').selectedIndex].text;
+                }
+               // alert('str CON: ' + str1)
+                document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_4_TCB').val());
+                return false;
+            }
+
+           //  alert('_ChurchBodyId_4_TCB: ' + $("#_ChurchBodyId_4_TCB").val())
+
+             var currDenomId = $("#_oAppGloOwnId_TCB").val();
+           // var currDenomId = $("#_hdnAppGloOwnId").val();
+             var parentCBId = $("#_ChurchBodyId_4_TCB").val();
+
+            //   var hdn_ChurchBodyId_5_TCB = $('#_ChurchBodyId_5_TCB').val();
+           var hdn_ChurchBodyId_5_TCB = $('#hdn_ChurchBodyId_5_TCB').val();
+           //  alert('4. parentCBId: ' + parentCBId);
+
+             var url = '@Url.Action("GetChurchBodyListByParentBody", "AppVenAdmin")';
+            $('#_ChurchBodyId_5_TCB').empty();
+
+             //  public JsonResult GetChurchBodyListByParentBody(int? oParentCBId, int? oAppGloOwnId, string strOrgType = null, bool addEmpty = false)
+             $.getJSON(url, { oParentCBId: parentCBId, oAppGloOwnId: currDenomId, strOrgType: 'CH', addEmpty: true }, function (data) {
+                if (Object.keys(data).length > 0) {
+                    var items = '';
+                    $.each(data, function (i, oData) {
+                        items += "<option value='" + oData.value + "'>" + oData.text + "</option>";   // alert(items);
+                    });
+                    // items += "<option value=''> Select </option>";
+                    $('#_ChurchBodyId_5_TCB').html(items);
+                   // alert('hdn5: ' + hdn_ChurchBodyId_5_TCB)
+                    $('#_ChurchBodyId_5_TCB').val(hdn_ChurchBodyId_5_TCB);
+
+                    var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+                    if (oCBLevelCount > 5) {
+                        $('#_ChurchBodyId_5_TCB').change();
+                    }
+                    else {
+                        if ($('#_ChurchBodyId_5_TCB').val() != '') {
+                            str1 = document.getElementById("_ChurchBodyId_5_TCB").options[document.getElementById('_ChurchBodyId_5_TCB').selectedIndex].text;
+                        }
+
+                       // alert('str assem: ' + str1)
+                     //   alert('str assem id: ' + $('#_ChurchBodyId_5_TCB').val())
+                        if (str1 == null || str1 == '') str1 = 'None. (choose congregation)';
+                        document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                        $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_5_TCB').val());
+                    }
+
+                    //if ($("#_div_ChurchBodyId_6_TCB").is(":hidden") == false) {
+                   // var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+                   // if (oCBLevelCount > 4) {
+                    //    $('#_ChurchBodyId_5_TCB').change();
+                    //}
+                }
+            });
+
+
+        })
+
+         $(document).on('change', '#_ChurchBodyId_3_TCB', function (e) {
+            e.preventDefault();
+
+           //  alert(' CB3 triggered...')
+
+              var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+           // alert('dis oCBLevelCount: ' + oCBLevelCount);
+            if (oCBLevelCount == 3) {  // district
+                var str1 = "None. (choose congregation)";
+                if ($('#_ChurchBodyId_3_TCB').val() != '') {
+                    str1 = document.getElementById("_ChurchBodyId_3_TCB").options[document.getElementById('_ChurchBodyId_3_TCB').selectedIndex].text;
+                }
+               // alert('str DIS: ' + str1)
+                document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_3_TCB').val());
+                return false;
+            }
+
+            var currDenomId = $("#_oAppGloOwnId_TCB").val();
+           // var currDenomId = $("#_hdnAppGloOwnId").val();
+             var parentCBId = $("#_ChurchBodyId_3_TCB").val();
+
+             //var hdn_ChurchBodyId_4_TCB = $('#_ChurchBodyId_4_TCB').val();
+             var hdn_ChurchBodyId_4_TCB = $('#hdn_ChurchBodyId_4_TCB').val();
+           //  alert('_ChurchBodyId_3_TCB: ' + $("#_ChurchBodyId_3_TCB").val())
+
+            var url = '@Url.Action("GetChurchBodyListByParentBody", "AppVenAdmin")';
+            $('#_ChurchBodyId_4_TCB').empty();
+
+             //  public JsonResult GetChurchBodyListByParentBody(int? oParentCBId, int? oAppGloOwnId, string strOrgType = null, bool addEmpty = false)
+             $.getJSON(url, { oParentCBId: parentCBId, oAppGloOwnId: currDenomId, strOrgType: 'CH', addEmpty: true }, function (data) {
+                if (Object.keys(data).length > 0) {
+                    var items = '';
+                    $.each(data, function (i, oData) {
+                        items += "<option value='" + oData.value + "'>" + oData.text + "</option>";   // alert(items);
+                    });
+                    // items += "<option value=''> Select </option>";   // <option selected disabled value=""> Select Church level </option>
+                    $('#_ChurchBodyId_4_TCB').html(items);
+                   // alert('hdn4: ' + hdn_ChurchBodyId_4_TCB)
+                    $('#_ChurchBodyId_4_TCB').val(hdn_ChurchBodyId_4_TCB);
+
+                  //  if ($("#_div_ChurchBodyId_5_TCB").is(":hidden") == false) {
+                    var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+                    if (oCBLevelCount > 4) {
+                        $('#_ChurchBodyId_4_TCB').change();
+                    }
+                    else {
+                        if ($('#_ChurchBodyId_4_TCB').val() != '') {
+                            str1 = document.getElementById("_ChurchBodyId_4_TCB").options[document.getElementById('_ChurchBodyId_4_TCB').selectedIndex].text;
+                        }
+                        //  alert('str PRB: ' + str1)
+                        if (str1 == null || str1 == '') str1 = 'None. (choose congregation)';
+                        document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                        $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_4_TCB').val());
+                    }
+                }
+            });
+
+         })
+
+         $(document).on('change', '#_ChurchBodyId_2_TCB', function (e) {
+            e.preventDefault();
+           // alert(' CB2 triggered...')
+
+
+                var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+          //  alert('PRS. oCBLevelCount: ' + oCBLevelCount);
+            if (oCBLevelCount == 2) {  // presbytery
+                var str1 = "None. (choose congregation)";
+                if ($('#_ChurchBodyId_2_TCB').val() != '') {
+                    str1 = document.getElementById("_ChurchBodyId_2_TCB").options[document.getElementById('_ChurchBodyId_2_TCB').selectedIndex].text;
+                }
+              //  alert('str PRB: ' + str1)
+                document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_2_TCB').val());
+                return false;
+            }
+
+            var currDenomId = $("#_oAppGloOwnId_TCB").val();
+           // var currDenomId = $("#_hdnAppGloOwnId").val();
+             var parentCBId = $("#_ChurchBodyId_2_TCB").val();
+
+           //  var hdn_ChurchBodyId_3_TCB = $('#_ChurchBodyId_3_TCB').val();
+             var hdn_ChurchBodyId_3_TCB = $('#hdn_ChurchBodyId_3_TCB').val();
+          //   alert('_ChurchBodyId_2_TCB: ' + $("#_ChurchBodyId_3_TCB").val())
+
+            var url = '@Url.Action("GetChurchBodyListByParentBody", "AppVenAdmin")';
+            $('#_ChurchBodyId_3_TCB').empty();
+
+            //  public JsonResult GetChurchBodyListByParentBody(int? oParentCBId, int? oAppGloOwnId, string strOrgType = null, bool addEmpty = false)
+             $.getJSON(url, { oParentCBId: parentCBId, oAppGloOwnId: currDenomId, strOrgType: 'CH', addEmpty: true }, function (data) {
+                if (Object.keys(data).length > 0) {
+                    var items = '';
+                    $.each(data, function (i, oData) {
+                        items += "<option value='" + oData.value + "'>" + oData.text + "</option>";   // alert(items);
+                    });
+                    // items += "<option value=''> Select </option>";
+                    $('#_ChurchBodyId_3_TCB').html(items);
+
+                   // alert('hdn3: ' + hdn_ChurchBodyId_3_TCB)
+                    $('#_ChurchBodyId_3_TCB').val(hdn_ChurchBodyId_3_TCB);
+
+                   // if ($("#_div_ChurchBodyId_4_TCB").is(":hidden") == false) {
+                    var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+                    if (oCBLevelCount > 3) {
+                        $('#_ChurchBodyId_3_TCB').change();
+                    }
+                    else {
+                        if ($('#_ChurchBodyId_3_TCB').val() != '') {
+                            str1 = document.getElementById("_ChurchBodyId_3_TCB").options[document.getElementById('_ChurchBodyId_3_TCB').selectedIndex].text;
+                        }
+                        //  alert('str PRB: ' + str1)
+                        if (str1 == null || str1 == '') str1 = 'None. (choose congregation)';
+                        document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                        $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_3_TCB').val());
+                    }
+                }
+            });
+
+        })
+
+         $(document).on('change', '#_oTargetCLId_TCB', function (e) {
+             e.preventDefault();
+
+           // alert('CL ...')
+
+             $('#_divAlertUser').prop('hidden', 'hidden');
+
+            var str1 = document.getElementById("_oTargetCLId_TCB").options[document.getElementById('_oTargetCLId_TCB').selectedIndex].text;
+             document.getElementById('_lblTargetCB_TCB').innerHTML = "Church Body (" + str1 + ")";
+            //$('#_strChurchLevel').val(str1);
+
+            // triggerChurchLevel_TCB();
+
+             //
+             var itemIndex = document.getElementById("_oTargetCLId_TCB").selectedIndex;
+            // alert('itemIndex: ' + itemIndex)
+             var limCount = $('#_numCLIndex_TCB').val();
+            // alert('limCount: ' + limCount)
+             var CHLevelIndex = limCount - itemIndex;  // + 1   ... 1 is highest levelIndex /db != selected Index
+             $('#_oCBLevelCount_TCB').val(CHLevelIndex);
+
+             //
+           //  alert('CHLevelIndex: ' + CHLevelIndex)
+             if (CHLevelIndex >= 0 && CHLevelIndex <= limCount) {
+                $('#_div_ChurchBodyId_1_TCB').prop('hidden', !(CHLevelIndex >= 1));
+                $('#_div_ChurchBodyId_2_TCB').prop('hidden', !(CHLevelIndex >= 2));
+                $('#_div_ChurchBodyId_3_TCB').prop('hidden', !(CHLevelIndex >= 3));
+                $('#_div_ChurchBodyId_4_TCB').prop('hidden', !(CHLevelIndex >= 4));
+                $('#_div_ChurchBodyId_5_TCB').prop('hidden', !(CHLevelIndex >= 5));
+                $('#_div_ChurchBodyId_6_TCB').prop('hidden', !(CHLevelIndex >= 6));
+                $('#_div_ChurchBodyId_7_TCB').prop('hidden', !(CHLevelIndex >= 7));
+                $('#_div_ChurchBodyId_8_TCB').prop('hidden', !(CHLevelIndex >= 8));
+                $('#_div_ChurchBodyId_9_TCB').prop('hidden', !(CHLevelIndex >= 9));
+                $('#_div_ChurchBodyId_10_TCB').prop('hidden', !(CHLevelIndex >= 10));
+
+                ///
+                 var numArbId = '_ChurchBodyId_' + CHLevelIndex + '_TCB';
+                 var _strCBDisp = '';
+                 if (CHLevelIndex == 1) {  // hq level... load into selected auto...
+                  //   alert('strArbId: ' + strArbId)
+                    // strArbId = '#_strChurchBody_' + CHLevelIndex + '_TCB';
+
+                     $('#_strChurchBody_1_TCB').prop("disabled", false);
+                     _strCBDisp = $('#_strChurchBody_1_TCB').val();
+                     $('#_strChurchBody_1_TCB').prop("disabled", true)
+
+                     //alert('_strCBDisp: ' + _strCBDisp)
+                 }
+                 else {
+                     _strCBDisp = document.getElementById(numArbId).options[document.getElementById(numArbId).selectedIndex].text;
+                 }
+
+                // alert('numArbId: ' + numArbId) ...
+
+              //  alert('str1: ' + str1)
+                 if (_strCBDisp == null || _strCBDisp == '') _strCBDisp = 'None. (choose congregation)';
+                 document.getElementById('_strTargetCB_TCB').innerHTML = _strCBDisp;
+
+               //  alert('numArbId: ' + numArbId)   alert('val: ' + $(numArbId).val())
+                $('#_oTargetCBId_TCB').val($('#' + numArbId).val());
+             }
+
+        })
+
+         var triggerChurchLevel_TCB = function () {
+
+         //    alert('CL triggered')
+            //var numCBId = $('#_numParentUnitCBId').val();
+            //var strCBName = $('#_strParentUnitCB').val();
+            //$('#_numParentUnitCBId').val(numCBId);
+            //$('#_strParentUnitCB').val(strCBName);
+
+            var currDenomId = $("#_oAppGloOwnId_TCB").val();
+           // var currDenomId = $("#_hdnAppGloOwnId").val();
+            var churchLevelId = $("#_oTargetCLId_TCB").val();
+
+          // alert('_numParentUnitCLId: ' + churchLevelId);
+        //  alert('currDenomId: ' + currDenomId);
+
+             var url = '@Url.Action("GetChurchLevelIndexesByChurchLevel", "AppVenAdmin")';
+            //  public JsonResult GetChurchLevelIndexByChurchLevel(int? oChurchLevelId, int? oAppGloOwnId, bool addEmpty = false)
+            @*var url = '@Url.Action("GetChurchLevelIndexByChurchLevel", "AppVenAdmin")';*@
+
+             //   $('#_ChurchBodyId_2_TCB').empty();
+
+             //document.getElementById('_CountryId').value = '';
+
+            //  public JsonResult GetChurchLevelIndexesByChurchLevel(int? oChurchLevelId, int? oAppGloOwnId, bool addEmpty = false)
+            $.getJSON(url, { oChurchLevelId: churchLevelId, oAppGloOwnId: currDenomId }, function (res) {
+                if (res != null) {  // alert(res.taskSuccess);  alert(res.strResId); alert(res.strRes);
+                    // document.getElementById('_CountryId').value = res.strResId;    // return Json(new { taskSuccess = res, numResLev = _numResLev, strRes = _strRes });
+
+                    var CHLevelIndex = 0;
+                     if (res.numResLev != null) {
+                         CHLevelIndex = res.numResLev; // - 1;
+                        // $('#_numCLIndex_TCB').val(res.numResLev);
+                         $('#_oCBLevelCount_TCB').val(CHLevelIndex);
+                    }
+
+                  //  alert('CHLevelIndex: ' + CHLevelIndex);
+                    //
+                    $('#_div_ChurchBodyId_1_TCB').prop('hidden', !(CHLevelIndex >= 1));
+                    $('#_div_ChurchBodyId_2_TCB').prop('hidden', !(CHLevelIndex >= 2));
+                    $('#_div_ChurchBodyId_3_TCB').prop('hidden', !(CHLevelIndex >= 3));
+                    $('#_div_ChurchBodyId_4_TCB').prop('hidden', !(CHLevelIndex >= 4));
+                    $('#_div_ChurchBodyId_5_TCB').prop('hidden', !(CHLevelIndex >= 5));
+                    $('#_div_ChurchBodyId_6_TCB').prop('hidden', !(CHLevelIndex >= 6));
+                    $('#_div_ChurchBodyId_7_TCB').prop('hidden', !(CHLevelIndex >= 7));
+                    $('#_div_ChurchBodyId_8_TCB').prop('hidden', !(CHLevelIndex >= 8));
+                    $('#_div_ChurchBodyId_9_TCB').prop('hidden', !(CHLevelIndex >= 9));
+                    $('#_div_ChurchBodyId_10_TCB').prop('hidden', !(CHLevelIndex >= 10));
+
+                    ///
+                    //if ($("#_div_ChurchBodyId_2_TCB").is(":hidden") == false) {
+
+                  //  alert('visible... trigger init')
+
+                    initChurchBodyListLookUp();
+
+                    //  $('#_CountryId').change();
+
+                    // $('#_CountryId').trigger('change');
+                    //}
+                }
+                else {
+                  //  var numCHLevelIndex = $('#_numCLIndex_TCB').val();
+                  //  alert('HQ...CL numCHLevelIndex: ' + numCHLevelIndex);
+                    //var str1 = "None. (choose congregation)";
+                   // if ($('#_ChurchBodyId_1_TCB').val() != '') {
+                   //     str1 = document.getElementById("_ChurchBodyId_1_TCB").options[document.getElementById('_ChurchBodyId_1_TCB').selectedIndex].text;
+                   // }
+                   //// alert('str1: ' + str1)
+                   // document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                   // $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_1_TCB').val());
+
+                    var str1 = "None. (choose congregation)";
+                    document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                    $('#_oTargetCBId_TCB').val(null);
+                }
+            });
+        }
+
+         var initChurchBodyListLookUp = function () {
+
+            //var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+             var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+          //  alert('HQ. oCBLevelCount: ' + oCBLevelCount);
+
+             if (oCBLevelCount == 1) {  // HQ
+            //    var str1 = "None. (choose congregation)";
+            //    if ($('#_ChurchBodyId_1_TCB').val() != '') {
+            //        str1 = document.getElementById("_ChurchBodyId_1_TCB").options[document.getElementById('_ChurchBodyId_1_TCB').selectedIndex].text;
+            //    }
+            ////    alert('str1 HQ: ' + str1)
+            //    document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+            //    $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_1_TCB').val());
+            //    return false;
+
+                //var str1 = "None. (choose congregation)";
+                //if ($('#_strTargetCB_TCB_1').text() != '') {
+                //    str1 = $('#_strChurchBody_1').text();
+                //}
+
+                $('#_strChurchBody_1_TCB').prop("disabled", false);
+                var str1 = $('#_strChurchBody_1_TCB').val();
+                $('#_strChurchBody_1_TCB').prop("disabled", true)
+
+                // alert('str1 HQ: ' + str1)
+                if (str1 == null || str1 == '') str1 = 'None. (choose congregation)';
+                document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_1_TCB').val());
+
+                return false;
+            }
+
+            var url = '@Url.Action("GetInitChurchBodyListByAppGloOwn", "AppVenAdmin")';
+
+            var currDenomId = $("#_oAppGloOwnId_TCB").val();
+           // var currDenomId = $("#_hdnAppGloOwnId").val();
+           // var churchLevelId = $("#_numParentUnitCLId").val();
+
+          //  var hdn_ChurchBodyId_2_TCB = $('#_ChurchBodyId_2_TCB').val();
+            var hdn_ChurchBodyId_2_TCB = $('#hdn_ChurchBodyId_2_TCB').val();
+           // var hdn_ChurchBodyId_2_TCB = $('#_ChurchBodyId_2_TCB').val();
+
+           // alert('bf: ' + hdn_ChurchBodyId_2_TCB)
+           // alert('bf hdn: ' + _hdn_ChurchBodyId_2_TCB)
+
+            $('#_ChurchBodyId_2_TCB').empty();
+            //   public JsonResult GetInitChurchBodyListByAppGloOwn(int? oAppGloOwnId, bool addEmpty = false)
+            $.getJSON(url, { oAppGloOwnId: currDenomId, addEmpty: true }, function (data) {
+
+                if (Object.keys(data).length > 0) {
+                    var items = '';
+                    $.each(data, function (i, oData) {
+                        items += "<option value='" + oData.value + "'>" + oData.text + "</option>";   // alert(items);
+                    });
+
+                 //   alert ('clearing...')
+                    // items += "<option value=''> Select </option>";
+                    $('#_ChurchBodyId_2_TCB').html(items);
+
+                   // alert('hdn2: ' + hdn_ChurchBodyId_2_TCB)
+                    $('#_ChurchBodyId_2_TCB').val(hdn_ChurchBodyId_2_TCB);
+
+                    var oCBLevelCount = $('#_oCBLevelCount_TCB').val();
+                    if (oCBLevelCount > 2) {
+                      //  alert('trig 2...')
+                        $('#_ChurchBodyId_2_TCB').change();
+                    }
+                    else {
+                        var str1 = "None. (choose congregation)";
+                        if ($('#_ChurchBodyId_2_TCB').val() != '') {
+                            str1 = document.getElementById("_ChurchBodyId_2_TCB").options[document.getElementById('_ChurchBodyId_2_TCB').selectedIndex].text;
+                        }
+                        //  alert('str PRB: ' + str1)
+                        if (str1 == null || str1 == '') str1 = 'None. (choose congregation)';
+                        document.getElementById('_strTargetCB_TCB').innerHTML = str1;
+                        $('#_oTargetCBId_TCB').val($('#_ChurchBodyId_2_TCB').val());
+                    }
+
+                }
+            });
+        }
+
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+}

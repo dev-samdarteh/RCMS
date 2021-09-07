@@ -1,0 +1,261 @@
+﻿
+@model RhemaCMS.Models.ViewModels.vm_cl.MemberProfileComponentModel
+
+
+<div class="container-fluid">
+    @*<div class="row">*@
+        @*<div class="col-md-3">
+            <div class="card card-primary card-outline">
+                @{ var photoPath = "~/img_db/" + (Model.oChurchMember.PhotoUrl ?? "df_user_p.png"); }
+
+                <div class="card-body box-profile">
+                    <div class="text-center mb-3">
+                        <img class="profile-user-img img-fluid img-circle" style="min-width: 150px; min-height:150px; max-width: 150px; max-height:150px;"
+                             src="@Url.Content(photoPath)" alt="Member photo">
+                    </div>
+
+                    <h4 class="profile-username text-center">
+                        @if (@Model.oMemberBioModel.oChurchMember.Gender == "M")
+                        {<i class="fas fa-male text-primary mr-1"></i> }
+                        else if (@Model.oMemberBioModel.oChurchMember.Gender == "F")
+                        { <i class="fas fa-female text-fuchsia mr-1"></i>}
+                        else 
+                        { <i class="fas fa-neuter text-black-50 mr-1"></i> }
+
+                        @Model.strMemFullName
+                    </h4>
+
+                    @{ var strRole = !string.IsNullOrEmpty(@Model.strLeadRole) ? @Model.strLeadRole : "Member"; }
+                    <p class="text-muted text-center"> @strRole </p>
+
+                    <ul class="list-group list-group-unbordered mb-3">
+                        <li class="list-group-item">
+                            <p><small class="float-left"><i class="fas fa-birthday-cake text-black-50 mr-1"></i> Birthday </small></p>
+                            <p class="text-left text-md">
+                                @Model.oMemberBioModel.strDateOfBirth
+                                <span class="badge badge-warning border ml-1">@Model.strBirthdayTag </span> 
+                            </p>  
+                        </li>
+                        <li class="list-group-item">
+                            <p><small class="float-left"><i class="fas fa-map-marker-alt text-black-50 mr-1"></i> Location </small></p>
+                            <p class="text-left text-md"> @Model.oMemberContactModel.strLocation </p> 
+                        </li> 
+                        <li class="list-group-item">
+                            <p><small class="float-left"><i class="fas fa-ring text-black-50 mr-1"></i> Marital Status </small></p>
+                            <p class="text-left text-md"> @Model.strMaritalStat </p>
+                        </li>
+                        <li class="list-group-item">
+                            <p><small class="float-left"><i class="fas fa-user-tag text-black-50 mr-1"></i> Member Type </small></p>
+                            <p class="text-left text-md"> @Model.strMemberType </p>
+                        </li>
+                    </ul>
+
+                    <a href="#" class="btn btn-light btn-block border font-weight-normal"><b> More info </b></a>
+
+                </div>
+            </div>
+        </div>*@
+
+        @*<div class="col-md text-sm">*@
+
+            <div class="row text-sm">
+
+                <section class="col-lg col-6">
+                    <div class="card card-light">
+                        <div class="card-header card-outline card-primary">
+                            <h3 class="card-title"> Personal Profile </h3>
+                        </div>
+                        <div class="card-body">
+                            <strong><i class="fas fa-microphone mr-1"></i> Language Proficiency </strong>
+
+                            <p class="text-muted">
+                                @Model.strLangProfiency
+                            </p>
+
+                            <hr>
+
+                            <strong><i class="fas fa-user-friends mr-1 mb-1"></i> Family Background </strong>
+
+                            <p class="text-muted mb-2"> 
+                                <span class="text-center"><i class="fas fa-dice text-secondary mr-1 ml-1" style="width: 15px"></i></span><span class="text-md-left ml-1"> @Model.strFamRelaDesc </span>
+                            </p>
+                            <p class="text-muted mb-2">
+                                @*@if (Model.oMemberBioModel.oChurchMember.Gender == "M")
+                                {<i class="fas fa-female fa-sm text-fuchsia mr-1 ml-1"></i> }
+                                else if (Model.oMemberBioModel.oChurchMember.Gender == "F")
+                                { <i class="fas fa-male fa-sm text-primary mr-1 ml-1"></i>}
+                                else
+                                { <i class="fas fa-user-alt fa-sm text-black-50 mr-1 ml-1"></i>}*@
+                                 
+                                <span class="text-center"><i class="fas fa-heart text-black-50 mr-1 ml-1" style="width: 15px"></i></span><span class="text-md-left ml-1"> Spouse: @Model.strMemSpouse </span>
+                            </p>
+                            <p class="text-muted mb-2"> 
+                                <span class="text-center"><i class="fas fa-child text-success mr-1 ml-1" style="width: 15px"></i></span><span class="text-md-left ml-1"> Children: @Model.strMemChildren </span>
+                            </p>
+                            <p class="text-muted mb-2"> 
+                                <span class="text-center"><i class="fas fa-handshake text-dark mr-1 ml-1" style="width: 15px"></i></span><span class="text-md-left ml-1"> Next-of-kin: @Model.strMemNextOfKin </span>
+                            </p>
+
+                            @*@if (item.oMemberRelation.RelationScope == "L" && item.oMemberRelation.ChurchBodyId == Model.oChurchBodyId_Logged)
+                            {
+                                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                   onclick="AddEditCurrDataCM_rtMPC_MFR(@item.oMemberRelation.RelationChurchBodyId, @item.oMemberRelation.RelationChurchMemberId, 0)"> 
+                                    <span><i class="fas fa-refresh" style="width:25px"></i></span> <span class="text-md-left ml-1"> Switch to Relation Profile </span>
+                                </a>
+                            }*@ 
+
+                            <hr>
+
+                            <strong><i class="fas fa-book mr-1"></i> Education Level </strong>
+
+                            <p class="text-muted">
+                                @Model.strEducLevelDesc
+                            </p>
+
+                            <hr>
+
+                            <strong><i class="fas fa-user-tie mr-1"></i> Brand &amp; Skills </strong>
+
+                            <p class="text-muted">
+                                @Model.strProBrandDesc
+
+                                @*<span class="tag tag-danger">UI Design</span>
+            <span class="tag tag-success">Coding</span>
+            <span class="tag tag-info">Javascript</span>
+            <span class="tag tag-warning">PHP</span>
+            <span class="tag tag-primary">Node.js</span>*@
+                            </p>
+
+                            <hr>
+
+                            <strong><i class="fas fa-user-clock mr-1"></i> Working Life </strong>
+
+                            <p class="text-muted">
+                                @Model.strJobStatusDesc
+                            </p>
+
+                            <hr>
+
+                            <strong><i class="far fa-file-alt mr-1"></i> Know Your Member </strong>
+
+                            <p class="text-muted"> @Model.oMemberBioModel.oChurchMember.Notes </p>
+
+                        </div>
+                    </div>
+                </section>
+
+                <section class="col-lg col-6">
+                    <div class="card card-light">
+                        <div class="card-header card-outline card-fuchsia">
+                            <h3 class="card-title"> Member Church-life </h3>
+                        </div>
+                        <div class="card-body">
+                            <strong><i class="fas fa-church mr-1"></i> Core Churchlife </strong>
+                            @{ var strCL1 = (!string.IsNullOrEmpty(Model.strCurrPastDeceased) ? Model.strCurrPastDeceased : "") +
+                                                      (!string.IsNullOrEmpty(Model.strJoined) ? ". Joined: " + Model.strJoined : "") +
+                                                      (!string.IsNullOrEmpty(Model.strDeparted) ? ". Departed: " + Model.strDeparted : "") +
+                                                      (!string.IsNullOrEmpty(Model.strLongevity) ? ". Longevity: " + Model.strLongevity : "");
+                            }
+                            <p class="text-muted">
+                                @strCL1
+                            </p>
+
+                           
+                                @*//var strCL2 = (!string.IsNullOrEmpty(Model.strBaptised) ? Model.strBaptised : "") +
+                                //                             (!string.IsNullOrEmpty(Model.strConfirmed) ? ". " + Model.strConfirmed : "") +
+                                //                             (!string.IsNullOrEmpty(Model.strCommunicant) ? ". " + Model.strCommunicant : "");*@
+
+                                @if (!string.IsNullOrEmpty(Model.strBaptised))
+                                {
+                                    <p>
+                                        @if (Model.strBaptised.Equals("Baptised"))
+                                        { <i class="fas fa-check-double text-success mr-1"></i> @Model.strBaptised}
+                                        else
+                                        { <i class="fas fa-times text-secondary mr-1"></i> @Model.strBaptised}
+                                    </p> 
+                                }
+
+                                @if (!string.IsNullOrEmpty(Model.strConfirmed))
+                                {
+                                    <p>
+                                        @if (Model.strConfirmed.Equals("Confirmed"))
+                                        { <i class="fas fa-check-double text-success mr-1"></i>  @Model.strConfirmed}
+                                        else
+                                        { <i class="fas fa-times text-secondary mr-1"></i> @Model.strConfirmed}
+                                    </p> 
+                                }
+
+                                @if (!string.IsNullOrEmpty(Model.strCommunicant))
+                                {
+                                    <p>
+                                        @if (Model.strCommunicant.Equals("Communicant"))
+                                        { <i class="fas fa-check-double text-success mr-1"></i>  @Model.strCommunicant}
+                                        else
+                                        { <i class="fas fa-times text-secondary mr-1"></i>  @Model.strCommunicant}
+                                    </p> 
+                                } 
+                            
+
+                            @*<p class="text-muted">
+                                @strCL2
+                            </p>*@
+
+                            <hr>
+                            <strong><i class="fas fa-location-arrow mr-1"></i> Church Movements </strong>
+
+                            @*<p class="text-muted">
+            @{ var strMCM = (!string.IsNullOrEmpty(Model.strMemTypeAssigned) ? Model.strMemTypeAssigned : "") +
+                                   (!string.IsNullOrEmpty(Model.strMemRankAssigned) ? ". " + Model.strMemRankAssigned : "") +
+                                   (!string.IsNullOrEmpty(Model.strMemStatAssigned) ? ". " + Model.strMemStatAssigned : "");
+            }
+        </p>*@
+
+                            <p class="text-muted">
+                                Member Type: @Model.strMemTypeAssigned
+                            </p>
+                            <p class="text-muted">
+                                Church Rank: @Model.strMemRankAssigned
+                            </p>
+                            <p class="text-muted">
+                                Church Status: @Model.strMemStatAssigned
+                            </p>
+                            <hr>
+
+                            <strong><i class="fas fa-map-marker-alt mr-1"></i> Migration &amp; Transfers </strong>
+
+                            <p class="text-muted">
+                                @*Malibu, California*@
+                            </p>
+                            <hr>
+
+                            <strong><i class="fas fa-users mr-1"></i> Groupings &amp; Associations </strong>
+
+                            <p class="text-muted">
+                                @Model.strMemGroupsDesc
+                            </p>
+                            <hr>
+
+                            <strong><i class="fas fa-user-tie mr-1"></i> Designations &amp; Roles </strong>
+
+                            <p class="text-muted">
+                                @Model.strMemRolesDesc
+                            </p>
+
+                            <hr>
+
+                            <strong><i class="far fa-file-alt mr-1"></i> Church milestone </strong>
+
+                            <p class="text-muted">
+                                @*Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.*@
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+        @*</div>*@
+
+
+    @*</div>*@
+</div>

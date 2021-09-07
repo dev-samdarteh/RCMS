@@ -1,0 +1,220 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.ChurchBodyModel
+
+@if (Model != null)
+{
+    @if (Model.oChurchBody != null)
+    {
+    <form class="needs-validation novalidate bg-transparent p-1" id="currForm_vwCB" method="post" enctype="multipart/form-data">
+
+        <input type="hidden" asp-for="oChurchBody.Id" />
+        <input type="hidden" asp-for="oChurchBodyId" />
+        <input type="hidden" asp-for="oChurchBody.MSTR_AppGlobalOwnerId" />
+        <input type="hidden" asp-for="oChurchBody.MSTR_ChurchBodyId" />
+        <input type="hidden" asp-for="oChurchBody.MSTR_ChurchLevelId" />
+        <input type="hidden" asp-for="oChurchBody.MSTR_ParentChurchBodyId" />
+
+        <input type="hidden" asp-for="@Model.oAppGloOwnId_Logged" />
+        <input type="hidden" asp-for="@Model.oUserId_Logged" />
+
+        @*<div class="form-row mb-2">
+            @if (!string.IsNullOrEmpty(Model.oChurchBody.ChurchBodyLogo))
+            {
+                <div class="col-md-3 justify-content-center">
+                    <small asp-for="oChurchBody.ChurchLogo" class="control-label"> Church unit logo </small>
+                    <div class="card m-0 p-2 border-0 shadow-none bg-transparent">
+                        <div class="card-body m-0 p-0 text-center">
+                            @{ var photoPath_CB = "~/img_db/" + (Model.oChurchBody.ChurchBodyLogo ?? "noimg.gif"); }
+                            <img class="card-img-top" src="@photoPath_CB" asp-append-version="true" id="imgFile" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="form-row mb-2">
+            <div class="col-md ">
+                <small class="font-weight-normal" asp-for="oChurchBody.Name"> Congregation (Church unit) name</small>
+                <input type="text" class="form-control" asp-for="oChurchBody.Name" placeholder="Denomination" readonly>
+            </div>
+        </div>
+        <div class="form-row mb-2">
+            <div class="col-md-6">
+                <small class="font-weight-normal" asp-for="strChurchLevel">Church Level</small>
+                <input type="text" class="form-control" asp-for="strChurchLevel" placeholder="Church Level" readonly>
+            </div>
+            <div class="col-md-6">
+                <small class="font-weight-normal" asp-for="strOrgType">Organisation Type</small>
+                <input type="text" class="form-control" asp-for="strOrgType" placeholder="Organisation Type" readonly>
+            </div>
+        </div>*@
+
+
+        <div class="form-row mb-0 mb-1">
+            <div class="col-md-2 justify-content-center">
+                <small asp-for="oChurchBody.ChurchLogo" class="control-label"> Church unit logo </small>
+                <div class="card m-0 p-3 border-0 shadow-none bg-transparent">
+                    <div class="card-body m-0 p-0 text-center">
+                        @{ var photoPath = "~/img_db/" + (Model.oChurchBody.ChurchBodyLogo ?? "noimg.gif"); }
+                        <img class="card-img-top" src="@photoPath" asp-append-version="true" id="imgFile" />
+                    </div>
+                </div>
+            </div>  
+            <div class="col-md-10">
+                <div class="form-row mb-1">
+                    <div class="col-md ">
+                        <small class="font-weight-normal" asp-for="oChurchBody.Name"> Congregation (Church unit) name</small>
+                        <input type="text" class="form-control" asp-for="oChurchBody.Name" placeholder="Denomination" readonly>
+                    </div>
+                </div>
+                <div class="form-row mb-1">
+                    <div class="col-md-6">
+                        <small class="font-weight-normal" asp-for="strChurchLevel">Church Level</small>
+                        <input type="text" class="form-control" asp-for="strChurchLevel" placeholder="Church Level" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <small class="font-weight-normal" asp-for="strOrgType">Organisation Type</small>
+                        <input type="text" class="form-control" asp-for="strOrgType" placeholder="Organisation Type" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-row mb-2">
+            <div class="col-md-6">
+                <small class="font-weight-normal" asp-for="oChurchBody.GlobalChurchCode">Church Code</small>
+                <input type="text" class="form-control" asp-for="oChurchBody.GlobalChurchCode" placeholder="Church code" readonly>
+            </div>
+            <div class="col-md-6">
+                <small class="font-weight-normal" asp-for="strCountryRegion">Faith Stream </small>
+                <input class="form-control" type="text" asp-for="strFaithTypeCategory" placeholder="Faith Stream" readonly>
+            </div>
+        </div>
+
+        @*<div class="form-row mb-2">
+            <div class="col-md">
+                <small class="font-weight-normal" asp-for="oChurchBody.RootChurchCode">Root Church Code</small>
+                <input class="form-control" type="text" asp-for="oChurchBody.RootChurchCode" placeholder="Root Church code" readonly>
+            </div>
+        </div>*@
+
+        <div class="form-row">
+            <!-- CB Parent -->
+            @if (Model.oChurchBody.OrgType != "CR")
+            {
+                <div class="col-md-6 mb-2">
+                    @{ var strParCBLevelTag = "Parent Body (" + Model.strParentCBLevel + ")"; }
+                    <small id="_lblParentChurchBody" class="font-weight-normal" asp-for="oChurchBody"> @strParCBLevelTag </small>
+                    <input type="text" class="form-control " asp-for="@Model.strParentChurchBody" placeholder="Parent Body" readonly>
+                </div>
+            }
+            else
+            {
+                <input type="hidden" class="form-control " asp-for="@Model.strParentChurchBody" placeholder="Parent Body">
+            }
+
+            <div class="col-md-6 mb-2">
+                @if (Model.oChurchBody.IsFullAutonomy)
+                {
+                    <small asp-for="oChurchBody.IsFullAutonomy" class="control-label">&nbsp;</small>
+                    <label class="chk_container">
+                        <label class="text-sm font-weight-normal"> Autonomous (Independent) </label>
+                        <input id="chk_IsFullAutonomy" type="checkbox" asp-for="oChurchBody.IsFullAutonomy" disabled />
+                        <span class="checkmark"></span>
+                    </label>
+                }
+                else if (!Model.oChurchBody.IsFullAutonomy && Model.oChurchBody.IsSupervisedByParentBody)
+                {
+                    <small asp-for="oChurchBody.IsSupervisedByParentBody" class="control-label">&nbsp;</small>
+                    <label class="chk_container">
+                        <label class="text-sm font-weight-normal"> Supervised by Parent Body </label>
+                        <input id="chk_IsSupervisedByParentBody" type="checkbox" asp-for="oChurchBody.IsSupervisedByParentBody" disabled />
+                        <span class="checkmark"></span>
+                    </label>
+                }
+                else if (!Model.oChurchBody.IsFullAutonomy && !Model.oChurchBody.IsSupervisedByParentBody)
+                {
+                    var strSupCBLevelTag = "Supervising Body (" + Model.strCBLevel_sup + ")";
+                    <small id="_lblSupervisedByChurchBody" class="font-weight-normal" asp-for="oChurchBody"> @strSupCBLevelTag </small>
+                    <input type="text" class="form-control" asp-for="@Model.strSupervisedByChurchBody" placeholder="Church code" readonly>
+                }
+            </div>
+        </div>
+
+        <div class="form-row mb-2">
+            <div class="col-md-6">
+                <small class="font-weight-normal" asp-for="strCountry">Country of Operation</small>
+                <input class="form-control" type="text" asp-for="strCountry" placeholder="Country" readonly>
+            </div>
+            <div class="col-md-6">
+                <small class="font-weight-normal" asp-for="strCountry">Region</small>
+                <input class="form-control" type="text" asp-for="strCountryRegion" placeholder="Region" readonly>
+            </div>
+        </div>
+
+        <div class="form-row  mb-2">
+            <div id="_DateFormed" class="col-md-6 ">
+                <small class="font-weight-normal" asp-for="oChurchBody.DateFormed"> Formed </small>
+                <input type="text" class="form-control " asp-for="@Model.strDateFormed" placeholder="Date formed" readonly>
+            </div>
+            <div id="_DateInnaug" class="col-md-6">
+                <small class="font-weight-normal" asp-for="oChurchBody.DateInnaug"> Innaugurated </small>
+                <input type="text" class="form-control " asp-for="@Model.strDateInnaug" placeholder="Date innaugurated" readonly>
+            </div>
+        </div>
+
+        <div class="form-row mb-2">
+            <div class="col-md">
+                <small class="font-weight-normal" asp-for="oChurchBody.BriefHistory"> Brief History </small>
+                <textarea maxlength="500" asp-for="oChurchBody.BriefHistory" class="form-control " rows="3" readonly></textarea>
+            </div>
+        </div>
+
+        <div class="form-row mb-2">
+            <div class="col-md">
+                <small class="font-weight-normal" asp-for="oChurchBody.SubscriptionKey">Subscription Key</small>
+                <input type="text" class="form-control " asp-for="oChurchBody.SubscriptionKey" placeholder="Subscription Key" readonly>
+            </div>
+        </div>
+
+        <div class="form-row mb-2">
+            <div class="col-md-9">
+                <small class="font-weight-normal" asp-for="oChurchBody.Comments">Any more comments</small>
+                <textarea asp-for="oChurchBody.Comments" class="form-control " rows="3" readonly></textarea>
+            </div>
+            <div class="col-md-3">
+                <div class="form-row  mb-2">
+                    <div class="col-md">
+                        <small class="font-weight-normal" asp-for="oChurchBody.ChurchWorkStatus"> Work Status </small>
+                        <div>
+                            @if (Model.oChurchBody.ChurchWorkStatus == "OP")
+                            {<span class="badge badge-btn badge-success">@Model.strChurchWorkStatus </span> }
+                        else if (Model.oChurchBody.ChurchWorkStatus == "ST")
+                        { <span class="badge badge-btn badge-secondary">@Model.strChurchWorkStatus </span>}
+                    else
+                    { <span class="badge badge-btn badge-light"> Unassigned </span>}
+                        </div>
+                        <input type="hidden" asp-for="oChurchBody.ChurchWorkStatus" />
+                    </div>
+                </div>
+                <div class="form-row mb-2">
+                    <div class="col-md">
+                        <small class="font-weight-normal" asp-for="strStatus"> Status </small>
+                        <div>
+                            @if (Model.oChurchBody.Status == "A")
+                            {<span class="badge badge-btn badge-success">@Model.strStatus </span> }
+                        else if (Model.oChurchBody.Status == "A")
+                        { <span class="badge badge-btn badge-secondary">@Model.strStatus </span>}
+                    else
+                    { <span class="badge badge-btn badge-light"> Unassigned </span>}
+                        </div>
+                        <input type="hidden" asp-for="oChurchBody.Status" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </form>
+        }
+     }

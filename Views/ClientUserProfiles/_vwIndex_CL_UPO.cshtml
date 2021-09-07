@@ -1,0 +1,273 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_app_ven.UserProfileModel
+
+@if (Model != null)
+{
+    
+    <div class="row">
+        <div class="col-md cus-top-center">
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="card bg-light" id="section-upd">
+                        <div class="card-header border-0">
+                            <h3 class="card-title">
+                                <i class="fas fa-user-alt mr-1"></i>
+                                <span class="text-info"> User Profile Overview </span>
+                            </h3>
+                            @*<div class="card-tools">
+                                <button type="button" class="btn btn-light btn-sm border-0" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>*@
+                        </div>
+                        <div class="card-body card-fuchsia card-outline">
+                            <div id="divTabData_CL_UP" class="overlay-wrapper mb-1">
+                                @{ await Html.RenderPartialAsync("_vwAddOrEdit_CL_UP", Model); }
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <button type="button" class="btn btn-info float-right" onclick="AddEditCurrData_CL_UPO(0, '[New] User Account')" disabled>
+                            <i class="fas fa-user-lock mr-1"></i> <span class="text-sm"> Change Password</span>
+                        </button>
+                            <button type="button" class="btn btn-default border mr-1 float-right" 
+                                    onclick="ReloadCurrPage_CL_UPO(@Model.oUserProfile.Id, @Model.oAppGloOwnId, @Model.oChurchBodyId, 1, true)" disabled>
+                                <i class="fa fa-refresh fa-secondary"></i>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="card " id="section-cl-rg">
+                        <div class="card-header border-0 pb-0" style="background-color: lightgray">
+                            <ul class="nav nav-tabs p-0" id="cl-tab" role="tablist" >
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="cl-upr-tab" data-toggle="pill" href="#cl-upr" role="tab" aria-controls="cl-upr" aria-selected="true">
+                                        <i class="fas fa-user-tie mr-1"></i>
+                                        <span class="text-black-50"> Assigned Roles </span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="cl-upg-tab" data-toggle="pill" href="#cl-upg" role="tab" aria-controls="cl-upg" aria-selected="false">
+                                        <i class="fas fa-users mr-1"></i>
+                                        <span class="text-black-50"> Associated Groups </span>
+                                    </a>
+                                </li>
+                                @*<li class="nav-item">
+                                    <a class="nav-link" id="cl-ugr-tab" data-toggle="pill" href="#cl-ugr" role="tab" aria-controls="cl-ugr" aria-selected="false">
+                                        <i class="fas fa-group mr-1"></i>
+                                        <span class="text-black-50"> Group Roles </span>
+                                    </a>
+                                </li>*@
+                            </ul>
+                        </div>
+                        <div class="card-body card-outline mt-2" > @*style="min-height: 500px; height: 500px; max-height: 500px; max-width: 100%;"*@
+                            <div class="tab-content" id="cl-rg-tabContent">
+                                <div id="cl-upr" class="tab-pane fade show active" role="tabpanel" aria-labelledby="cl-upr-tab">
+                                    <div id="divTabData_CL_UPR" class="overlay-wrapper mb-1">
+                                        @{ await Html.RenderPartialAsync("_vwIndex_CL_UPR", Model.lsUserProfileRoles_All); }
+                                    </div>
+                                    <div class="card-footer bg-transparent card-outline">
+                                        <button type="button" class="btn btn-info float-right" onclick="saveCurr_CL_UPR()"> 
+                                            <i class="fa fa-refresh fa-database"></i><span class="text-sm"> Save </span>
+                                        </button>
+                                        <button type="button" class="btn btn-default border mr-1 float-right" onclick="ReloadCurrPage_CL_UPR(@Model.oUserProfile.Id, @Model.oAppGloOwnId, @Model.oChurchBodyId, 1, true)">
+                                            <i class="fa fa-refresh fa-secondary"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="cl-upg" class="tab-pane fade" role="tabpanel" aria-labelledby="cl-upg-tab">
+                                    <div id="divTabData_CL_UPR" class="overlay-wrapper mb-1 ">
+                                        @*@{ await Html.RenderPartialAsync("_vwIndex_CL_UPG", Model.lsUserRolesAll); }*@
+                                    </div>
+                                    <div class="card-footer bg-transparent">
+                                        <button type="button" class="btn btn-info float-right" onclick="saveCurr_CL_UPG()">
+                                            <i class="fas fa-save "></i>
+                                        </button>
+                                        <button type="button" class="btn btn-default border mr-1 float-right" onclick="ReloadCurrPage_CL_UPG(@Model.oUserProfile.Id, @Model.oAppGloOwnId, @Model.oChurchBodyId, 1, true)">
+                                            <i class="fa fa-refresh fa-secondary"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                @*<div id="cl-ugr" class="tab-pane fade" role="tabpanel" aria-labelledby="cl-ugr-tab">
+                                    <div id="divTabData_CL_UGR" class="overlay-wrapper mb-1">
+                                        @{ await Html.RenderPartialAsync("_vwIndex_CL_UGR", Model.lsUserRolesAll); }
+                                    </div>
+                                    <div class="card-footer bg-transparent">
+                                        <button type="button" class="btn btn-info float-right" onclick="saveCurr_CL_UGR()">
+                                            <i class="fas fa-save "></i>
+                                        </button>
+                                        <button type="button" class="btn btn-default border mr-1 float-right" onclick="ReloadCurrPage_CL_UGR(@Model.oUserProfile.Id, @Model.oAppGloOwnId, @Model.oChurchBodyId, 1, true)">
+                                            <i class="fa fa-refresh fa-secondary"></i>
+                                        </button>
+                                    </div>
+                                </div>*@
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+             
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="card  bg-light" id="section-upm">
+                        <div class="card-header border-0" style="background-color: lightgray">
+                            <span class="nav-item">
+                                <i class="fas fa-lock-open mr-1"></i> <span class="text-black-50"> User Permissions Assigned </span>
+                            </span> 
+                        </div>
+                        <div class="card-body card-outline">
+                            <div id="divTabData_CL_URP" class="overlay-wrapper mb-1">
+                                @{ await Html.RenderPartialAsync("_vwIndex_CL_URP", Model.lsUserSessionPermList); }
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <button type="button" class="btn btn-info float-right" onclick="AddEditCurrData_CL_URP(0, '[New] User Permission')">
+                                <i class="fas fa-edit mr-1"></i>  
+                            </button>
+                            <button type="button" class="btn btn-default border mr-1 float-right" onclick="ReloadCurrPage_CL_URP(0, 0, true)">
+                                <i class="fa fa-refresh fa-secondary"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="card bg-light" id="section-uat">
+                        <div class="card-header border-0" style="background-color: lightgray">
+                            <span class="nav-item">
+                                <i class="fas fa-history mr-1"></i> <span class="text-black-50"> User Trail &amp; Activity History </span>
+                            </span> 
+                        </div>
+                        <div class="card-body">
+                            <div class="card-body card-outline">
+                                <div id="divTabData_CL_UAT" class="overlay-wrapper mb-1">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <div class="row">
+                                <button type="button" class="btn btn-default border mr-1 float-right" onclick="ReloadCurrPage_CL_UAT(0, 0, true)">
+                                    <i class="fa fa-refresh fa-secondary"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            @*<div class="row mb-3">
+            <div class="card col-md-12 bg-light" id="section-ur-ug  col-md-12">
+                <div class="card-header p-2">
+                    <ul class="nav nav-pills ">
+                        <li class="nav-item "><a class="nav-link active" href="#up-user-role" data-toggle="tab"><i class="fas fa-user-tie mr-1"></i> Assigned Roles </a></li>
+                        <li class="nav-item"><a class="nav-link" href="#up-user-group" data-toggle="tab"><i class="fas fa-users mr-1"></i> Associated Groups </a></li>
+                    </ul>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-light btn-sm border-0" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                            <i class="fas fa-minus mr-1"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="active tab-pane" id="up-user-role">
+                            <div class="card-body card-fuchsia card-outline">
+                                <div id="divTabData_CL_UPR" class="overlay-wrapper mb-1">
+                                    @{ await Html.RenderPartialAsync("_vwIndex_CL_UPR", Model.lsUserRolesAll); }
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <button type="button" class="btn btn-info float-right" onclick="AddEditCurrData_CL_UPR(0, '[New] User Role')">
+                                    <i class="fas fa-edit mr-1"></i> <span class="text-sm"> Modify </span>
+                                </button>
+                                <button type="button" class="btn btn-default border mr-1 float-right" onclick="ReloadCurrPage_CL_UPR(0, 0, true)">
+                                    <i class="fa fa-refresh fa-secondary"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="up-user-group">
+                            <div class="card-body">
+
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <button type="button" class="btn btn-info float-right" onclick="AddEditCurrData_CL_UG(0, '[New] User Group')">
+                                    <i class="fas fa-edit mr-1"></i> <span class="text-sm"> Add User Group </span>
+                                </button>
+                                <button type="button" class="btn btn-default border mr-1 float-right" onclick="ReloadCurrPage_CL_UG(0, 0, true)">
+                                    <i class="fa fa-refresh fa-secondary"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+
+        </div>
+
+        @*<div class="col-md-4">
+            <div class="card float-right" style="min-height: 200px; width: 200px; max-height: 200px; max-width: 150px;">
+                <div class="card-header bg-gray-light">
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <h3 class="card-title text-primary"> <i class="fas fa-ellipsis-h fa-lg fa-secondary"> </i> </h3>
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div> 
+                <div class="card-body p-0 ">
+                    <ul class="nav nav-pills flex-column">
+                        <li class="nav-item active">
+                            <a class="nav-link" role="button" onclick="ReloadCurrPage_CL_UP(0, 0, false)">
+                                <i class="fas fa-user-alt pr-2"></i> User Profiles
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" role="button">
+                                <i class="fas fa-user-lock pr-2"></i> Reset Password
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" role="button">
+                                <i class="fas fa-user-tie pr-2"></i> Manage Roles
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" role="button">
+                                <i class="fas fa-users pr-2"></i> Manage User Groups
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" role="button">
+                                <i class="fas fa-lock-open pr-2"></i> Assigned Permissions
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-danger" role="button">
+                                <i class="fas fa-user-times pr-2"></i> Deactivate Profile
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" role="button">
+                                <i class="fas fa-history pr-2"></i> User Trail &amp; History
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>*@
+
+
+    </div>
+ 
+
+}

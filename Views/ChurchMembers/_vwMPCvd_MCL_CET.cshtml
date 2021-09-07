@@ -1,0 +1,263 @@
+﻿
+@model RhemaCMS.Models.ViewModels.vm_cl.MemberChurchlifeEventTaskModel
+
+@if (Model.taskIndex == 0)
+{
+    <table id="tabDataCM_MCL_CET" class="table table-bordered table-striped text-sm"  >
+        <thead>
+            <tr>
+                <th style="vertical-align: middle"> Task Description </th>
+                @*<th width="100px" style="vertical-align: middle"> Member Activity  </th>*@
+                <th style="vertical-align: middle; text-align: center"> Date </th>
+                <th style="vertical-align: middle"> Status  </th>
+                <th class="justify-content-center" style="vertical-align: middle; text-align: center; width: 50px ">
+                    <button type="button" class="btn btn-default w-100 h-100 border-0" onclick="AddEditCurrDataCM_MPC(@Model.oChurchBodyId, @Model.oChurchMemberId, -1, 11, 3, true)">
+                        <i class="fa fa-refresh fa-secondary"></i>
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lsMemberChurchlifeEventTaskModels)
+            {
+                if (item.oMemberChurchlifeEventTask != null)
+                {
+                    <tr>
+                        <td style="vertical-align: middle">
+                            @item.strRequirementDefTask 
+                        </td>
+
+                        @*<td style="vertical-align: middle">
+                            @item.strMemberChurchlifeActivity_Desc
+                        </td>*@
+
+                        <td style="vertical-align: middle; text-align: right">
+                            @item.strDateDesc
+                        </td>
+                        <td style="vertical-align: middle; text-align: center">
+                            
+                            @if (item.oMemberChurchlifeEventTask.TaskStatus == "C" || item.oMemberChurchlifeEventTask.TaskStatus == "A")   //   P-Pending, I-In Progress, D-Deactive, Complete
+                            {<span class="badge badge-success text-center text border text-sm"> <i class="fas fa-check fa-sm text-light"></i> @item.strStatus </span> }
+                            else if (item.oMemberChurchlifeEventTask.TaskStatus == "I")
+                            { <span class="badge badge-warning text-center border text-sm"> <i class="fas fa-times fa-sm "></i> @item.strStatus </span>}
+                             else if (item.oMemberChurchlifeEventTask.TaskStatus == "H")
+                            { <span class="badge badge-info text-center border text-sm"> <i class="fas fa-times fa-sm text-light"></i> @item.strStatus </span>}
+                            else if (item.oMemberChurchlifeEventTask.TaskStatus == "P")
+                            { <span class="badge badge-primary text-center border text-sm"> <i class="fas fa-times fa-sm text-light"></i> @item.strStatus </span>}
+                            else if (item.oMemberChurchlifeEventTask.TaskStatus == "X" || item.oMemberChurchlifeEventTask.TaskStatus == "D")
+                            { <span class="badge badge-danger text-center border text-sm"> <i class="fas fa-times fa-sm text-light"></i> @item.strStatus </span>}
+                            else
+                            { <span class="badge badge-light text-center border text-sm"> @item.strStatus </span> }                          
+                        </td>
+                        <td class="p-1" style="vertical-align: middle; text-align:center ">
+                            @{ var strDesc = '"' + @item.strChurchlifeActivity + '"'; }
+                            <div class="btn-group ">
+                                <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-ellipsis-v text-gray text-lg"></i>
+                                </button>
+                                <div class="dropdown-menu p-1">
+                                    <ul class="m-0 p-0" style="list-style-type: none;">
+                                        <li>
+                                            <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                               onclick="AddEditCurrDataCM_moMPC(@Model.oChurchBodyId, @Model.oChurchMemberId, @item.oMemberChurchlifeEventTask.Id, -1, @strDesc, 11, 3, -1)">
+                                                <span><i class="fa fa-eye" style="width:20px"></i></span><span class="text-md-left ml-1"> View </span>
+                                            </a>
+                                        </li>
+
+                                        @if (item.oChurchBodyId == Model.oChurchBodyId_Logged)
+                                        {
+                                            <li>
+                                                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                                   onclick="AddEditCurrDataCM_moMPC(@Model.oChurchBodyId, @Model.oChurchMemberId, @item.oMemberChurchlifeEventTask.Id, @item.oMemberChurchlifeEventTask.MemberChurchlifeActivityId, @strDesc, 11, 3, 2)">
+                                                    <span><i class="fa fa-edit" style="width:20px"></i></span><span class="text-md-left ml-1"> Edit </span>
+                                                </a>
+                                            </li>
+                                            @if (item.isUserRoleAdmin_Logged ||
+                                            (item.oChurchBodyId == Model.oChurchBodyId_Logged && item.oMemberChurchlifeEventTask.CreatedByUserId == Model.oUserId_Logged))
+                                            {
+                                                <li>
+                                                    <a role="button" class="btn btn-light text-danger text-left w-100 border-0"
+                                                       onclick="DeleteCurrDataCM_moMPC(@item.oChurchBodyId, @item.oChurchMemberId, false, '')">
+                                                        <span><i class="fa fa-trash" style="width:20px"></i></span><span class="text-md-left ml-1" style="color:#000"> Delete </span>
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+}
+else
+{
+    <div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center p-3" style="width: 90%; margin: 0 auto 0 auto ; padding: 0;  ">
+        <form needs-validation bg-transparent p-2" novalidate id="currFormCM_MCL_CET" method="post" enctype="multipart/form-data" asp-action="AddModCM_MCL_CET" class=" form-group bg-transparent">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @if (Model.oMemberChurchlifeEventTask != null)
+            {
+                <input type="hidden" asp-for="oAppGloOwnId" />
+                <input type="hidden" asp-for="oChurchBodyId" />
+                <input type="hidden" asp-for="oChurchMemberId" />
+
+                <input type="hidden" asp-for="oMemberChurchlifeEventTask.Id" />
+                <input type="hidden" asp-for="oMemberChurchlifeEventTask.ChurchBodyId" id="_ChurchBodyId" />
+                <input type="hidden" asp-for="oMemberChurchlifeEventTask.AppGlobalOwnerId" id="_AppGlobalOwnerId" />
+                <input type="hidden" asp-for="oMemberChurchlifeEventTask.ChurchMemberId" />
+
+                <input type="hidden" asp-for="strChurchBody" id="_strChurchBody" />
+
+                <input type="hidden" asp-for="oMemberChurchlifeEventTask.Created" />
+                <input type="hidden" asp-for="oMemberChurchlifeEventTask.LastMod" />
+                <input type="hidden" asp-for="oMemberChurchlifeEventTask.CreatedByUserId" />
+                <input type="hidden" asp-for="oMemberChurchlifeEventTask.LastModByUserId" />
+
+                <input type="hidden" asp-for="subSetIndex" id="_subSetIndex_MPC" />
+
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC" />
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC1" />
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC_MCL_CET" />
+
+                <input type="hidden" asp-for="taskIndex" id="_taskIndex_MPC" />
+
+
+
+                int? _oAGOId = Model.oAppGloOwnId != null ? Model.oAppGloOwnId : -1; //if (Model.oAppGloOwnId != null) { _oAGOId = (int)Model.oChurchBody.AppGlobalOwnerId; };
+                int? _oCBId = Model.oChurchBodyId != null ? Model.oChurchBodyId : -1; //if (Model.oChurchBody.Id != -1) { _oCBId = (int)Model.oChurchBody.Id; }
+
+
+
+                @if (!string.IsNullOrEmpty(Model.oMemberChurchlifeEventTask.PhotoUrl))
+                {
+                    var photoPath = "~/img_db/" + (Model.oMemberChurchlifeEventTask.PhotoUrl ?? "df_user_p.png");
+
+                    <div class="col-md cus-rel-center mb-3">
+                        <div class="overlay-wrapper">
+                            <div class="btn-group float-right">
+                                <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-edit text-primary"></i>
+                                </button>
+                                <div class="dropdown-menu p-1">
+                                    <input type="file" class="form-control-file text-sm" value="Choose photo" asp-for="PhotoFile_CET">
+
+                                    <input type="hidden" asp-for="oMemberChurchlifeEventTask.PhotoUrl" />
+                                </div>
+                            </div>
+
+                            <div class="text-center mb-3">
+                                <img class="profile-user-img img-fluid img-circle" style="min-width: 150px; min-height:150px; max-width: 150px; max-height:150px;"
+                                     src="@Url.Content(photoPath)" alt="Contact photo">
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberChurchlifeEventTask.MemberChurchlifeActivityId" class="control-label"> Church Activity  </small>
+                        <select id="_MemberChurchlifeActivityId_moMCL_CET" class="form-control text-sm" asp-for="oMemberChurchlifeEventTask.MemberChurchlifeActivityId" asp-items="Model.lkpMemberChurchlifeActivities">
+                            <option value="" selected disabled> Select ... </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberChurchlifeEventTask.RequirementDefId" class="control-label"> Step Required  </small>
+                        <select id="_RequirementDefId_moMCL_CET" class="form-control text-sm" asp-for="oMemberChurchlifeEventTask.RequirementDefId" asp-items="Model.lkpRequirementDefList">
+                            <option value="" selected disabled> Select ... </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberChurchlifeEventTask.DateCommenced" class="control-label"> Date Commenced </small>
+                        <input id="_DateCommenced_moMCL_CET" type="date" class="form-control text-sm" asp-for="oMemberChurchlifeEventTask.DateCommenced">
+                    </div>
+                    <div class="col-md" id="_divDateCompleted_moMCL_CET">
+                        <small asp-for="oMemberChurchlifeEventTask.DateCompleted" class="control-label"> Date Completed </small>
+                        <input type="date" class="form-control text-sm" asp-for="oMemberChurchlifeEventTask.DateCompleted">
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberChurchlifeEventTask.Status" class="control-label"> Action Status  </small>
+                        <select id="_Status_moMCL_CET" class="form-control text-sm" asp-for="oMemberChurchlifeEventTask.TaskStatus" asp-items="Model.lkpTaskStatuses">
+                            <option value="" selected disabled> Select ... </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row mb-3" id="_divNotes_moMCL_CET">
+                    <div class="col-md">
+                        <small asp-for="oMemberChurchRole.Notes" class="control-label"> Notes (Tasks Undertaken) </small>
+                        <textarea maxlength="300" asp-for="oMemberChurchlifeEventTask.Notes" class="form-control text-sm" rows="3"></textarea>
+                    </div>
+                </div>
+
+
+
+                @if (string.IsNullOrEmpty(Model.oMemberChurchlifeEventTask.PhotoUrl))
+                {
+                    <div class="form-row mb-3 ">
+                        <div class="form-group">
+                            <small class="font-weight-normal" asp-for="oMemberChurchlifeEventTask.PhotoUrlExtCon"> User Photo </small>
+                            <input type="file" class="form-control-file small" value="Choose photo" asp-for="PhotoFile_CET">
+                            <input type="hidden" asp-for="oMemberChurchlifeEventTask.PhotoUrl" />
+                        </div>
+                    </div>
+                }
+
+
+                <br />
+                <hr class="cus-div" style="width:100%; border: 1px solid #808080;" />
+
+                @if (Model.oChurchBody?.OrgType == "CN" && Model.oMemberChurchlifeEventTask.ChurchBodyId == Model.oChurchBodyId_Logged)
+                {
+                    <div class="form-row mb-3 mt-3">
+                        <div class="col-md-3">
+                            <small class="font-weight-normal" asp-for="strOwnedByStatus"> Scope </small>
+                            <input type="text" class="form-control text-xs" asp-for="strOwnStatus" placeholder="Scope" readonly>
+                            <input type="hidden" asp-for="oMemberChurchlifeEventTask.ChurchBodyId" />
+                        </div>
+                        <div class="col-md">
+                            <small class="font-weight-normal" asp-for="oMemberChurchlifeEventTask.SharingStatus"> Sharing Status </small>
+                            <select id="_CountryId" class="form-control text-xs" asp-for="oMemberChurchlifeEventTask.SharingStatus" asp-items="Model.lkpSharingStatuses_Any" aria-describedby="fd_SharingStatus" required>
+                                <option selected disabled value=""> Select scope </option>
+                            </select>
+                            <div class="invalid-feedback" id="fd_SharingStatus"> Select sharing status </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-row mb-3 mt-3">
+                        <div class="col-md-3">
+                            <small class="font-weight-normal" asp-for="strOwnershipStatus"> Scope </small>
+                            <input type="text" class="form-control text-xs" asp-for="strOwnStatus" placeholder="Scope" readonly>
+                            <input type="hidden" asp-for="oMemberChurchlifeEventTask.SharingStatus" />
+                        </div>
+                        <div class="col-md">
+                            @{ var strOwnCB = "Owned by " + (!string.IsNullOrEmpty(Model.strOwnedByCBLevel) ? "(" + Model.strOwnedByCBLevel + ")" : "");}
+                            <small class="font-weight-normal" asp-for="strOwnedByChurchBody"> @strOwnCB </small>
+                            <input type="text" class="form-control text-xs" asp-for="strOwnedByCB" placeholder="Owned by" readonly>
+                            <input type="hidden" asp-for="oMemberChurchlifeEventTask.ChurchBodyId" />
+                        </div>
+                    </div>
+                }
+
+            }
+
+        </form>
+    </div>
+}

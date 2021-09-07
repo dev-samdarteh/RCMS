@@ -1,0 +1,109 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.ChurchUnitModel
+
+
+@if (Model != null)
+{
+    <table id="tabData_CBA" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th> Church Unit </th>
+                <th> Unit Type </th>
+                @*<th> Church Level </th>*@
+                <th> Parent Unit </th>
+                <th width="50px" style="text-align:center; vertical-align: middle"> Scope </th>
+                <th width="50px" style="text-align:center; vertical-align: middle">Status</th>
+                <th class="p-1 justify-content-center" style="vertical-align: middle; text-align: center; width: 60px ">
+                    <button type="button" class="btn btn-default border-0" onclick="ReloadCurrPage_CU(4, 1)">
+                        <i class="fa fa-refresh text-secondary"></i>
+                    </button>
+                    @*<a href="#" id="btnAddEdit_CU" data-remote="false" class="btn btn-default text-success border-0"
+                           data-backdrop="static" onclick="ReloadCurrPage_CU(14, 1)">
+                            <i class="fa fa-refresh fa-secondary"></i>
+                        </a>*@
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lsChurchUnitModels)
+            {
+                if (item.oChurchUnit != null)
+                {
+                    var strCU_Par = !string.IsNullOrEmpty(item.strParentChurchUnit) ? item.strParentChurchUnit + " /" : item.strParentChurchUnit;
+                    var strDesc = '"' + strCU_Par + item.strChurchUnit + '"';
+                    var strParDesc = '"' + item.strChurchUnit + '"';
+
+                    <tr>
+                        <td style="vertical-align: middle">
+                            @if (item.numSubUnitsCount > 0)
+                            {
+                                var _strUnit = item.strChurchUnit + " (" + item.numSubUnitsCount + ")";
+                                <a href="#section-cba" data-backdrop="static" onclick="ReloadCurrPage_CU(4, 1, @item.oChurchUnit.Id, @strParDesc)">
+                                    @_strUnit
+                                    @*@item.strChurchUnit <i class="fa fa-ellipsis-h fa-xs text-secondary ml-1"></i>*@
+                                </a>
+                            }
+                            else
+                            {
+                                @item.strChurchUnit
+                            }
+                        </td>
+                        <td style="vertical-align: middle">
+                            @item.strOrgType
+                        </td>
+                        @*<td style="vertical-align: middle">
+                                @item.strTargetChurchLevel
+                            </td>*@
+                        <td style="vertical-align: middle">
+                            @item.strParentChurchUnit
+                        </td>
+                        <td width="50px" style="text-align:center; vertical-align: middle">
+                            @if (item.strOwnershipCode == "O")
+                            {<span class="badge badge-primary text-center text-light font-weight-normal border"> <i class="fas fa-cog"></i>  @item.strOwnershipStatus </span> }
+                        else if (item.strOwnershipCode == "I")
+                        { <span class="badge badge-primary text-center text-light font-weight-normal border"> <i class="fas fa-download"></i>  @item.strOwnershipStatus </span> }
+                    else
+                    { <span class="badge badge-light text-center font-weight-normal border"> <i class="fas fa-info-circle"></i> @item.strOwnershipStatus </span>}
+                        </td>
+                        <td style="text-align:center; vertical-align: middle">
+                            @if (item.oChurchUnit.Status == "A")
+                            {<span class="badge badge-success text-center text-light font-weight-normal border"> <i class="fas fa-check fa-sm text-light"></i> @item.strStatus </span> }
+                        else
+                        { <span class="badge badge-secondary text-center text-light font-weight-normal border"> <i class="fas fa-times fa-sm"></i> @item.strStatus </span>}
+                        </td>
+                        <td class="p-1" style="vertical-align: middle; text-align:center ">
+                            <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-ellipsis-v text-gray text-lg"></i>
+                            </button>
+                            <div class="dropdown-menu p-1">
+                                <ul class="m-0 p-0" style="list-style-type: none;">
+                                    <li>
+                                        <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                           onclick="AddEditCurrData_CU(@item.oChurchUnit.Id, -1,  @Model.oAppGloOwnId_Logged, @Model.oChurchBodyId_Logged, @strDesc, 4, 0)">
+                                            <i class="fa fa-eye"></i><span class="text-md-left ml-3"> View </span>
+                                        </a>
+                                    </li>
+                                    @if (item.oChurchUnit.OwnedByChurchBodyId == Model.oChurchBodyId_Logged)
+                                    {
+                                        <li>
+                                            <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                               onclick="AddEditCurrData_CU(@item.oChurchUnit.Id, -1, @item.oChurchUnit.AppGlobalOwnerId, @item.oChurchUnit.OwnedByChurchBodyId, @strDesc, 4, 2)">
+                                                <i class="fa fa-edit"></i><span class="text-md-left ml-3"> Edit </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a role="button" class="btn btn-light text-danger text-left w-100 border-0"
+                                               onclick="DeleteCurrData_CU(@item.oChurchUnit.Id, false, '')">
+                                                <i class="fa fa-trash"></i><span class="text-md-left ml-3" style="color:#000"> Delete </span>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+}

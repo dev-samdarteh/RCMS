@@ -1,0 +1,110 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.AppUtilityNVPModel
+
+
+@if (Model != null)
+{
+    // var _NVPCategId = Model.tempSetIndex == 18 ? @item.oAppUtilityNVP.Id : (int?)null ;
+    var _NVPCode = "CMT";
+    var _NVPDesc = "Church Member Type";
+
+    <table id="tabData_CMT" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th> Parameter Description </th>
+                <th> Category </th>
+                <th width="50px" style="text-align:center; vertical-align: middle"> Scope </th>
+                <th width="50px" style="text-align:center; vertical-align: middle">Status</th>
+                <th class="p-1" style="vertical-align: middle; text-align: center; width: 60px ">
+                    <a role="button" data-remote="false" class="btn btn-default border-0" data-backdrop="static"
+                       onclick="AddEditCurrData_NVP(0, '@_NVPDesc', '@_NVPCode', -1, 1)">
+                        <i class="fas fa-plus text-info "></i>
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lsAppUtilityNVPModels)
+            {
+                if (item.oAppUtilityNVP != null)
+                {
+                    var strNVP_Par = !string.IsNullOrEmpty(item.strNVPCategory) ? "/" + item.strNVPCategory : item.strNVPCategory;
+                    var strDesc = '"' + item.strNVPTag + strNVP_Par + " :- " + item.strAppUtilityNVP + '"';
+
+                    <tr class="pl-2">
+                        <td style="vertical-align: middle">
+                            @item.strAppUtilityNVP
+                        </td>
+                        <td style="vertical-align: middle">
+                            @item.strNVPSubTag
+                        </td>
+                        <td width="50px" style="text-align:center; vertical-align: middle">
+                            @if (item.strOwnershipCode == "O")
+                            {
+                                <span class="badge badge-primary text-light text-center font-weight-normal border">
+                                    <i class="fas fa-cog"></i>  @item.strOwnershipStatus
+                                </span> }
+
+                            else if (item.strOwnershipCode == "I")
+                            {
+                                <span class="badge badge-secondary text-light text-center font-weight-normal border">
+                                    <i class="fas fa-share-alt mr-1"></i>  @item.strOwnershipStatus
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-light text-center font-weight-normal border">
+                                    <i class="fas fa-info-circle "></i> @item.strOwnershipStatus
+                                </span>
+                            }
+                        </td>
+                        <td style="text-align:center; vertical-align: middle">
+                            @if (item.oAppUtilityNVP.NVPStatus == "A")
+                            {
+                                <span class="badge badge-success text-center text-light font-weight-normal border">
+                                    <i class="fas fa-check fa-sm text-light "></i>  @item.strNVPStatus
+                                </span> }
+                            else
+                            {
+                                <span class="badge badge-danger text-center text-light font-weight-normal border">
+                                    <i class="fas fa-times fa-sm  "></i> @item.strNVPStatus
+                                </span>}
+                        </td>
+                        <td class="p-1" style="vertical-align: middle; text-align:center ">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-ellipsis-v text-gray text-lg"></i>
+                                </button>
+                                <div class="dropdown-menu p-1">
+                                    <ul class="m-0 p-0" style="list-style-type: none;">
+                                        <li>
+                                            <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                               onclick="AddEditCurrData_NVP(@item.oAppUtilityNVP.Id, @strDesc, '@_NVPCode', -1, 0)">
+                                                <i class="fa fa-eye"></i><span class="text-md-left ml-3"> View </span>
+                                            </a>
+                                        </li>
+                                        @if (item.oAppUtilityNVP.OwnedByChurchBodyId == Model.oChurchBodyId_Logged)
+                                        {
+                                            <li>
+                                                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                                   onclick="AddEditCurrData_NVP(@item.oAppUtilityNVP.Id, @strDesc, '@_NVPCode','', 2)">
+                                                    <i class="fa fa-edit"></i><span class="text-md-left ml-3"> Edit </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a role="button" class="btn btn-light text-danger text-left w-100 border-0"
+                                                   onclick="DeleteCurrData_NVP(@item.oAppUtilityNVP.Id, '@_NVPCode', false, '')">
+                                                    <i class="fa fa-trash"></i><span class="text-md-left ml-3" style="color:#000"> Delete </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+}

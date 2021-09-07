@@ -1,0 +1,375 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.MemberContactPersonModel
+
+@if (Model.taskIndex == 0)
+{
+    <table id="tabDataCM_MCP" class="table table-bordered table-striped text-sm">
+        <thead>
+            <tr>
+                <th style="vertical-align: middle"> Contact Name  </th>
+                <th style="vertical-align: middle"> Relationship </th>
+                <th style="vertical-align: middle"> Faith </th>
+                <th style="vertical-align: middle"> Scope </th>
+                <th width="70px" style="text-align:center; vertical-align: middle">Status</th>
+                <th class="justify-content-center" style="vertical-align: middle; text-align: center; width: 50px ">
+                    <button type="button" class="btn btn-default w-100 h-100 border-0" onclick="AddEditCurrDataCM_MPC(@Model.oChurchBodyId, @Model.oChurchMemberId, -1, 5, 0, true)">
+                        <i class="fa fa-refresh fa-secondary"></i>
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lsMemberContactModels)
+            {
+                if (item.oMemberContact != null)
+                {
+                    <tr>
+                        <td style="vertical-align: middle">
+                            @if (item.oMemberContact.RelationScope != "E")
+                            {
+                                var strDescMem = '"' + item.strContactName + '"';
+                            <a role="button" id="btnAddEdit" data-remote="false" class="border-0" data-backdrop="static"
+                               onclick="AddEditCurrDataCM_rtMPC_MCP(@Model.oChurchBodyId, @item.oMemberContact.ContactChurchMemberId, 0)">
+                                @item.strContactName
+                            </a>
+                            }
+                            else
+                            {
+                                @item.strContactName
+                            }
+
+                            @if (item.oMemberContact.IsCurrentContact == true)
+                            {
+                                <small class="badge badge-info text-center">
+                                    <i class="far fa-check-circle fa-sm ml-1"></i> Primary
+                                </small>
+                            }
+                        </td>
+                        <td style="vertical-align: middle">
+                            @item.strRelationship
+                        </td>
+                        <td style="vertical-align: middle">
+                            @item.strFaithAffiliate
+                        </td>
+                        <td style="text-align: center; vertical-align: middle">
+                            @item.strRelationCB_Scope
+                        </td>
+                        <td style="vertical-align: middle">
+                            @if (item.oMemberContact.Status == "A")
+                            {<span class="badge badge-primary text-center text-light font-weight-normal border"> <i class="fas fa-check fa-sm text-light"></i> @item.strStatus </span> }
+                        else if (item.oMemberContact.Status == "D")
+                        { <span class="badge badge-danger text-center text-light font-weight-normal border"> <i class="fas fa-times fa-sm text-light"></i> @item.strStatus </span>}
+                    else
+                    { <span class="badge badge-warning text-center text-dark font-weight-normal border"> @item.strStatus </span>}
+                        </td>
+                        <td class="p-1" style="vertical-align: middle; text-align:center ">
+                            @{ var strDesc = '"' + item.strContactName + '"'; }
+                            <div class="btn-group ">
+                                <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-ellipsis-v text-gray text-lg"></i>
+                                </button>
+                                <div class="dropdown-menu  dropdown-menu-right p-1" role="menu">
+                                    <ul class="m-0 p-0" style="list-style-type: none;">
+                                        <li>
+                                            <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                               onclick="AddEditCurrDataCM_moMPC(@Model.oChurchBodyId, @Model.oChurchMemberId, @item.oMemberContact.Id, -1, @strDesc, 4, 0, -1)">
+                                                <span><i class="fa fa-eye" style="width:20px"></i></span><span class="text-md-left ml-1"> View </span>
+                                            </a>
+                                        </li>
+
+                                        @if (item.oChurchBodyId == Model.oChurchBodyId_Logged)
+                                        {
+                                            <li>
+                                                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                                   onclick="AddEditCurrDataCM_moMPC(@Model.oChurchBodyId, @Model.oChurchMemberId, @item.oMemberContact.Id, -1, @strDesc, 4, 0, 2)"> 
+                                                    <span><i class="fa fa-edit" style="width:20px"></i></span><span class="text-md-left ml-1"> Edit </span>
+                                                </a>
+                                            </li>
+                                            @if (item.isUserRoleAdmin_Logged ||
+                                      (item.oChurchBodyId == Model.oChurchBodyId_Logged && item.oMemberContact.CreatedByUserId == Model.oUserId_Logged))
+                                            {
+                                                <li>
+                                                    <a role="button" class="btn btn-light text-danger text-left w-100 border-0"
+                                                       onclick="DeleteCurrDataCM_moMPC(@item.oChurchBodyId, @item.oChurchMemberId, false, '')">
+                                                        <span><i class="fa fa-trash" style="width:20px"></i></span><span class="text-md-left ml-1" style="color:#000"> Delete </span>
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+}
+else
+{
+    <div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center p-3" style="width: 90%; margin: 0 auto 0 auto ; padding: 0;  ">
+        <form needs-validation bg-transparent p-2" novalidate id="currFormCM_MCP" method="post" enctype="multipart/form-data" asp-action="AddModCM_MCP" class=" form-group bg-transparent">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @if (Model.oMemberContact != null)
+            {
+                <input type="hidden" asp-for="oAppGloOwnId" />
+                <input type="hidden" asp-for="oChurchBodyId" />
+                <input type="hidden" asp-for="oChurchMemberId" />
+
+                <input type="hidden" asp-for="oMemberContact.Id" />
+                <input type="hidden" asp-for="oMemberContact.ChurchBodyId" id="_ChurchBodyId" />
+                <input type="hidden" asp-for="oMemberContact.AppGlobalOwnerId" id="_AppGlobalOwnerId" />
+                <input type="hidden" asp-for="oMemberContact.ChurchMemberId" />
+
+                <input type="hidden" asp-for="strChurchBody" id="_strChurchBody" />
+
+                <input type="hidden" asp-for="oMemberContact.RelationCategory" />
+
+                <input type="hidden" asp-for="oMemberContact.Created" />
+                <input type="hidden" asp-for="oMemberContact.LastMod" />
+                <input type="hidden" asp-for="oMemberContact.CreatedByUserId" />
+                <input type="hidden" asp-for="oMemberContact.LastModByUserId" />
+
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC" />
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC1" />
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC_MCP" />
+
+                <input type="hidden" asp-for="taskIndex" id="_taskIndex_MPC" />
+
+
+
+                @if (Model.oMemberContact.RelationScope != "E" || (Model.oMemberContact.RelationScope == "E" && !string.IsNullOrEmpty(Model.strPhotoUrl_MCP))) //Model.oMemberContact.PhotoUrlExtCon != null)
+                {
+                    var photoPath = "~/img_db/" + (Model.strPhotoUrl_MCP ?? "df_user_p.png");
+
+                    <div class="col-md cus-rel-center mb-3">
+                        <div class="overlay-wrapper">
+                            @if (Model.oMemberContact.RelationScope == "E")
+                            {
+                                <div class="btn-group float-right">
+                                    <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-edit text-primary"></i>
+                                    </button>
+                                    <div class="dropdown-menu p-1">
+                                        <input type="file" class="form-control-file text-sm" value="Choose photo" asp-for="PhotoFile_ExtCon">
+
+                                        <input type="hidden" asp-for="oMemberContact.PhotoUrlExtCon" />
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="text-center mb-3">
+                                <img class="profile-user-img img-fluid img-circle" style="min-width: 150px; min-height:150px; max-width: 150px; max-height:150px;"
+                                     src="@Url.Content(photoPath)" alt="Contact photo">
+                            </div>
+                        </div>
+                    </div>
+                }
+
+               
+                <div class="form-row mb-3 mt-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberContact.RelationScope" class="control-label">Relation Scope: Church Fellow ?</small>
+                        <select id="_RelationScope_moMCP" class="form-control text-sm" asp-for="oMemberContact.RelationScope" asp-items="Model.lkpRelationScopes">
+                            @*<option value="" selected disabled> Select ... </option>*@
+                        </select>
+                    </div>
+                    <div class="col-md-4 pt-1" id="_divIsCurrentContact">
+                        <small asp-for="oMemberContact.IsCurrentContact" class="control-label">&nbsp;</small>
+                        <label class="chk_container">
+                            <span class="text-sm font-weight-normal"> Primary Contact </span>
+                            <input id="chk_IsCurrentContact_moMCP" type="checkbox" asp-for="oMemberContact.IsCurrentContact" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberContact.RelationshipCode" class="control-label"> Relationship (to the person) </small>
+                        <select id="_RelationshipCode_moMCP" class="form-control text-sm" asp-for="oMemberContact.RelationshipCode" asp-items="Model.lkpRelationshipTypes">
+                            <option value="" selected disabled> Select ... </option>
+                        </select>
+                    </div>
+                    @if (Model.oMemberContact.Id > 0)
+                    {
+                        <div class="col-md">
+                            <small asp-for="oMemberContact.RelationCategory" class="control-label">Relation Category</small>
+                            <input id="_RelationCategory_moMCP" class="form-control text-sm" asp-for="strRelationCategory" readonly>
+                        </div>
+                    }
+                </div>
+
+
+                <div id="_divContactChurchFellow_MCP">
+                    @{
+                        int? _oAGOId = Model.oAppGloOwnId != null ? Model.oAppGloOwnId : -1; //if (Model.oAppGloOwnId != null) { _oAGOId = (int)Model.oChurchBody.AppGlobalOwnerId; };
+                        int? _oCBId = Model.oChurchBodyId != null ? Model.oChurchBodyId : -1; //if (Model.oChurchBody.Id != -1) { _oCBId = (int)Model.oChurchBody.Id; }
+                    }
+
+                    <div class="form-row mb-3">
+                        <div class="col-md-12">
+                            @{ var strParCBLevelTag = !string.IsNullOrEmpty(Model.strParentCBLevel) ? "Congregation (" + Model.strParentCBLevel + ")" : "Congregation"; }
+                            <small id="_lblContactChurchBody_MCP" class="font-weight-normal" asp-for="oChurchBody"> @strParCBLevelTag </small>
+                            <div class="input-group">
+                                <input id="_strContactChurchBody_par_MCP" type="text" class="form-control text-sm text-sm bg-transparent"
+                                       asp-for="strContactChurchBody" aria-describedby="button-addon2" placeholder="Contact's Congregation" disabled />
+                                <button class="btn btn-light btn-sm border border-left-0" type="button" id="button-addon2"
+                                        onclick="ImportTargetCB(@_oAGOId, @_oCBId, '_numContactChurchBodyId_par_MCP', '_strContactChurchBody_par_MCP', '', '_lblContactChurchBody_MCP', 'Parent_Body')">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                            </div>
+
+                            <input id="_numContactChurchBodyId_par_MCP" type="hidden" asp-for="oMemberContact.ContactChurchBodyId" />
+                        </div>
+                    </div>
+
+                    <div class="form-row mb-3" id="divContactChurchMemberId_moMCP">
+                        <div class="col-md">
+                            <small asp-for="oMemberContact.ContactChurchMemberId" class="control-label"> Related Member (please pick contact) </small>
+                            <div class="input-group">
+                                <select id="_ContactChurchMemberId_moMCP" class="form-control text-sm" asp-for="oMemberContact.ContactChurchMemberId" asp-items="Model.lkpChurchMembers">
+                                    <option value="" selected disabled> Select member </option>
+                                </select>
+
+                                @*<button class="btn btn-light btn-sm border border-left-0" type="button" data-toggle="tooltip" data-placement="bottom" title="Lookup Member (more options)"
+                                        onclick="LaunchMemberLookup()">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>*@
+                                <button id="_btnPickMembersDirect_moMCP" class="btn btn-light btn-sm border border-left-0" type="button" data-toggle="tooltip" data-placement="bottom" title="Load members">
+                                    <i class="fa fa-refresh text-black-50"></i>
+                                </button>
+                                @*<button id="_btnViewContactMBD_moMCP" class="btn btn-light btn-sm border border-left-0" type="button" data-toggle="tooltip" data-placement="bottom" title="View profile"
+                                        onclick="AddEditCurrDataCM_rtMBD_MCP()">
+                                    <i class="fa fa-eye text-black-50"></i>
+                                </button>*@
+
+                                <input id="_hdnContactChurchMemberId_moMCP" type="hidden" asp-for="oMemberContact.ContactChurchMemberId" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="_divExtFellow_MCP" hidden>
+
+                    <div class="form-row mb-3">
+                        <div class="col-md">
+                            <small asp-for="oMemberContact.ContactNameExtCon" class="control-label"> Contact Name </small>
+                            <input asp-for="oMemberContact.ContactNameExtCon" class="form-control text-sm " placeholder="Contact Name" />
+                        </div>
+                    </div>
+
+                    <div class="form-row mb-3">
+                        <div class="col-md">
+                            <small asp-for="oMemberContact.ResidenceAddressExtCon" class="control-label"> Residence Address </small>
+                            <input asp-for="oMemberContact.ResidenceAddressExtCon" class="form-control text-sm " placeholder="Residence Address" />
+                        </div>
+                    </div>
+                    <div class="form-row mb-3">
+                        <div class="col-md-6">
+                            <small asp-for="oMemberContact.LocationExtCon" class="control-label"> Location </small>
+                            <input asp-for="oMemberContact.LocationExtCon" class="form-control text-sm " placeholder="Location" />
+                        </div>
+                        <div class="col-md-6" id="_divResAddrSameAsPostAddr_moMCP">
+                            <small asp-for="oMemberContact.ResAddrSameAsPostAddrExtCon" class="control-label">&nbsp;</small>
+                            <label class="chk_container">
+                                <small> Postal Address same as Residence Address </small>
+                                <input id="chk_ResAddrSameAsPostAddr_moMCP" type="checkbox" asp-for="oMemberContact.ResAddrSameAsPostAddrExtCon" />
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row mb-3" id="_divPostalAddress_moMCP">
+                        <div class="col-md">
+                            <small asp-for="oMemberContact.PostalAddressExtCon" class="control-label"> Postal Address</small>
+                            <input id="_PostalAddress_moMCP" asp-for="oMemberContact.PostalAddressExtCon" class="form-control text-sm " placeholder="Postal Address" />
+                        </div>
+                    </div>
+                    <div class="form-row mb-3">
+                        <div class="col-md-6">
+                            <small asp-for="oMemberContact.CityExtCon" class="control-label"> City </small>
+                            <input asp-for="oMemberContact.CityExtCon" class="form-control text-sm " placeholder="City" />
+                        </div>
+                        <div class="col-md-6">
+                            <small asp-for="oMemberContact.DigitalAddressExtCon" class="control-label"> Digital Address </small>
+                            <div class="input-group">
+                                <input type="text" class="form-control text-sm  border-right-0" asp-for="oMemberContact.DigitalAddressExtCon" placeholder="Digital Address">
+                                <button id="_btnLoadDigitalAddress_moMCP" type="button" class="btn btn-light btn-sm border border-left-0 ">
+                                    <i class="fas fa-map-marker-alt fa-sm text-danger"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row mb-3">
+                        <div class="col-md-6">
+                            <small asp-for="oMemberContact.CtryAlpha3CodeExtCon" class="control-label">Country</small>
+                            <select id="_CountryId_moMCP" class="form-control text-sm " asp-for="oMemberContact.CtryAlpha3CodeExtCon" asp-items="Model.lkpCountries">
+                                <option selected disabled value=""> Choose Country </option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <small asp-for="oMemberContact.RegionIdExtCon" class="control-label"> Country Region</small>
+                            <select id="_RegionId_moMCP" class="form-control text-sm " asp-for="oMemberContact.RegionIdExtCon" asp-items="Model.lkpCountryRegions">
+                                <option selected value=""> Select Country Region </option>
+                            </select>
+                            <input id="_hdnRegionId_moMCP" type="hidden" asp-for="oMemberContact.RegionIdExtCon" />
+                        </div>
+                    </div>
+                    <div class="form-row mb-3">
+                        <div class="col-md-6">
+                            <small asp-for="oMemberContact.MobilePhone1ExtCon" class="control-label">Mobile Phone 1</small>
+                            <input id="_MobilePhone1_moMCP" type="tel" asp-for="oMemberContact.MobilePhone1ExtCon" class="form-control text-sm " placeholder="MobilePhone1" />
+                        </div>
+                        <div class="col-md-6">
+                            <small asp-for="oMemberContact.MobilePhone2ExtCon" class="control-label">Mobile Phone 2</small>
+                            <input id="_MobilePhone2_moMCP" type="tel" asp-for="oMemberContact.MobilePhone2ExtCon" class="form-control text-sm " placeholder="MobilePhone2" disabled />
+                        </div>
+                    </div>
+                    <div class="form-row mb-3">
+                        <div class="col-md">
+                            <small asp-for="oMemberContact.Email" class="control-label">Email</small>
+                            <input type="email" asp-for="oMemberContact.EmailExtCon" class="form-control text-sm " placeholder="Email" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-row mb-3 ">
+                    @if (Model.oMemberContact.RelationScope == "E")
+                    {
+                        <div class="col-md">
+                            <small asp-for="oMemberContact.FaithAffiliationExtCon" class="control-label"> Faith Affilation </small>
+                            <select class="form-control text-sm text-sm " asp-for="oMemberContact.FaithAffiliationExtCon" asp-items="Model.lkpFaithCategories" required>
+                                <option selected value="" disabled> Select Contact's Faith </option>
+                            </select>
+                        </div>
+                    }
+
+                    <div class="col-md-4">
+                        <small asp-for="oMemberContact.Status" class="control-label"> Contact Status </small>
+                        <select class="form-control text-sm text-sm " asp-for="oMemberContact.Status" asp-items="Model.lkpStatuses" required>
+                            @*<option selected value="" disabled> Select status </option>*@
+                        </select>
+                    </div>
+                </div>
+
+
+
+                @if (Model.oMemberContact.RelationScope == "E" && string.IsNullOrEmpty(Model.strPhotoUrl_MCP))
+                {
+                    <div class="form-row mb-3 ">
+                        <div class="form-group">
+                            <small class="font-weight-normal" asp-for="oMemberContact.PhotoUrlExtCon"> User Photo </small>
+                            <input type="file" class="form-control-file small" value="Choose photo" asp-for="PhotoFile_ExtCon">
+                            <input type="hidden" asp-for="oMemberContact.PhotoUrlExtCon" />
+                        </div>
+                    </div>
+                }
+            }
+
+        </form>
+    </div>
+}

@@ -1,0 +1,186 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.MemberWorkExperienceModel
+
+@if (Model.taskIndex == 0)
+{
+    <table id="tabDataCM_MWE" class="table table-bordered table-striped text-sm">
+        <thead>
+            <tr>
+                <th style="vertical-align: middle"> Job Role </th>
+                <th style="vertical-align: middle"> Workplace  </th> 
+                <th style="vertical-align: middle"> Date </th>
+                @*<th width="100px" style="vertical-align: middle"> Until </th>*@ 
+                <th class="justify-content-center" style="vertical-align: middle; text-align: center; width: 50px ">
+                    <button type="button" class="btn btn-default w-100 h-100 border-0" onclick="AddEditCurrDataCM_MPC(@Model.oChurchBodyId, @Model.oChurchMemberId, -1, 8, 0, true)">
+                        <i class="fa fa-refresh fa-secondary"></i>
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lsMemberWorkExperienceModels)
+            {
+                if (item.oMemberWorkExperience != null)
+                {
+                    <tr>
+                        <td style="vertical-align: middle">
+                            @item.oMemberWorkExperience.WorkRole
+                            @if (!string.IsNullOrEmpty(item.strStatus))
+                            {
+                                <small class="badge badge-info text-center">
+                                    <i class="far fa-flag-usa fa-sm ml-1"></i> @item.strStatus
+                                </small>
+                            }
+                        </td>
+                        <td style="vertical-align: middle">
+                            @item.oMemberWorkExperience.WorkPlace
+                            @if (!string.IsNullOrEmpty(item.strLocationCountry))
+                            {
+                                <small class="badge badge-light text-center border ml-1">
+                                    @item.strLocationCountry
+                                </small>
+                            }
+                        </td>
+                        <td style="vertical-align: middle">
+                            @item.strDateDesc
+                        </td>
+                        @*<td style="text-align: center; vertical-align: middle">
+                            @item.strToDate
+                        </td>*@ 
+                        <td class="p-1" style="vertical-align: middle; text-align:center ">
+                            @{ var strDesc = '"' + @item.strWorkExperience + '"'; }
+                            <div class="btn-group ">
+                                <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-ellipsis-v text-gray text-lg"></i>
+                                </button>
+                                <div class="dropdown-menu  dropdown-menu-right p-1" role="menu">
+                                    <ul class="m-0 p-0" style="list-style-type: none;">
+                                        <li>
+                                            <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                               onclick="AddEditCurrDataCM_moMPC(@Model.oChurchBodyId, @Model.oChurchMemberId, @item.oMemberWorkExperience.Id, -1, @strDesc, 8, 0, -1)">
+                                                <span><i class="fa fa-eye" style="width:20px"></i></span><span class="text-md-left ml-1"> View </span>
+                                            </a>
+                                        </li>
+
+                                        @if (item.oChurchBodyId == Model.oChurchBodyId_Logged)
+                                        {
+                                            <li>
+                                                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                                   onclick="AddEditCurrDataCM_moMPC(@Model.oChurchBodyId, @Model.oChurchMemberId, @item.oMemberWorkExperience.Id, -1, @strDesc, 8, 0, 2)">
+                                                    <span><i class="fa fa-edit" style="width:20px"></i></span><span class="text-md-left ml-1"> Edit </span>
+                                                </a>
+                                            </li>
+                                            @if (item.isUserRoleAdmin_Logged ||
+                                     (item.oChurchBodyId == Model.oChurchBodyId_Logged && item.oMemberWorkExperience.CreatedByUserId == Model.oUserId_Logged))
+                                            {
+                                                <li>
+                                                    <a role="button" class="btn btn-light text-danger text-left w-100 border-0"
+                                                       onclick="DeleteCurrDataCM_moMPC(@item.oChurchBodyId, @item.oChurchMemberId, false, '')">
+                                                        <span><i class="fa fa-trash" style="width:20px"></i></span><span class="text-md-left ml-1" style="color:#000"> Delete </span>
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+}
+else
+{
+    <div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center p-3" style="width: 90%; margin: 0 auto 0 auto ; padding: 0;  ">
+        <form needs-validation bg-transparent p-2" novalidate id="currFormCM_MWE" method="post" enctype="multipart/form-data" asp-action="AddModCM_MWE" class=" form-group bg-transparent">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @if (Model.oMemberWorkExperience != null)
+            {
+                <input type="hidden" asp-for="oAppGloOwnId" />
+                <input type="hidden" asp-for="oChurchBodyId" />
+                <input type="hidden" asp-for="oChurchMemberId" />
+
+                <input type="hidden" asp-for="oMemberWorkExperience.Id" />
+                <input type="hidden" asp-for="oMemberWorkExperience.ChurchBodyId" id="_ChurchBodyId" />
+                <input type="hidden" asp-for="oMemberWorkExperience.AppGlobalOwnerId" id="_AppGlobalOwnerId" />
+                <input type="hidden" asp-for="oMemberWorkExperience.ChurchMemberId" />
+
+                <input type="hidden" asp-for="strChurchBody" id="_strChurchBody" />
+
+                <input type="hidden" asp-for="oMemberWorkExperience.Created" />
+                <input type="hidden" asp-for="oMemberWorkExperience.LastMod" />
+                <input type="hidden" asp-for="oMemberWorkExperience.CreatedByUserId" />
+                <input type="hidden" asp-for="oMemberWorkExperience.LastModByUserId" />
+
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC" />
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC1" />
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC_MWE" />
+
+                <input type="hidden" asp-for="taskIndex" id="_taskIndex_MPC" /> 
+                 
+
+
+
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberWorkExperience.WorkRole" class="control-label"> Job Role </small>
+                        <input type="text" class="form-control text-sm" asp-for="oMemberWorkExperience.WorkRole">
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberWorkExperience.WorkPlace" class="control-label"> Workplace (Employer) </small>
+                        <input type="text" class="form-control text-sm" asp-for="oMemberWorkExperience.WorkPlace">
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberWorkExperience.Location" class="control-label"> Location </small>
+                        <input id="_Location_moMWE" type="text" class="form-control text-sm" asp-for="oMemberWorkExperience.Location">
+                    </div>
+                    <div class="col-md">
+                        <small asp-for="oMemberWorkExperience.CtryAlpha3Code" class="control-label"> Country </small>
+                        <select id="_CtryAlpha3Code_moMWE" class="form-control text-sm" asp-for="oMemberWorkExperience.CtryAlpha3Code" asp-items="Model.lkpCountries">
+                            <option value="" selected disabled> Select ... </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row mb-3" id="_divFromDate">
+                    <div class="col-md pt-1" id="_divIsCurrentWork">
+                        <small asp-for="oMemberWorkExperience.IsCurrentWork" class="control-label">&nbsp;</small>
+                        <label class="chk_container">
+                            <span class="text-sm font-weight-normal"> Current Job  </span>
+                            <input id="chk_IsCurrentWork_moMWE" type="checkbox" asp-for="oMemberWorkExperience.IsCurrentWork" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="col-md">
+                        <small asp-for="oMemberWorkExperience.FromDate" class="control-label"> Since </small>
+                        <input id="_FromDate_moMWE" type="date" class="form-control text-sm" asp-for="oMemberWorkExperience.FromDate">
+                    </div>
+                    <div class="col-md" id="_divToDate_moMWE">
+                        <small asp-for="oMemberWorkExperience.ToDate" class="control-label"> Until </small>
+                        <input  type="date" class="form-control text-sm" asp-for="oMemberWorkExperience.ToDate">
+                    </div>
+                </div>
+
+                <div class="form-row mb-3" id="_divReason_moMWE">
+                    <div class="col-md">
+                        <small asp-for="oMemberWorkExperience.Reason" class="control-label"> Any Reasons leaving ? </small>
+                        <textarea  maxlength="300" asp-for="oMemberWorkExperience.Reason" class="form-control text-sm" rows="3"></textarea>
+                    </div>
+                </div>
+
+            }
+
+        </form>
+    </div>
+}

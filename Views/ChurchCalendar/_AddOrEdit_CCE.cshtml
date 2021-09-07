@@ -1,0 +1,139 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.ChurchCalendarModel
+
+
+<div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center"
+     style="width: 80%; margin: 0px auto 10px auto ; padding:0;  ">
+
+    <form id="currForm_CCE" method="post" enctype="multipart/form-data" asp-action="AddOrEdit_CCE" class=" form-group bg-transparent"
+          style="margin-top:0px; padding-left: 3px; padding-right:3px;   ">
+
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="oChurchEvent.Id" id="_hdnCurrId_CCE" />
+        <input type="hidden" asp-for="oChurchEvent.ChurchBodyId" id="_hdnChuBodyId" />
+        <input type="hidden" asp-for="oChurchEvent.AppGlobalOwnerId" id="_hdnAppGloOwnId" />
+        @*<input type="hidden" asp-for="oChurchEvent.OwnedByChurchBodyId" />*@
+        <input type="hidden" asp-for="oChurchEvent.PhotoUrl" />
+        <input type="hidden" asp-for="oChurchEvent.Created" />
+        <input type="hidden" asp-for="oChurchEvent.LastMod" />
+
+        @{
+            if (Model.oChurchEvent != null)
+            {
+                <div class="form-row mb-3 mt-3">
+                    <div class="col-md-8">
+                        <small asp-for="oChurchEvent.strActivityTypeCode" class="control-label"> Activity Type </small>
+                        <select id="_oActivityTypeId" class="form-control text-sm" asp-for="oChurchEvent.strActivityTypeCode" asp-items="Model.lkp_ActivityType"></select>
+                        <span asp-validation-for="oChurchEvent.strActivityTypeCode" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3" id="_divEventActive">
+                        <small asp-for="oChurchEvent.IsEventActive" class="control-label">&nbsp;</small>
+                        @*<small class="chk_container">
+                            <span> Activated </span>
+                            <input id="chk_EventActive" type="checkbox" asp-for="oChurchEvent.IsEventActive" />
+                            <span class="checkmark"></span>
+                        </small>*@
+
+                        <label class="chk_container text-sm font-weight-normal">
+                            <span class="text-sm "> Activated </span>
+                            <input id="chk_EventActive" type="checkbox" asp-for="oChurchEvent.IsEventActive" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oChurchEvent.ChurchlifeActivityId" class="control-label">Church Activity</small>
+                        <select id="_ChurchLifeActivityId" class="form-control text-sm" asp-for="oChurchEvent.ChurchlifeActivityId" asp-items="Model.lkp_ChurchLifeActivity"></select>
+                        <span asp-validation-for="oChurchEvent.ChurchlifeActivityId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oChurchEvent.Subject " class="control-label">Subject</small>
+                        <input asp-for="oChurchEvent.Subject" class="form-control text-sm" autocomplete="off" />
+                        <span asp-validation-for="oChurchEvent.Subject" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oChurchEvent.Description" class="control-label">Description</small>
+                        <input asp-for="oChurchEvent.Description" class="form-control text-sm" autocomplete="off" />
+                        <span asp-validation-for="oChurchEvent.Description" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oChurchEvent.Venue" class="control-label">Venue</small>
+                        <input asp-for="oChurchEvent.Venue" class="form-control text-sm" autocomplete="off" />
+                        <span asp-validation-for="oChurchEvent.Venue" class="text-danger"></span>
+                    </div>
+                    <div class="col-md">
+                        <small asp-for="oChurchEvent.ChurchEventCategoryId" class="control-label">Categorized as: </small>
+                        <select id="_ChurchEventCategoryId" class="form-control text-sm" asp-for="oChurchEvent.ChurchEventCategoryId" asp-items="Model.lkp_ChurchEventCategory"></select>
+                        <span asp-validation-for="oChurchEvent.ChurchEventCategoryId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row mb-3">
+                    @*<div class="col-md" id="_divIsFullDay">
+                        <small asp-for="oChurchEvent.IsFullDay" class="control-label">&nbsp;</small>
+                        <small class="chk_container">
+                            <span> Full Day Event ? </span>
+                            <input id="chk_IsFullDay" type="checkbox" asp-for="oChurchEvent.IsFullDay" />
+                            <span class="checkmark"></span>
+                        </small>
+                    </div>*@
+                    <div class="col-md" id="_divIsFullDay">
+                        <small asp-for="oChurchEvent.IsFullDay" class="control-label">&nbsp;</small>
+                        <label class="chk_container text-sm font-weight-normal">
+                            <span class="text-sm "> Full Day Event ? </span>
+                            <input id="chk_IsFullDay" type="checkbox" asp-for="oChurchEvent.IsFullDay" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="col-md">
+                        <small asp-for="oChurchEvent.ThemeColor" class="control-label">Theme Color</small>
+                        <select id="_ThemeColor" class="form-control text-sm" asp-for="oChurchEvent.ThemeColor" asp-items="Model.lkp_ThemeColors"></select>
+                        <span asp-validation-for="oChurchEvent.ThemeColor" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row mb-3">
+                    <div class="col-md-6" id="_divEventFrom">
+                        <small asp-for="oChurchEvent.EventFrom" class="control-label">Event From</small>
+                        <input id="_EventFrom" asp-for="oChurchEvent.EventFrom" class="form-control text-sm" /> 
+                    </div>
+                    <div class="col-md-6" id="_divEventTo">
+                        <small asp-for="oChurchEvent.EventTo" class="control-label">Event To</small>
+                        <input id="_EventTo" asp-for="oChurchEvent.EventTo" class="form-control text-sm" /> 
+                    </div>
+                </div>
+
+                <br />
+                if (Model.oChurchBody.OrgType == "CH" || Model.oChurchBody.OrgType == "CR")
+                {
+                    <hr />
+                    <div class="form-row mb-3">
+                        <div class="form-group col">
+                            <small asp-for="oChurchEvent.SharingStatus" class="control-label">Sharing Status</small>
+                            <select class="form-control text-sm" asp-for="oChurchEvent.SharingStatus" asp-items="Model.lkpSharingStatus"></select>
+                            <span asp-validation-for="oChurchEvent.SharingStatus" class="text-danger"></span>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <input type="hidden" asp-for="oChurchEvent.SharingStatus" />
+                }
+            }
+        }
+
+    </form>
+</div>
+
+
+
+
+

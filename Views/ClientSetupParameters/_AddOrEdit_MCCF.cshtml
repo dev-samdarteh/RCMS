@@ -1,0 +1,114 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.MemberCustomCodeFormatModel
+
+@if (Model != null)
+{
+    <div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center w-75 " style="margin: 0 auto 0 auto ; padding: 0">
+        <form class="needs-validation bg-transparent p-2" novalidate id="currForm_MCCF" method="post" enctype="multipart/form-data" asp-action="AddOrEdit_MCCF">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*<input type="hidden" asp-for="oAppUtilityNVP.Id" id="_hdnCurrId_AGO" />*@
+            <input type="hidden" asp-for="oAppGloOwnId" />
+            <input type="hidden" asp-for="oChurchBodyId" />
+
+            <input type="hidden" asp-for="modNVPCode" />
+            @*<input type="hidden" asp-for="modSharingStatus" />*@
+            @*<input type="hidden" asp-for="modOwnedByChurchBodyId" />*@
+
+            <input type="hidden" asp-for="@Model.setIndex" id="_setIndex" />
+            <input type="hidden" asp-for="@Model.tempSetIndex" id="_tempSetIndex" />
+
+            <input type="hidden" asp-for="@Model.oChurchBodyId_Logged" id="_oChurchBody_Logged" />
+            <input type="hidden" asp-for="@Model.oAppGloOwnId_Logged" id="_oAppGloOwnId_Logged" />
+            <input type="hidden" asp-for="@Model.oUserId_Logged" id="_oCurrUserId_Logged" />
+
+
+            <div class="form-row mt-3">
+                <div class="col-md">
+                    <label class="chk_container font-weight-normal">
+                        <label class="font-weight-normal" asp-for="bl_IsAutogenMCCFCode"> Auto-generate Member Custom Code </label>
+                        <input id="chk_IsAutogenMCCFCode" type="checkbox" asp-for="bl_IsAutogenMCCFCode" />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+            <div id="_divMCCFDetails">
+                <div class="form-row mb-3">
+                    <div class="col-md-6">
+                        <small class="font-weight-normal" asp-for="strPrefix"> Prefix </small>
+                        <div class="input-group">
+                            <input id="_strPrefix" type="text" class="form-control" asp-for="strPrefix" placeholder="Prefix">
+                            @*<input id="_strPrefixDelim" type="text" class="form-control" asp-for="strPrefixDelim" placeholder="delimiter" style="width:30px">*@
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <small class="font-weight-normal" asp-for="strSuffix"> Suffix </small>
+                        <div class="input-group">
+                            @*<input id="_strSuffixDelim" type="text" class="form-control" asp-for="strSuffixDelim" placeholder="delimiter" style="width:50px">*@
+                            <input id="_strSuffix" type="text" class="form-control" asp-for="strSuffix" placeholder="Suffix">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row mb-3 mt-1" >
+                    <div class="col-md">
+                        <label class="chk_container font-weight-normal">
+                            <label class="font-weight-normal" asp-for="bl_IsLeadingZeros"> Leading Zeros [variable: min 4 digits] </label>
+                            <input id="chk_IsLeadingZeros" type="checkbox" asp-for="bl_IsLeadingZeros" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-row col-md-12 mb-3">
+                    <div class="text-md">
+                        <input id="_sampleLDZR" type="text" asp-for="strSampleTextLDZR" class="form-control bg-white border-left border-info" readonly >
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <hr style="border:1px inset #fff" />
+            <br />
+
+            @if ((Model.modOwnedByChurchBody?.OrgType == "CR" || Model.modOwnedByChurchBody?.OrgType == "CH") && Model.modOwnedByChurchBodyId == Model.oChurchBodyId_Logged)
+            {
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <div class="input-group mb-3">
+                            <div class="col-md-4">
+                                <small class="font-weight-normal" asp-for="strOwnershipStatus"> Scope </small>
+                                <input type="text" class="form-control text-sm" asp-for="strOwnershipStatus" placeholder="Scope" readonly>
+                                <input type="hidden" asp-for="modOwnedByChurchBodyId" />                                
+                            </div>
+                            <div class="col-md-8">
+                                <small class="font-weight-normal" asp-for="modSharingStatus"> Sharing Status </small>
+                                <select id="_modSharingStatus" class="form-control text-sm" asp-for="modSharingStatus" asp-items="Model.lkpSharingStatuses" aria-describedby="fd_SharingStatus" required>
+                                    <option selected value="">Select </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <div class="input-group mb-3">
+                            <div class="col-md-4">
+                                <small class="font-weight-normal" asp-for="strOwnershipStatus"> Scope </small>
+                                <input type="text" class="form-control text-sm" asp-for="strOwnershipStatus" placeholder="Scope" readonly>
+                                <input type="hidden" asp-for="modSharingStatus" />
+                            </div>
+                            <div class="col-md-8">
+                                @{ var strOwnCB = "Owned by " + (!string.IsNullOrEmpty(Model.strChurchLevel_OwnedByCB) ? "(" + Model.strChurchLevel_OwnedByCB + ")" : "");}
+                                <small class="font-weight-normal" asp-for="strOwnedByChurchBody"> @strOwnCB </small>
+                                <input type="text" class="form-control text-sm" asp-for="strOwnedByChurchBody" placeholder="Owned by" readonly>
+                                <input type="hidden" asp-for="modOwnedByChurchBodyId" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </form>
+    </div>
+}

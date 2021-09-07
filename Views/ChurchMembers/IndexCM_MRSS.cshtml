@@ -1,0 +1,468 @@
+﻿
+@model RhemaCMS.Models.ViewModels.vm_cl.CBMemRollModel
+
+@{
+    ViewData["Title"] = (!string.IsNullOrEmpty(ViewBag.AppName) ? ViewBag.AppName : "") + " - Member Roll Summary Sheet";
+}
+
+@if (Model != null)
+{
+    <body id="page-top" class="hold-transition sidebar-mini-md sidebar-toggled layout-fixed w-100"> 
+        <input type="hidden" id="_oChurchBodyId_Logged" data-value="@Model.oChurchBodyId_Logged" />
+        <input type="hidden" id="_oAppGloOwnId_Logged" data-value="@Model.oAppGloOwnId_Logged" />
+        <input type="hidden" id="_oUserId_Logged" data-value="@Model.oUserId_Logged" />
+
+
+        <div class="wrapper" id="divSetupMain">
+
+
+            <!-- Main content -->
+            <section class="content ">
+                @*<div class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i><div class="text-bold pt-2">Loading...</div></div>*@
+
+                <div class="container-fluid mt-5">
+                    <div class="content-header border-bottom mb-0 pb-0 mb-5">
+                        <div class="row m-0">
+                            <div class="col-sm">
+                                @{ var _strHeader = !string.IsNullOrEmpty(Model.strChurchBody) ? "  - " + Model.strChurchBody : "";
+                                    var _strMainTag = Model.taskIndex == 2 ? "Congregations" : "Member Roll Summary Sheet" ;
+                                }
+                                <h4 class="text-primary" style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: x-large; ">
+                                    @_strMainTag
+                                    <span id="_strHeader" class="text-black-50 text-md"> @_strHeader </span>
+                                </h4>
+                            </div>
+                            <div class="col-sm-3">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item active">
+                                        <a asp-controller="ChurchMembers" asp-action="IndexCM_MRSS" class="text-black-50">
+                                            <i class="fas fa-refresh mr-1"></i>
+                                        </a>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div id="section-cmbd" class="card card-light col-md-12 m-0 p-2 border-0 shadow-none">
+                            <div class="card-header bg-transparent shadow-none mb-0 pb-0 border-0">
+                                @* style=" border-bottom: 3px solid deepskyblue"*@
+                                <div class="form-row">
+                                    <div class="col-sm mb-0">
+                                        <div class="input-group rounded-top m-0 border border-bottom-0">
+                                            <span class="input-group-text bg-transparent border-0 text-center" id="basic-addon1" data-toggle="tooltip" data-placement="top" title="Total Roll"
+                                                  style="width: 40px; "><i class="fas fa-user-friends text-dark"></i></span>
+                                            <input type="text" role="button" class="form-control bg-gray-light text-xl-center  border-0" aria-label="Roll" aria-describedby="basic-addon1" asp-for="@Model.strGrandTotRoll"
+                                                   style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: large; " readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm mb-0">
+                                        <div class="input-group rounded-top  m-0 border border-bottom-0">
+                                            <span class="input-group-text bg-transparent border-0 text-center" id="basic-addon5" data-toggle="tooltip" data-placement="top" title="Non-Adult"
+                                                  style="width: 40px"> <i class="fas fa-walking fa-lg text-green"></i> </span>
+                                            <input type="text" role="button" class="form-control bg-gray-light  text-xl-center  border-0" aria-label="Non-Adult" aria-describedby="basic-addon5" asp-for="@Model.strGrandTot_NA"
+                                                   style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: large;" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm mb-0">
+                                        <div class="input-group rounded-top m-0 border border-bottom-0">
+                                            <span class="input-group-text bg-transparent border-0 text-center" id="basic-addon3" data-toggle="tooltip" data-placement="top" title="Adult (General)"
+                                                  style="width: 40px"> <i class="fas fa-user-slash text-dark text-center"></i></span>
+                                            <input type="text" role="button" class="form-control bg-gray-light  text-xl-center  border-0" aria-label="Adult" aria-describedby="basic-addon3" asp-for="@Model.strGrandTot_GA"
+                                                   style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: large;" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm mb-0">
+                                        <div class="input-group rounded-top  m-0 border border-bottom-0">
+                                            <span class="input-group-text bg-transparent border-0 text-center" id="basic-addon4" data-toggle="tooltip" data-placement="top" title="Older Adult"
+                                                  style="width: 40px"><i class="fas fa-neuter text-secondary"></i></span>
+                                            <input type="text" role="button" class="form-control bg-gray-light  text-xl-center  border-0"   aria-label="Older Adult" aria-describedby="basic-addon4" asp-for="@Model.strGrandTot_OA"
+                                                   style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: large;" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm mb-0">
+                                        <div class="input-group rounded-top  m-0 border border-bottom-0">
+                                            <span class="input-group-text bg-transparent border-0 text-center" id="basic-addon5" data-toggle="tooltip" data-placement="top" title="Leaders"
+                                                  style="width: 40px"> <i class="fas fa-user-shield text-primary"></i> </span>
+                                            <input type="text" role="button" class="form-control bg-gray-light  text-xl-center  border-0"  aria-label="Leaders" aria-describedby="basic-addon5" asp-for="@Model.strGrandTot_LDR"
+                                                   style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: large;" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm mb-0">
+                                        <div class="input-group rounded-top m-0 border border-bottom-0">
+                                            <span class="input-group-text bg-transparent border-0 text-center" id="basic-addon6" data-toggle="tooltip" data-placement="top" title="Clergy"
+                                                  style="width: 40px"> <i class="fas fa-user-tie text-purple"></i> </span>
+                                            <input type="text" role="button" class="form-control bg-gray-light text-xl-center  border-0"  aria-label="Clergy" aria-describedby="basic-addon6" asp-for="@Model.strGrandTot_CLG"
+                                                   style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: large;" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> @* card-light card-outline border-left border-right border-bottom *@
+                            <div class="card-header clearfix mb-2 pl-2 pr-2 shadow-sm card-gray card-outline border-left border-right border-bottom">
+                                <div class="form-row">
+                                    <div class="col-md-3 mb-1 mt-1">
+                                        <button id="btnInfo_CM" type="button" class="btn btn-light" data-container="body" data-toggle="popover" data-placement="bottom"
+                                                data-content="Church member data is core to the functionality of the entire app notably the Member Register module. Note: Member Profile may be referenced in any of the modules">
+                                            <i class="fa fa-info-circle text-black-50"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-md mb-1 mt-1 pt-2 text-center">
+                                        @if(Model.taskIndex == 1){
+                                            <small class="text-muted"> Keys:- M-Male | F-Female | C-Child | Y-Youth | YA-Young Adult | MA-Mid-Aged | AA-Aged </small>
+                                        }
+                                        else {
+                                    <small class="text-muted"> Keys:- M-Male | F-Female | C-Child | Y-Youth | GA-Adult (General) </small>
+                                        }
+                                    </div>
+                                    <div class="col-md-4 mb-1 mt-1">
+                                        @if (Model.oChurchBodyId == Model.oChurchBodyId_Logged)
+                                        {
+                                            <button type="button" class="btn btn-outline-dark border-0 shadow-sm float-right" style="background-color: lightskyblue"
+                                                    onclick="UpdCBMemRoll(@Model.oAppGloOwnId, @Model.oChurchBodyId)">
+                                                <i class="fas fa-edit mr-1"></i> <span class="text-sm text-bold"> Update Roll Sheet </span>
+                                            </button>
+                                        }
+
+
+                                        @{ var strDesc = '"' + Model.oChurchBody?.Name + '"'; }
+                                        <button type="button" class="btn btn-default border mr-1 float-right" onclick="ReloadCurrPageCM_MRSS(@Model.oChurchBodyId, @Model.taskIndex, @strDesc)">
+                                            <i class="fas fa-refresh text-secondary"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body mt-1 shadow-sm" style="border : 1px solid lightskyblue">
+                                <div id="divTabDataCM_MRSS" class="overlay-wrapper">
+                                    <div class="se-pre-con"></div>
+
+                                    @{ await Html.RenderPartialAsync("_vwIndexCM_MRSS", Model); }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+         
+        <div class="modal fade" id="divPopModal_AddEdit" tabindex="-1" role="dialog" aria-labelledby="_modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable " role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-pink text-dark">
+                        <h5 class="modal-title"> Editing: </h5> @*@Model.strCurrTask style="color: hotpink"*@
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div id="divModalBody_AddEdit_lg" class="modal-body bg-light" style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: 10pt">
+                    </div>
+                    <div class="modal-footer " style="background-color: lightgrey; left:auto; right: auto">
+                        <a role="button" class="btn btn-outline-light " data-dismiss="modal"> <span class="text-sm "> Cancel </span> </a>
+
+                        @*<button id="btnSaveChanges" type="submit" class="btn btn-outline-primary float-right">
+                                <i class="fas fa-database fa-sm"></i> Save changes
+                            </button>*@
+
+                        <button id="btnSaveChanges" type="submit" class="btn btn-outline-dark border-0 shadow-sm float-right" style="background-color: lightskyblue">
+                            <i class="fas fa-database mr-1"></i> <span class="text-bold"> Save changes </span>
+                        </button>
+                        <button id="btnSaveChanges_ProcToCMP" type="button" class="btn btn-light float-right" hidden>
+                            Proceed to Member Profile <i class="fas fa-arrow-right text-bold ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </body>
+
+}
+
+
+
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+<script> 
+    $(document).ready(function () {
+        // Animate loader off screen
+        $(".se-pre-con").fadeOut("slow");
+    });
+</script>
+
+    <script>
+
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
+
+        $(document).ready(function () {
+
+            let anchorlinks = document.querySelectorAll('a[href^="#section"]')
+
+            for (let item of anchorlinks) { // relitere
+                item.addEventListener('click', (e) => {
+                    let hashval = item.getAttribute('href')
+                    let target = document.querySelector(hashval)
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    })
+                    history.pushState(null, null, hashval)
+                    e.preventDefault()
+                })
+            }
+
+        });
+
+
+
+        $(document).ready(function () {
+
+            $('#smartwizard').smartWizard({
+                selected: 0,
+                theme: 'dots',
+                autoAdjustHeight: true,
+                transitionEffect: 'fade',
+                showStepURLhash: false,
+
+            });
+        });
+
+        var DisplaySuccessInfo = function (msg, reload = false) {
+
+            $.alert({
+                title: 'Done!',
+                type: 'green',
+                typeAnimated: true,
+                content: msg,
+                closeIcon: true,
+                closeIconClass: 'fa fa-close'
+            });
+
+        };
+
+        var DisplayErrorInfo = function (msg, reload = false) {
+
+            $.alert({
+                title: 'Oops!',
+                type: 'red',
+                typeAnimated: true,
+                content: msg,
+                closeIcon: true,
+                closeIconClass: 'fa fa-close'
+            });
+
+        };
+
+
+    var DisplaySuccessInfo_Reload_CM = function (msg, reload = false, resetNew = false, _setIndex = 6, _subSetIndex = 1, _currCMCode = '') {   //currSubSetIndex,  proScope, subScope,
+
+        // alert('success.. reload: ' + reload);
+
+        $.alert({
+            title: 'Done!',
+            type: 'green',
+            icon: 'success',
+            content: '<span style="color:#000">' + msg + '<span>',
+            html: true,
+            background: 'green',
+            typeAnimated: true,
+            // closeIcon: false,
+            closeIconClass: 'fa fa-close',
+            buttons: {
+                ok: function () {
+                    if (reload) {
+                        ReloadCurrPage_CM(_setIndex, _subSetIndex, _currCMCode);
+                    }
+
+                    //if (resetNew == true) {
+                    //    AddEditCurrData_CM(0, '', valCMCode,'', 1); //(0, currDenomId, currChuBodyId, currSetIndex, currSubSetIndex, _desc);
+                    //}
+                    //else {
+                    //    $("#divPopModal_AddEdit .close").click();
+                    //}
+                }
+            }
+        });
+
+        //if (reload) {
+        //    ReloadCurrPage();   //, currSubSetIndex , proScope, subScope
+        //}
+    };
+
+    var DisplayErrorInfo_Reload_CM = function (msg, reload = false, _setIndex = 6, _subSetIndex = 1, _currCMCode = '') {
+        //  alert('fail.. reload: ' + reload);
+
+        $.alert({
+            title: 'Oops!',
+            type: 'red',
+            //icon: 'fail',
+            content: '<span style="color:#000">' + msg + '<span>',
+            html: true,
+            background: 'red',
+            typeAnimated: true,
+            //closeIcon: true,
+            closeIconClass: 'fa fa-close',
+            buttons: {
+                ok: function () {
+                    if (reload) {
+                        ReloadCurrPage_CM(_setIndex, _subSetIndex, _currCMCode);
+                    }
+                }
+            }
+        });
+
+    };
+
+
+
+
+    </script>
+
+
+    <!-- CM_MRSS  no ADD, no DEL, only EDIT -->
+    <script>
+        //LoadTableCM_MRSS();
+
+        $(function () {
+            if ($.fn.dataTable.isDataTable('#tabDataCM_MRSS')) {
+                $('#tabDataCM_MRSS').DataTable();
+            }
+            else {
+                $('#tabDataCM_MRSS').DataTable({
+                    "responsive": true,
+                    "autoWidth": false,
+                    //"paging": true,
+                    //"lengthChange": false,
+                    "searching": true,
+                    //  "orderable": true,
+                    //"info": true,
+                    "order": [],
+                    "columnDefs": [{
+                        "targets": [0],
+                        "orderable": false,
+                    }]
+                });
+            }
+        });
+
+
+
+
+        var ReloadCurrPageCM_MRSS = function (currCBId, taskIndex = 1, hdrDesc = "") {
+            //alert('reload.. ')
+            //   public ActionResult IndexCM_MRSS(int? oCBid = null, bool isCBPar=false, bool loadLim = false)
+            if (taskIndex < 0) taskIndex = 1;
+            var url = '@Url.Action("IndexCM_MRSS", "ChurchMembers")?oCBid=' + currCBId + '&t_ndx=' + taskIndex + '&loadLim=true';
+
+            if (hdrDesc != '') hdrDesc = "  - " + hdrDesc;
+            $('#_strHeader').html(hdrDesc);
+
+            //alert(url)
+            $('#divTabDataCM_MRSS').load(url, function () {
+                if ($.fn.dataTable.isDataTable('#tabDataCM_MRSS')) {
+                    $('#tabDataCM_MRSS').DataTable();
+                }
+                else {
+                    $('#tabDataCM_MRSS').DataTable({
+                        "responsive": true,
+                        "autoWidth": false,
+                        //"paging": true,
+                        //"lengthChange": false,
+                        "searching": true,
+                        //  "orderable": true,
+                        //"info": true,
+                        "order": [],
+                        "columnDefs": [{
+                            "targets": [0],
+                            "orderable": false,
+                        }]
+                    });
+                }
+            });
+        }
+ 
+
+        var UpdCBMemRoll = function () { // (currSetIndex, currSubSetIndex) {
+            //    alert('save... ');
+
+           // const form = document.getElementById("currFormCM_MRSS");
+           // alert('val 4 .. ' + form.checkValidity())
+
+             var currFormData = new FormData($("#currFormCM_MRSS").get(0));
+                // var currFormData = $("#currFormCM_MRSS").serialize();
+               // alert('save... submitting...');
+
+                $.ajax({
+                    type: 'POST',
+                    // data: formdata,
+                    // processData: false,
+
+                    url: '@Url.Action("AddModCM_MRSS", "ChurchMembers")',
+
+                   // url: "/ChurchMembers/AddModCM_MRSS",
+                    data: currFormData,   //{ data: currFormData, taskIndx: oTask },  //
+                    //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+
+                        if (res.taskSuccess == true) {
+
+                            ReloadCurrPageCM_MRSS(res.currCBId);   //currId... via AJAX...
+
+                            // var ures = confirm("Add new member?");
+
+                            //alert($('#btnSaveChanges').text())
+
+                            if ($('#btnSaveChanges').text().includes('Save')) {  // newly added...
+                               // alert('adding new...')
+                               $.confirm({
+                                    title: 'Done!',
+                                    content: res.userMess + '. >> Add new member - biodata?',
+                                    type: 'green',
+                                    typeAnimated: true,
+                                    closeIcon: true,
+                                    closeIconClass: 'fa fa-close',
+                                    ///
+                                    buttons: {
+                                        close: function () {
+                                            AddEditCurrDataCM_MRSS(res.currCBId, res.currId, res.memDispName);
+                                            document.querySelector('#btnSaveChanges').innerHTML = '<i class="fas fa-database text-bold mr-1"></i> Update';
+                                            // enable the proceed to ... btn
+                                            $('#btnSaveChanges_ProcToCMP').prop('hidden', false);
+                                        },
+                                        ///
+                                        'ok add new': function () {
+                                            AddEditCurrDataCM_MRSS(res.currCBId, 0, "'[New] Church Member - Biodata'");
+                                            document.querySelector('#btnSaveChanges').innerHTML = '<i class="fas fa-database text-bold mr-1"></i> Save changes';
+                                            $('#btnSaveChanges_ProcToCMP').prop('hidden', 'hidden');
+                                        },
+                                    }
+                                });
+                            }
+
+                            else {   // update..
+                               // alert('updating...')
+                                DisplaySuccessInfo(res.userMess);
+                                $("#divPopModal_AddEdit .close").click();
+                            }
+                        }
+
+                        else //if (res.taskSuccess == false)
+                        {
+                            DisplayErrorInfo(res.userMess);
+                        }
+
+                    }
+                })
+
+        }
+
+
+
+    </script>
+     
+}

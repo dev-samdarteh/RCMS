@@ -1,0 +1,228 @@
+﻿
+@model RhemaCMS.Models.ViewModels.vm_cl.MemberBioModel
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<input type="hidden" asp-for="oChurchMember.Id" id="_hdnCurrIdCM_BD" />
+<input type="hidden" asp-for="oChurchMember.ChurchBodyId" id="_ChurchBodyId" />
+<input type="hidden" asp-for="oChurchMember.AppGlobalOwnerId" id="_AppGlobalOwnerId" />
+
+<input type="hidden" asp-for="bl_AUT_GN" id="_bl_AUT_GN" />
+<input type="hidden" asp-for="oChurchMember.Created" />
+<input type="hidden" asp-for="oChurchMember.LastMod" />
+<input type="hidden" asp-for="oChurchMember.CreatedByUserId" />
+<input type="hidden" asp-for="oChurchMember.LastModByUserId" />
+
+<input type="hidden" asp-for="@Model.setIndex" id="_setIndex" />
+<input type="hidden" asp-for="@Model.subSetIndex" id="_subSetIndex" />
+
+<input type="hidden" asp-for="@Model.oChurchBodyId_Logged" id="_oChurchBodyId_Logged" />
+<input type="hidden" asp-for="@Model.oAppGloOwnId_Logged" id="_oAppGloOwnId_Logged" />
+<input type="hidden" asp-for="@Model.oUserId_Logged" id="_oUserId_Logged" />
+
+@if (Model.oChurchMember != null)
+{
+
+    <div class="form-row mb-2">
+        <div class="col-md">
+            <small class="text-black-50" asp-for="strChurchBody"> Member belongs to: </small>
+            <p class="text-sm text-black-50 text-bold" type="text" asp-for="strChurchBodyDetail">@Model.strChurchBodyDetail</p>
+            <hr class="cus-div" style="width:100%; border: 1px solid #b7b5b5;" />
+        </div>
+    </div>
+
+    @*var photoPath = "~/img_db/" + (Model.oChurchMember.PhotoUrl ?? "df_user_p.png");
+
+        <div class="col-md cus-rel-center mb-2">
+            <div class="overlay-wrapper">
+                <div class="text-center mb-2">
+                    <img class="profile-user-img img-fluid img-circle" style="min-width: 150px; min-height:150px; max-width: 150px; max-height:150px;"
+                         src="@Url.Content(photoPath)" alt="User profile photo">
+                </div>
+            </div>
+        </div>*@
+
+     
+        @if (Model.oChurchMember.Id > 0 && !string.IsNullOrEmpty(Model.strAccountStatus))
+        {
+            <div class="form-row mb-2">
+                <div class="col-md-4 float-right">
+                    <small asp-for="oChurchMember.Status" class="control-label"> Profile Status </small>
+                    @if (Model.oChurchMember.Status == "A")
+                    {
+                    <input type="text" class="form-control text-sm text-center bg-success" asp-for="strAccountStatus" readonly>
+                    }
+                     else if (Model.oChurchMember.Status == "T")
+                    {
+                    <input type="text" class="form-control text-sm text-center bg-info" asp-for="strAccountStatus" readonly>
+                    }
+                    else if (Model.oChurchMember.Status == "H")
+                    {
+                    <input type="text" class="form-control text-sm text-center bg-warning" asp-for="strAccountStatus" readonly>
+                    }
+                    else if (Model.oChurchMember.Status == "D")
+                    {
+                    <input type="text" class="form-control text-sm text-center bg-danger" asp-for="strAccountStatus" readonly>
+                    }
+                    else if (Model.oChurchMember.Status == "X")
+                    {
+                    <input type="text" class="form-control text-sm text-center bg-secondary" asp-for="strAccountStatus" readonly>
+                    }
+                    else
+                    {
+                    <input type="text" class="form-control text-sm text-center bg-light" asp-for="strAccountStatus" readonly>
+                    }
+
+                    <input type="hidden" asp-for="oChurchMember.Status" />
+                </div>
+            </div>
+        } 
+    <div class="form-row mb-2">
+        <div class="col-md">
+            <small asp-for="oChurchMember.strMemDisplayName" class="control-label"> Member Name </small>
+            <input asp-for="strMemDisplayName" class="form-control text-sm" placeholder="Name of Member" readonly />
+        </div>
+
+        @*<div class="col-md-2 ">
+                <small asp-for="oChurchMember.Title" class="control-label">Title</small>
+                <input asp-for="oChurchMember.Title" class="form-control text-sm" placeholder="Title" readonly />
+            </div>
+            <div class="col-md">
+                <small asp-for="oChurchMember.FirstName " class="control-label">First Name</small>
+                <input asp-for="oChurchMember.FirstName" class="form-control" placeholder="First Name" readonly />
+            </div>
+            <div class="col-md">
+                <small asp-for="oChurchMember.MiddleName " class="control-label">Middle Name</small>
+                <input asp-for="oChurchMember.MiddleName" class="form-control" placeholder="Middle Name" readonly />
+            </div>
+            <div class="col-md-4">
+                <small asp-for="oChurchMember.LastName " class="control-label">Last Name</small>
+                <input asp-for="oChurchMember.LastName" class="form-control" placeholder="Last Name" readonly />
+            </div>*@
+    </div>
+    <div class="form-row mb-2">
+        <div class="col-md-4">
+            <small asp-for="oChurchMember.Gender" class="control-label">Gender</small>
+            <input asp-for="strGender" class="form-control text-sm" placeholder="Gender" readonly />
+        </div>
+        <div class="col-md">
+            <small asp-for="oChurchMember.MaidenName " class="control-label">Maiden Name</small>
+            <input asp-for="oChurchMember.MaidenName" class="form-control text-sm" placeholder="Maiden Name" readonly />
+        </div>
+    </div>
+    <div class="form-row mb-2">
+        <div class="col-md-4" id="_divMaritalStatus">
+            <small asp-for="oChurchMember.MaritalStatus" class="control-label">Marital Status</small>
+            <input asp-for="strMaritalStatus" class="form-control text-sm" placeholder="Gender" readonly />
+        </div>
+        <div class="input-group col-md-8" aria-describedby="fd_AgeBracket">
+            <div class="col-md-8 m-0 p-0">
+                <small asp-for="oChurchMember.DateOfBirth " class="control-label">Date of Birth</small>
+                <input id="_DateOfBirth" type="text" asp-for="strDateOfBirth" class="form-control text-sm" placeholder="Date of Birth" readonly />
+            </div>
+            <div class="col-md-4 m-0 p-0">
+                <small asp-for="oChurchMember.DateOfBirth" class="control-label"> Age </small>
+                <input id="_strMemberAge" asp-for="strMemberAge" class="form-control text-sm" readonly />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row mb-2" id="_divMarriageType" hidden>
+        <div class="col-md-4">
+            <small asp-for="oChurchMember.MarriageType" class="control-label">Marriage Type</small>
+            <input asp-for="strMarriageType " class="form-control text-sm" placeholder="Marriage Type" readonly />
+        </div>
+        <div class="col-md mb-2" id="_divMarriageRegNo" hidden>
+            <small asp-for="oChurchMember.MarriageRegNo" class="control-label">Marriage Cert. No. </small>
+            <input id="_MarriageRegNo" type="text" class="form-control text-sm" asp-for="oChurchMember.MarriageRegNo" readonly />
+        </div>
+    </div>
+
+    <div class="form-row mb-2">
+        <div class="col-md">
+            <small class="font-weight-normal" asp-for="oChurchMember.GlobalMemberCode"> Member Code</small>
+            <input type="text" class="form-control text-sm" maxlength="50" asp-for="oChurchMember.GlobalMemberCode" placeholder="Church code" aria-describedby="fd_GlobalMemberCode" readonly>
+        </div>
+        <div class="col-md">
+            <small class="font-weight-normal" asp-for="oChurchMember.MemberCustomCode"> Member Custom Code </small>
+            <input id="_MemberCustomCode" type="text" class="form-control text-sm" maxlength="50" asp-for="oChurchMember.MemberCustomCode" placeholder="Church code" aria-describedby="fd_MemberCustomCode" readonly>
+        </div>
+        <div class="col-md-2">
+            <small class="font-weight-normal" asp-for="oChurchMember.Id"> #Item Id </small>
+            <input type="text" class="form-control text-sm text-center" maxlength="50" asp-for="oChurchMember.Id" placeholder="#Item Id" readonly>
+        </div>
+    </div>
+    <div class="form-row mb-2">
+        <div class="col-md">
+            <small asp-for="oChurchMember.NationalityId" class="control-label">Nationality</small>
+            <input asp-for="strNationality" class="form-control text-sm" placeholder="Nationality" readonly />
+        </div>
+        <div class="col-md">
+            <small asp-for="oChurchMember.MotherTongueId" class="control-label">Mother Tongue</small>
+            <input asp-for="strMotherTongue" class="form-control text-sm" placeholder="Mother Tongue" readonly />
+        </div>
+    </div>
+    <div class="form-row mb-2">
+        <div class="col-md">
+            <small asp-for="oChurchMember.Hometown" class="control-label">Hometown</small>
+            <input type="text" class="form-control text-sm" asp-for="oChurchMember.Hometown" readonly />
+        </div>
+        <div class="col-md">
+            <small asp-for="oChurchMember.HometownRegionId" class="control-label">Hometown Region</small>
+            <input asp-for="strHometownRegion" class="form-control text-sm" placeholder="Hometown Region" readonly />
+        </div>
+    </div>
+    <div class="form-row mb-2">
+        <div class="col-md">
+            <small asp-for="oChurchMember.IdTypeId" class="control-label">National Id Type</small>
+            <input asp-for="strIdType" class="form-control text-sm" placeholder="Id Type" readonly />
+        </div>
+        <div class="col-md" id="_divNational_IdNum" hidden>
+            <small asp-for="oChurchMember.National_IdNum" class="control-label"> ID Number </small>
+            <input id="_National_IdNum" type="text" maxlength="50" class="form-control text-sm" asp-for="oChurchMember.National_IdNum" placeholder="National ID Number" readonly />
+        </div>
+    </div>
+
+    <div class="form-row mb-2">
+        <div class="col-md">
+            <small class="font-weight-normal" asp-for="oChurchMember.Hobbies"> Hobbies </small>
+            <input type="text" maxlength="50" class="form-control text-sm" asp-for="oChurchMember.Hobbies" placeholder="Hobbies" readonly>
+        </div>
+    </div>
+    <div class="form-row mb-2">
+        <div class="col-md-4">
+            <small asp-for="strMemType" class="control-label"> Member Type </small>
+            <input type="text" class="form-control text-sm" asp-for="strMemType" placeholder="Member Type" aria-describedby="fd_strMemType" readonly /> 
+        </div>
+        <div class="col-md">
+            <small asp-for="oChurchMember.numMemRankId" class="control-label"> Member Rank </small>
+            <input type="text" class="form-control text-sm" asp-for="strMemRank" placeholder="Member Rank" aria-describedby="fd_strMemRank" readonly />
+        </div>
+        <div class="col-md">
+            <small asp-for="oChurchMember.numMemTypeId" class="control-label"> Member Status </small>
+            <input type="text" class="form-control text-sm" asp-for="strMemStatus" placeholder="Member Status" aria-describedby="fd_strMemStatus" readonly />
+        </div>
+    </div>
+
+    @*<div class="form-row mb-2">
+        <div class="col-md">
+            <small asp-for="oChurchMember.MemberClass" class="control-label">Member Class</small>
+            <input asp-for="strMemberScope" class="form-control text-sm" placeholder="Member Class" readonly />
+        </div>
+        <div class="col-md">
+            <small asp-for="strMemStatus" class="control-label">Member Status</small>
+            <input type="text" class="form-control text-sm" asp-for="strMemStatus" readonly />
+        </div>
+        <div class="col-md">
+            <small asp-for="oChurchMember.Status" class="control-label">Account Status</small>
+            <input asp-for="strMemStatus" class="form-control text-sm" placeholder="Account Status" readonly />
+        </div>
+    </div>*@
+
+    <div class="form-row mb-2">
+        <div class="col-md">
+            <small class="font-weight-normal" asp-for="oChurchMember.Notes"> Member Brief (Notes) </small>
+            <textarea maxlength="300" asp-for="oChurchMember.Notes" class="form-control text-sm" rows="3" readonly></textarea>
+        </div>
+    </div>
+}

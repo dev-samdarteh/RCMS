@@ -1,0 +1,187 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_app_ven.UserProfileModel
+
+
+@if (Model != null)
+{
+    int? _oAGOId = -1; if (Model.oAppGloOwnId != null) { _oAGOId = (int)Model.oAppGloOwnId; };
+    int? _oCBId = -1; if (Model.oChurchBodyId != null) { _oCBId = (int)Model.oChurchBodyId; }
+
+
+    @*<table id="tabData_UP" class="table table-sm table-bordered table-striped table-responsive-sm table-hover w-100 p-1" cellspacing="0">*@
+    <table id="tabData_UP" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th class="pl-1" style="text-align:left; vertical-align: middle">
+                    User Description
+                </th>
+                <th style="vertical-align: middle">
+                    Username
+                </th>
+                <th style="vertical-align: middle">
+                    Denomination
+                </th>
+                <th style="vertical-align: middle">
+                    Congregation
+                </th>
+                <th align="left" style="vertical-align: middle; text-align:left ">
+                    Expires
+                </th>
+                <th style="vertical-align: middle">
+                    Status
+                </th>
+                <th style="text-align: center; width: auto; vertical-align: middle">
+                    @*<a class="btn btn-light btn-sm " asp-controller="AppVenAdmin" asp-action="Index_UP" asp-route-setIndex="@Model.setIndex" data-backdrop="static" data-keyboard="false">
+                            <i class="fa fa-refresh fa-sm text-success"></i>
+                        </a>*@
+
+                    <a role="button" data-remote="false" class="btn btn-default btn-sm text-success border-0" data-backdrop="static"
+                       onclick="ReloadCurrPage(@Model.setIndex )">
+                        <i class="fa fa-refresh "></i>
+                    </a>
+
+                    <div class="btn-group dropright">
+                        <button type="button" class="btn btn-light dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                data-placement="top" title="Add administrator account">
+                            <i class="fas fa-user-plus text-primary"></i>  &nbsp; Add
+                        </button>
+
+                        <div class="dropdown-menu p-1">
+                            @if (Model.setIndex == 1 && string.Compare(Model.oUserProfileScope_Logged, "V", true) == 0 && // Model.oUserProfileLevel_Logged == 1 &&
+                               (Model.arrAssignedPermCodes.Contains("A0_01"))) // || Model.arrAssignedPermCodes.Contains("A0_01")))
+                            //string.Compare(Model.oUserProfile_Logged.Username, "sys",true)==0 && string.Compare(Model.oUserProfile_Logged.ProfileScope, "V", true) == 0) //  // && Model.subSetIndex == 1)  //(Model.strAppCurrUser_RoleCateg == "SYS") //SYS task
+                            {
+                                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light btn-sm" data-backdrop="static" 
+                                   onclick="AddEditCurrData_UP(0, @_oAGOId, @_oCBId, 1, 2, '[New] Super Admin Account')">
+                                    <i class="fas fa-screwdriver fa-sm "></i> &nbsp; Super Admin Profile
+                                </a>
+                            }
+                            @if (Model.setIndex == 1 && string.Compare(Model.oUserProfileScope_Logged, "V", true) == 0 && // Model.oUserProfileLevel_Logged == 2 &&
+                              (Model.arrAssignedPermCodes.Contains("A0_02")))
+                            //string.Compare(Model.oUserProfile_Logged.Username, "supadmin", true) == 0 ) // //  //(Model.strAppCurrUser_RoleCateg == "SUP_ADMN") //(Model.subSetIndex == 2)  //SUP_ADMN task
+                            {
+                                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light btn-sm " data-backdrop="static" 
+                                   onclick="AddEditCurrData_UP(0, @_oAGOId, @_oCBId, 1, 3, '[New] System Admin Account')">
+                                    <i class="fas fa-user-cog fa-sm "></i> &nbsp; System Admin Profile
+                                </a>
+                            }
+
+                            @if (Model.setIndex == 1 && string.Compare(Model.oUserProfileScope_Logged, "V", true) == 0 && // Model.oUserProfileLevel_Logged == 2 &&
+                              (Model.arrAssignedPermCodes.Contains("A0_02")))
+                            //string.Compare(Model.oUserProfile_Logged.Username, "supadmin", true) == 0 ) // //  //(Model.strAppCurrUser_RoleCateg == "SUP_ADMN") //(Model.subSetIndex == 2)  //SUP_ADMN task
+                            {
+                                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light btn-sm " data-backdrop="static" 
+                                   onclick="AddEditCurrData_UP(0, @_oAGOId, @_oCBId, 1, 4, '[New] Client System Assist Account')">
+                                    <i class="fas fa-user-cog fa-sm "></i> &nbsp; Client System Assist Profile
+                                </a>
+                            }
+
+                            @if ((Model.setIndex == 2 || Model.setIndex == 3 || Model.setIndex == 4) && // Model.oUserProfileLevel_Logged >= 2 && Model.oUserProfileLevel_Logged <= 5  &&
+                              (Model.arrAssignedPermCodes.Contains("A0_06"))) // || Model.arrAssignedPermCodes.Contains("A0_02") || Model.arrAssignedPermCodes.Contains("A0_11")))                                
+                                //(Model.strAppCurrUser_RoleCateg == "SUP_ADMN" || Model.strAppCurrUser_RoleCateg == "SYS_ADMN" || Model.strAppCurrUser_RoleCateg == "SYS_CUST") // SUP_ADMN or SYS_ADMN task
+                                // string.Compare(Model.oUserProfile_Logged.ProfileScope, "V", true) == 0 && //string.Compare(Model.oUserProfile_Logged.Username, "sys", true) != 0 ) //
+                            
+                            {
+                                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light btn-sm" data-backdrop="static"
+                                   onclick="AddEditCurrData_UP(0, @_oAGOId, @_oCBId, 2, 6, '[New] Church Admin Profile')">
+                                    <i class="fas fa-user-cog fa-sm"></i> &nbsp; Church Administrator
+                                </a>
+                                <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light btn-sm" data-backdrop="static"
+                                   onclick="AddEditCurrData_UP(0, @_oAGOId, @_oCBId, 2, 11, '[New] Congregation Administrator Profile')">
+                                    <i class="fas fa-user-cog fa-sm "></i> &nbsp; Congregation Administrator
+                                </a>
+                            }
+
+                        </div>
+                    </div>
+
+                    @*<a class="btn btn-light btn-sm " asp-controller="AppVenAdmin" asp-action="AddOrEdit_UP_ChangePwd" asp-route-setIndex="@Model.setIndex" data-backdrop="static" data-keyboard="false">
+                            <i class="fa fa-refresh fa-sm text-danger" ></i>
+                        </a>*@
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lsUserProfileModels)
+            {
+                var strDesc = "'" + item.oUserProfile.UserDesc + "'";
+                <tr>
+                    <td class="pl-1" align="left" style="vertical-align: middle">
+                        @*<a id="btnAddEdit" class="btn btn-link btn-sm" data-remote="false" asp-controller="AppVenAdmin" asp-action="Index_UP" asp-route-oDenomId="@Model.oAppGlolOwnId" asp-route-oCurrChuBodyId="@Model.oChurchBodyId"
+                               asp-route-id="@item.oUserProfile.Id" asp-route-setIndex="@Model.setIndex" asp-route-subSetIndex="@Model.subSetIndex" asp-route-pageIndex="2" data-backdrop="static" data-keyboard="false">
+                                @item.oUserProfile.UserDesc
+                            </a>*@
+
+                        <a id="btnAddEdit" class="btn btn-link btn-sm" data-remote="false" asp-controller="AppVenAdmin" asp-action="Index_UP" asp-route-setIndex="1" asp-route-pageIndex="2" data-backdrop="static" data-keyboard="false">
+                            @item.oUserProfile.UserDesc
+                        </a>
+                    </td>
+                    <td style="vertical-align: middle">
+                        @item.oUserProfile.Username
+                    </td>
+                    <td style="vertical-align: middle">
+                        @item.strAppGlobalOwn
+                    </td>
+                    <td style="vertical-align: middle">
+                        @item.strChurchBody
+                    </td>
+                    <td style="vertical-align: middle; text-align:left ">
+                        @item.oUserProfile.strExpr
+                    </td>
+                    <td style="vertical-align: middle; text-align:center">
+                        @if (item.oUserProfile.UserStatus == "A")
+                        {<span class="badge badge-success text-center text-light font-weight-normal border"> <i class="fas fa-check fa-sm text-light mr-1"></i>  @item.oUserProfile.strUserStatus </span> }
+                        else
+                        { <span class="badge badge-light text-center text-secondary font-weight-normal border"> <i class="fas fa-times fa-sm mr-1"></i> @item.oUserProfile.strUserStatus </span>}
+                    </td>
+
+                    <td style=" vertical-align: middle ; text-align:center">
+                        @* @if ((Model.subSetIndex >= 1 && Model.subSetIndex <= 5) || (Model.subSetIndex == 6 || Model.subSetIndex == 11))      Vendor edits admin profiles and church admins (Model.strAppCurrUser_RoleCateg == "SYS" || Model.strAppCurrUser_RoleCateg == "SUP_ADMN" || Model.strAppCurrUser_RoleCateg == "SYS_ADMN" || Model.strAppCurrUser_RoleCateg == "SYS_CUST" || Model.strAppCurrUser_RoleCateg == "SYS_ADMN" || Model.strAppCurrUser_RoleCateg == "SYS_CUST")  *@
+
+                        @{ 
+                            if ((item.oUserProfile.ProfileLevel == 1 && Model.arrAssignedPermCodes.Contains("A0_00")) ||
+                                (item.oUserProfile.ProfileLevel == 2 && Model.arrAssignedPermCodes.Contains("A0_01")) ||
+                                (item.oUserProfile.ProfileLevel == 3 && Model.arrAssignedPermCodes.Contains("A0_02")) ||
+                                (item.oUserProfile.ProfileLevel == 4 && Model.arrAssignedPermCodes.Contains("A0_04")) ||
+                                ((item.oUserProfile.ProfileLevel == 6 || item.oUserProfile.ProfileLevel == 11) && Model.arrAssignedPermCodes.Contains("A0_06")))
+                            {
+                                _oAGOId = item.oUserProfile.AppGlobalOwnerId; _oCBId = item.oUserProfile.ChurchBodyId;
+                                _oAGOId = _oAGOId == null ? -1 : _oAGOId; _oCBId = _oCBId == null ? -1 : _oCBId;
+
+                                <div class="btn-group dropright">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-ellipsis-v fa-sm"></i>
+                                    </button>
+                                    <div class="dropdown-menu p-1">
+                                        <a href="#" id="btnAddEdit" data-remote="false" class="btn btn-light btn-sm text-primary" data-backdrop="static"
+                                           onclick="AddEditCurrData_UP(@item.oUserProfile.Id, @_oAGOId, @_oCBId, @Model.setIndex, @Model.subSetIndex, @strDesc)">
+                                            <i class="fa fa-pencil fa-sm "></i> &nbsp; Edit
+                                        </a>
+                                        @*  var DeleteCurrData_UP = function (currId, currSetIndex, currSubSetIndex, forceDeleteConfirm = false, msg = "")  @_oAGOId,  @_oCBId,  *@
+
+                                        @if ((item.oUserProfile.ProfileLevel == 1 && Model.arrAssignedPermCodes.Contains("A0_00")) ||
+                                          (item.oUserProfile.ProfileLevel == 2 && Model.arrAssignedPermCodes.Contains("A0_00")) ||
+                                          (item.oUserProfile.ProfileLevel == 3 && Model.arrAssignedPermCodes.Contains("A0_01")) ||
+                                          (item.oUserProfile.ProfileLevel == 4 && Model.arrAssignedPermCodes.Contains("A0_01")) ||
+                                          ((item.oUserProfile.ProfileLevel == 6 || item.oUserProfile.ProfileLevel == 11) &&
+                                           (Model.arrAssignedPermCodes.Contains("A0_01") || Model.arrAssignedPermCodes.Contains("A0_04")))
+                                          )
+                                        {
+                                            <a href="#" class="btn btn-light btn-sm text-danger small" onclick="DeleteCurrData_UP(@_oAGOId, @_oCBId, @item.oUserProfile.Id, @Model.setIndex, @Model.subSetIndex, false, '')">
+                                                <i class="fa fa-trash fa-sm"></i> &nbsp; Delete
+                                            </a>
+                                        } 
+                                    </div>
+                                </div>
+                            }
+
+                         // @if (Model.oUserProfileLevel_Logged <= item.oUserProfile.ProfileLevel)@* Vendor edits admin profiles and church admins (Model.strAppCurrUser_RoleCateg == "SYS" || Model.strAppCurrUser_RoleCateg == "SUP_ADMN" || Model.strAppCurrUser_RoleCateg == "SYS_ADMN" || Model.strAppCurrUser_RoleCateg == "SYS_CUST" || Model.strAppCurrUser_RoleCateg == "SYS_ADMN" || Model.strAppCurrUser_RoleCateg == "SYS_CUST")  *@
+                       }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+}

@@ -1,0 +1,761 @@
+﻿
+@model RhemaCMS.Models.ViewModels.vm_cl.ChurchCalendarModel
+
+@{
+    ViewData["Title"] = (!string.IsNullOrEmpty(ViewBag.AppName) ? ViewBag.AppName : "") + " - Church Calendar";
+}
+
+@if (Model != null)
+{
+    <body id="page-top" class="hold-transition sidebar-mini-md sidebar-toggled layout-fixed w-100">
+        @{
+            var _oCBId = Model.oChurchBodyId != null ? (int)Model.oChurchBodyId : -1;
+            // var _oAGOId = Model.oAppGlolOwnId != null ? (int)Model.oAppGlolOwnId : -1;
+        }
+
+        @*<input type="hidden" asp-for="@Model.setIndex" id="_setIndex" />
+            <input type="hidden" asp-for="@Model.oChurchBodyId_Logged" id="_oChurchBody_Logged" />
+            <input type="hidden" asp-for="@Model.oAppGlolOwnId_Logged" id="_oAppGloOwnId_Logged" />
+            <input type="hidden" asp-for="@Model.oUserId_Logged" id="_oUserId_Logged" />*@
+
+
+        @*<input type="hidden" id="_oSetIndex" data-value="@Model.setIndex" />
+            <input type="hidden" id="_oAppGloOwnId_Logged" data-value="@Model.oAppGloOwnId_Logged" />
+            <input type="hidden" id="_oChurchBodyId_Logged" data-value="@Model.oChurchBodyId_Logged" />
+            <input type="hidden" id="_oUserId_Logged" data-value="@Model.oUserId_Logged" />*@
+
+
+
+        <div class="wrapper" id="divSetupMain">
+
+            <div class="content-header border-bottom border-info mb-3 pb-0">
+                <div class="row m-0">
+                    <div class="col-sm">
+                        <h4> Church Calendar (Global Scope) </h4>
+                    </div>
+                    <div class="col-sm-4">
+                        <ol class="breadcrumb float-sm-right" style="list-style-type: none;">
+                            <li>
+                                <a role="button" class="btn btn-light" data-toggle="tooltip" data-placement="bottom" title="Tithe Payments"
+                                   asp-controller="ChurchCalendar" asp-action="Index" asp-route-oCBid="@Model.oChurchBodyId">
+                                    <i class="fas fa-list text-dark mr-1"></i>
+                                </a>
+                            </li>
+                            @*<li>
+                                    <a role="button" class="btn btn-light" data-toggle="tooltip" data-placement="bottom" title="Reload data"
+                                       onclick="AddEditCurrDataCM_MPC(@Model.oChurchBodyId, @Model.oChurchMemberId, -1, @Model.setIndex)">
+                                        <i class="fas fa-refresh text-dark mr-1"></i>
+                                    </a>
+                                </li>*@
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container mt-2 mb-2">
+                    <div class="col-md">
+                        @*@{ var strDesc = '"' +  "Tithe Payment" + '"'; }*@
+
+                        @*@if (Model.setIndex == 0 || Model.setIndex == 1)
+                            {*@
+
+
+
+
+
+
+
+
+                        <div class="card mb-3 " style="background-color: transparent; width: 100%; ">
+                            @*<div class="card-header bg-light  " style="color: darkslategray ;  ">
+                                    <div>
+                                        <i class="fas fa-users fa-lg" style="color: darkslategray" ;></i>&nbsp;&nbsp;
+                                        <span style=" font-size: x-large; text-transform:uppercase"> Church Calendar (Almanac) - </span>
+                                        <span style="font-size: x-large; font-variant-caps: titling-caps; color: tomato">
+                                            @Model.oChurchBody?.Name
+                                        </span>
+                                    </div>
+                                </div>*@
+
+                            <div class="card-header bg-info rounded-bottom border-0 justify-content-center" style="color: lightyellow; margin: 1px ">
+                                <div class="text-sm-center small ">
+
+                                    <i class="fas fa-building "></i>
+                                    <span>
+                                        @Model.strActivityCount_Global  : @Model.ActivityCount_Global
+                                        &nbsp;&nbsp; | &nbsp;&nbsp;
+                                    </span>
+
+                                    @if (Model.oChurchBody?.ParentChurchBodyId != null)
+                                    {
+                                        <i class="fas fa-arrow-alt-circle-up "></i>
+                                        <span>
+                                            @Model.strActivityCount_Parent : @Model.ActivityCount_Parent
+                                            &nbsp;&nbsp; | &nbsp;&nbsp;
+                                        </span>
+                                        <i class="fas fa-church "></i>
+                                        <span>
+                                            @Model.strActivityCount_Local  : @Model.ActivityCount_Local
+                                            &nbsp;&nbsp; | &nbsp;&nbsp;
+                                        </span>
+                                    }
+
+                                    <i class="fa fa-question-circle-o "></i>
+                                    <span>
+                                        Uncategorized : @Model.ActivityCount_Uncat
+
+                                    </span>
+
+                                    @*<i class="fas fa-user-friends "></i>
+                                        Member Roll : @Model.CHCF_TotMem
+                                        <i class="fas fa-male fa-lg" style="color:deepskyblue"></i>
+                                        Males :  @Model.CHCF_TotMaleMem
+                                        &nbsp;&nbsp; | &nbsp;&nbsp;
+                                        <i class="fas fa-female fa-lg" style="color:deeppink"></i>
+                                        Females :  @Model.CHCF_TotFemMem
+                                        &nbsp;&nbsp; | &nbsp;&nbsp;
+                                        <i class="fas fa-question-circle fa-lg" style="color: lightyellow"></i>
+                                        Other :  @Model.CHCF_TotOtherMem
+                                        &nbsp;&nbsp; | &nbsp;&nbsp;
+                                        <i class="fas fa-plus fa-lg" style="color: lightgreen"></i>
+                                        New Members :  @Model.CHCF_TotNewMem*@
+                                </div>
+                            </div>
+
+                            <!-- Nav tabs -->
+                            <div class="p-3">
+                                <ul class="nav nav-tabs" role="tab" style="margin-left: 0px">
+                                    <li id="l1" class="nav-item active">
+                                        <a class="nav-link active" href="#tab_basic" aria-controls="tab_basic" role="tab" data-toggle="tab">
+                                            <h7 class="breadcrumb-item" style="font-size:small; ">
+                                                <i class="fas fa-table" style="color: green"></i> &nbsp;&nbsp; Events Line-up
+                                            </h7>
+                                        </a>
+                                    </li>
+                                    <li id="l2" class="nav-item ">
+                                        <a class="nav-link " href="#tab_loc_addr" aria-controls="tab_loc_addr" role="tab" data-toggle="tab">
+                                            <h7 class="breadcrumb-item" style="font-size:small; ">
+                                                <i class="fa fa-calendar-alt" style="color: tomato"></i> &nbsp;&nbsp; Calendar Grid
+                                            </h7>
+                                        </a>
+                                    </li>
+
+                                </ul>
+
+                                <!-- Tab panes -->
+                                <div class="tab-content shadow-sm " style="width:100%;   background-color: transparent">
+                                    <div role="tabpanel" class="tab-pane active " id="tab_basic" style=" background-color: transparent">
+                                        <div class="panel panel-default" style="margin:10px -1px 0px 0px; padding: 10px; background-color:transparent; overflow:auto;">
+                                            @*<div class="form-group col-sm-2">
+                                                    <a href="#" id="btnAddEdit" class="btn  btn-sm btn-light"><i class="fas fa-marker fa-sm smaller" style="color: darkorange;"></i></a>
+                                                </div>*@
+                                            <br />
+                                            <input type="hidden" asp-for="oChurchBodyId" id="_hdnChuBodyId" />
+
+                                            <table id="tabData_CCE" class="table-sm table-responsive-sm table-borderless table-hover small " cellspacing="0" style=" width: 100%;">
+                                                <thead>
+                                                    <tr align="center">
+                                                        <th align="left" style="text-align: left ">
+                                                            Subject
+                                                        </th>
+                                                        <th align="left" style="text-align: left ">
+                                                            Churchlife Activity
+                                                        </th>
+                                                        <th>
+                                                            Venue
+                                                        </th>
+                                                        <th>
+                                                            @*@Html.DisplayNameFor(model => model.oCalendarEvents[0].EventFrom)*@ From
+                                                        </th>
+                                                        <th>
+                                                            @*@Html.DisplayNameFor(model => model.oCalendarEvents[0].EventTo)*@ To
+                                                        </th>
+                                                        <th>
+                                                            @*@Html.DisplayNameFor(model => model.oCalendarEvents[0].IsFullDay)*@ Full Day
+                                                        </th>
+                                                        <th>
+                                                            Event Active
+                                                        </th>
+
+                                                        <th width="80px">
+                                                            <a class="btn btn-light btn-sm " asp-controller="ChurchCalendar" asp-action="Index" asp-route-reqChurchBodyId="@Model.oChurchBody.Id">
+                                                                <i class="fas fa-refresh" style="color:green "></i>
+                                                            </a>
+                                                            <a href="#" class="btn btn-light " onclick="AddEditCurrData_CCE(0)" style=" font-weight:bold; font-size:small"><i class="fa fa-plus fa-sm"></i></a>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.oCalendarEvents)
+                                                    {
+                                                        <tr align="center">
+                                                            <td style="color: dodgerblue; text-align: left ">
+                                                                @Html.DisplayFor(modelItem => item.Subject)
+                                                            </td>
+                                                            <td style=" text-align: left ">
+                                                                @{
+                                                                    var descActv = item.ChurchlifeActivity_NVP != null ? item.ChurchlifeActivity_NVP.NVPValue : string.Empty;
+                                                                }
+                                                                @Html.DisplayFor(modelItem => descActv)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Venue)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.EventFrom)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.EventTo)
+                                                            </td>
+                                                            <td>
+                                                                @if (item.IsFullDay)
+                                                                {
+                                                                    <i class="fa fa-check fa-lg" style="color:deepskyblue"></i>
+                                                                }
+                                                                else if (item.IsFullDay == false)
+                                                                {
+                                                                    <i class="fa fa-times fa-lg" style=" color: lightgrey "></i>
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                @if (item.IsEventActive)
+                                                                {
+                                                                    <i class="fa fa-check fa-lg" style="color:limegreen "></i>
+                                                                }
+                                                                else if (item.IsEventActive == false)
+                                                                {
+                                                                    <i class="fa fa-times fa-lg" style=" color: tomato  "></i>
+                                                                }
+                                                            </td>
+
+
+                                                            <td>
+                                                                <a href="#" class="btn btn-sm btn-outline-light ml-1" data-backdrop="static" data-keyboard="false" onclick="AddEditCurrData_norm(  @item.Id)"><i class="fa fa-pencil fa-sm" style="color: darkslategray;"></i></a>
+                                                                <a href="#" class="text-danger ml-1" onclick="ConfirmDeleteCurr_ProgEvent(@item.Id)"><i class="fas fa-trash-alt small"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                                @*<tfoot>
+                                                        <tr class="bg-white" style="text-align: center; color: white">
+                                                            <th> </th>
+                                                            <th> </th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th>
+                                                                <a href="#" class="btn btn-info btn-block smaller" onclick="ReloadCurrPage_ProgEvent()" style=" font-weight:normal; font-size:small"><i class="fa fa-refresh fa-sm smaller"></i>&nbsp Reload</a>
+                                                            </th>
+                                                        </tr>
+                                                    </tfoot>*@
+
+                                            </table>
+
+
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane " id="tab_loc_addr" style=" background-color: transparent">
+                                        <div class="panel panel-default" style=" margin:10px -1px 0px 0px; padding: 10px; background-color:transparent; overflow:auto;">
+                                            @*<div class="form-group col-sm-10"></div>*@
+                                            @*<div class="form-group col-sm-2">
+
+
+                                                    <a href="#" class="btn  btn-sm btn-light" data-backdrop="static" data-keyboard="false"><i class="fas fa-marker fa-sm smaller" style="color: blue;"></i></a>
+                                                </div>*@
+                                            <br />
+
+                                            <div class="card mb-3" style="background-color:transparent; ">
+                                                <div class="card-header" style="color:black; font-weight:bold; background-color:lightcoral;  ">
+                                                    <i class="fas fa-calendar-alt fa-lg" style="color:lightyellow"></i>&nbsp;&nbsp; Church Calendar & Task Management
+
+                                                    <div class="position-absolute pr-1 " style="right:2px; top:7px; ">
+                                                        <a class="btn btn-light btn-sm " asp-controller="ChurchCalendar" asp-action="Index" asp-route-reqChurchBodyId="@Model.oChurchBody.Id">
+                                                            <i class="fas fa-refresh" style="color:green "></i>
+                                                        </a>
+                                                        <a href="#" class="btn btn-light  btn-sm" onclick="AddEditCurrData_CCE(0)" style=" font-weight:bold; font-size:small"><i class="fa fa-plus fa-sm"></i></a>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body ">
+                                                    @*class="panel panel-default" style=" background-color:transparent; overflow:auto;"*@
+                                                    <div id="calendar">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            @*<div class="modal fade" id="divPopModal_AddEdit" tabindex="-1" role="dialog" aria-labelledby="_modalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable " role="document" style="max-height: 60%;">
+                        <div class="modal-content">
+                            <div class="modal-header bg-teal">
+                                <h5 class="modal-title"> Editing: </h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div id="divModalBody_AddEdit" class="modal-body bg-light" style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: 10pt">
+                            </div>
+                            <div class="modal-footer " style="background-color: lightgrey; left:auto; right: auto">
+                                <a role="button" class="btn btn-outline-light " data-dismiss="modal"> <span class="text-sm "> Cancel </span> </a>
+
+                                <button id="btnSaveChanges" type="submit" class="btn btn-outline-dark border-0 shadow-sm float-right" style="background-color: lightskyblue">
+                                    <i class="fas fa-database mr-1"></i> <span class="text-bold"> Save changes </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+
+            <!-- Add/Edit Modal-->
+            <div class="modal fade" id="divPopModal_AddEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document"
+                     style="font-family:Verdana, Geneva, Tahoma, sans-serif;  width:auto ; height:auto; padding: 2px;">
+                    <div class="modal-content">
+                        <div class="modal-header " style="color:#000; background-color: tomato  ">
+                            @*style="background-color: lightgrey;*@
+                            <h6 class="modal-title"> Church Calendar   </h6>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div id="divModalBody_AddEdit" class="modal-body bg-light" style=" font-size: 10pt; ">
+
+                        </div>
+                        <div id="_divFooterCommit" class="modal-footer " style="background-color:   lightgrey; left:auto; right: auto">
+                            <a href="#" class="btn btn-outline-light " data-dismiss="modal"> Cancel </a>
+                            <button id="btnSaveChanges" type="button" class="btn btn-light save-data"><i class="fa fa-database "></i> Save changes </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </body>
+
+}
+
+
+@*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">*@
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css" rel="stylesheet" />
+<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css" rel="stylesheet" media="print" />
+
+
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>*@
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+
+
+
+
+    <script>
+
+
+        $(document).ready(function () {
+
+            //$('#tblId_ProgEvent').DataTable({
+            //    "processing": true,
+            //    "columnDefs": [
+            //        { "searchable": false, "orderable": false, "targets": [6] },
+            //    ],
+            //});
+
+
+            $(function () {
+                if ($.fn.dataTable.isDataTable('#tabData_CCE')) {
+                    $('#tabData_CCE').DataTable();
+                }
+                else {
+                    $('#tabData_CCE').DataTable({
+                        "responsive": true,
+                        "autoWidth": false,
+                        //"paging": true,
+                        //"lengthChange": false,
+                        "searching": true,
+                        //  "orderable": true,
+                        //"info": true,
+                        "order": [],
+                        "columnDefs": [{
+                            "targets": [0, 6],
+                            "orderable": false,
+                        }]
+                    });
+                }
+            });
+
+
+
+
+
+            //saves
+
+            $(document).on('click', '#btnSaveChanges', function (e) {
+                e.preventDefault();
+
+                alert('save.. ? ');
+
+                var currFormData = $("#currForm_CCE").serialize(); // + "&churchLogoFile="+currFile;
+                // var formdata = new FormData($("#currForm_CCE").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    // data: formdata,
+                    // processData: false,
+                    //contentType: false,
+                    url: "/ChurchCalendar/AddOrEdit_ProgEvent",
+                    data: currFormData,
+                    success: function (res) {
+                        //alert("saved upd: " + res);
+
+                        $("#divLoader").hide();
+                        if (res == true) {
+                            alert("Saved changes successfully");
+
+                            //if (currId == 0) {
+                            //    window.location.href = "/MemberPane/Index";
+                            //}
+                            //else {
+                            //    window.location.href = "/MemberPane/AddOrEdit?id=" + currId;
+                            //}
+                        }
+                        else {
+                            alert("Saving of changes failed. Details: " + ViewBag.UserMsg);
+                        }
+                    }
+                })
+            })
+
+
+            $(document).on('click', '#btnSaveCurr_ProgEvent', function (e) {
+                e.preventDefault();
+
+                //var currId = $("#_hdnCurrId_ProgEvent").val();
+                //   alert(1);
+                //$("#divLoader").show();
+
+                var currFormData = $("#currForm_CCE").serialize(); // + "&churchLogoFile="+currFile;
+                // var formdata = new FormData($("#currForm_CCE").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    // data: formdata,
+                    // processData: false,
+                    //contentType: false,
+                    url: "/ChurchCalendar/AddOrEdit_ProgEvent",
+                    data: currFormData,
+                    success: function (res) {
+                        //alert("saved upd: " + res);
+
+                        $("#divLoader").hide();
+                        if (res == true) {
+                            alert("Saved changes successfully");
+
+                            //if (currId == 0) {
+                            //    window.location.href = "/MemberPane/Index";
+                            //}
+                            //else {
+                            //    window.location.href = "/MemberPane/AddOrEdit?id=" + currId;
+                            //}
+                        }
+                        else {
+                            alert("Saving of changes failed. Details: " + ViewBag.UserMsg);
+                        }
+                    }
+                })
+            })
+        });
+
+
+        //var AddEditCurrData = function (categ, currId) {
+        //     alert("currId add: " + currId);
+        //    var url = "/ChurchCalendar/" + categ + "?id=" + currId;
+        //    // alert("clicked: " + url);
+
+        //    //  divPopModal_AddEdit  --- divModalBody_AddEdit
+        //    $('#divPopModal_AddEdit').modal({
+        //        backdrop: 'static',
+        //        keyboard: false
+        //    });
+
+        //    $("#divModalBody_AddEdit").load(url, function () {
+        //        $("#divPopModal_AddEdit").modal('show');
+        //    });
+        //};
+
+        var AddEditCurrData_norm1 = function (currId) {
+            //  alert("currId add: " + currId);
+            var url = "/ChurchCalendar/AddOrEdit_ProgEvent?id=" + currId;
+            //var url = "/MemberPane/AddOrEdit?id=" + currId;
+            // alert("clicked mem  pane: " + url);
+
+            //$('#divPopModal_AddEdit_norm').modal({
+            //    backdrop: 'static',
+            //    keyboard: false
+            //});
+
+           // alert(url)
+
+            ////divModalBody_AddEdit_norm -- divPopModal_AddEdit_norm
+            //$("#divModalBody_AddEdit").load(url, function () {
+            //    $("#divPopModal_AddEdit").modal('show');
+            //});
+
+
+            $('#divPopModal_AddEdit .modal-dialog').draggable({
+                handle: ".modal-header"
+            });
+
+            //alert('loading modal...')
+            $('#divPopModal_AddEdit .modal-body').load(url, function () {
+
+                //$('#divPopModal_AddEdit_lg .modal-title').html(_strItemName);
+                //$("#_TithedByScope").change();
+                //$("#_TitheMode").change();
+
+                $("#divPopModal_AddEdit").modal('show');
+            });
+
+        };
+
+
+        var AddEditCurrData_CCE = function (currId) {
+                    //alert('addORedit...');
+
+                    //if (currId < 0) currId = null;
+                    //if (currDenomId < 0) currDenomId = null;
+                    //if (currChuBodyId < 0) currChuBodyId = null;
+                    //if (currSetIndex < 0) currSetIndex = null;
+
+                    //var currAGOId_Logged = $("#_oAppGloOwnId_Logged").data("value");
+                    //var currCBId_Logged = $("#_oChurchBodyId_Logged").data("value");
+                    //var currUserId_Logged = $("#_oUserId_Logged").data("value");
+
+
+            var url = '@Url.Action("AddOrEdit_ProgEvent", "ChurchCalendar")?id=' + currId;
+
+
+             alert(url)  // if (currId > 0) { document.querySelector('#btnSaveChanges_TT').innerHTML = 'Update'; }
+
+            if (currId > 0)
+            { document.querySelector('#btnSaveChanges').innerHTML = '<i class="fas fa-database text-bold mr-1"></i> Update';}
+
+            $('#divPopModal_AddEdit').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+
+
+            $('#divPopModal_AddEdit .modal-dialog').draggable({
+                handle: ".modal-header"
+            });
+
+            //alert('loading modal...')
+            $('#divPopModal_AddEdit .modal-body').load(url, function () {
+
+                //$('#divPopModal_AddEdit .modal-title').html(_strItemName);
+
+                // alert('showing data...')
+
+                $("#divPopModal_AddEdit").modal('show');
+            });
+        };
+
+
+    </script>
+
+
+
+
+    <script>
+        $(document).on('change', '#chk_IsFullDay', function (e) {
+            e.preventDefault();
+            var _isAvail = $("#chk_IsFullDay").is(":checked");     // alert('chk: ' + _isAvail);
+           // $('#chk_IsDeceased').prop('disabled', _isAvail);
+            $('#_divEventTo').prop('hidden', _isAvail);
+
+          // if ($("#chk_IsDeceased").is(":disabled")) { $('#chk_IsDeceased').prop('checked', false) };
+            if ($("#_divEventTo").is(":hidden")) { $("#_EventTo").val('');  };
+        })
+
+
+        $(document).on('change', '#_oActivityTypeId', function (e) {
+            e.preventDefault();
+         //   alert('...');
+         var actvType = $("#_oActivityTypeId").val();
+
+          //  alert('actvType: ' + actvType);
+            var churchBodyId = $("#_hdnChuBodyId").val();
+           // alert('churchBodyId: ' + churchBodyId);
+            var url = '@Url.Content("~/")' + 'ChurchCalendar/GetChurchActivityByType';
+            $('#_ChurchLifeActivityId').empty();
+
+             //   $('#tblAttendees_MemEditBody').html('');
+                //   public JsonResult GetChurchActivityByType(int oCurrChuBodyId, string typeCode = null, bool addEmpty = false)
+            $.getJSON(url, { oCurrChuBodyId: churchBodyId, typeCode: actvType, addEmpty: true }, function (data) {
+
+                if (Object.keys(data).length > 0) {
+                    //alert('> 0');
+                    var items = '';
+                        $.each(data, function (i, oData) {
+                            items += "<option value='" + oData.value + "'>" + oData.text + "</option>";
+                            //alert(items);
+                        });
+                        // items += "<option value=''> Select </option>";
+                  //  alert(items);
+                    $('#_ChurchLifeActivityId').html(items);
+                    }
+            });
+
+
+     });
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // alert('draw cal...');
+
+            //refresh the activity list
+            $('#_oActivityTypeId').change();
+
+            var churchBodyId = $("#_hdnChuBodyId").val();
+            // alert('churchBodyId: ' + churchBodyId);
+            var _events = new Array(); //[];
+
+            //  var events = [];
+            // public JsonResult GetEvents(int? oCurrChuBodyId = null)
+            $.ajax({
+                type: "GET",
+                url: "/ChurchCalendar/GetEvents",
+                data: { oCurrChuBodyId: churchBodyId }, //JSON.stringify(events),
+                cache: false,
+                success: function (events) {
+                    //  alert('success');
+
+                    //     _events.push({
+                    //     title: 'Christmas Day',
+                    //     description: 'event 1',
+                    //     start: '2019-12-25', //moment(new Date()),
+                    //     end: null, // moment('2010-12-27'), //v.EventTo != null ? moment(v.EventTo) : null,
+                    //     color: 'yellow',
+                    //     allDay: 'true'
+                    //});
+
+                    //_events.push({
+                    //    title: 'Sam & Uni anniversary',
+                    //    description: 'Sam Darteh anniversary',
+                    //    start: '2019-12-21', //moment(new Date()),
+                    //    end: null, // moment('2010-12-27'), //v.EventTo != null ? moment(v.EventTo) : null,
+                    //    color: 'red',
+                    //    allDay: 'true'
+                    //});
+
+                    //_events.push({
+                    //    title: 'Joyce 27th Birthday',
+                    //    description: '',
+                    //    start: '2020-07-04', //moment(new Date()),
+                    //    end: null, // moment('2010-12-27'), //v.EventTo != null ? moment(v.EventTo) : null,
+                    //    color: 'pink',
+                    //    allDay: 'true'
+                    //});
+
+                    //alert(_events.length);
+                    //GenerateCalendar(_events);
+
+                    $.each(events, function (i, v) {
+                        //  alert('subject: ' + events[i].subject + '; from: ' + v.eventFrom + '; to: ' + v.eventTo + '; color: ' + v.themeColor + '; allday: ' + v.isFullDay);
+                        _events.push(
+                            {
+                                title: v.subject,
+                                description: v.eventFullDesc,
+                                start: moment(v.eventFrom),
+                                end: v.eventTo != null ? moment(v.eventTo) : null,
+                                color: v.themeColor,
+                                allDay: v.isFullDay
+                            }
+                        );
+                    });
+
+                    //  alert(_events.length);
+                    GenerateCalendar(_events);
+
+                },
+                error: function (error) {
+                    alert('failed...');
+                }
+            })
+
+
+
+            function GenerateCalendar(events) {
+                // alert('draw the cal...');
+
+                $('#calendar').fullCalendar('destroy');
+                $('#calendar').fullCalendar({
+                    contentHeight: 500,
+                    defaultDate: new Date(),
+                    timeFormat: 'h(:mm)a',
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month,basicWeek,basicDay,agenda'
+                    },
+                    eventLimit: true,
+                    eventColor: '#378006',
+                    events: events,
+                    eventClick: function (calEvent, jsEvent, view) {
+                        // alert('call 2');
+
+                        $('#eventModal #eventTitle').text(calEvent.title);
+                        var $description = $('<div/>');
+
+                        $description.append($('<p/>').html('<b>Start: </b>' + calEvent.start.format("DD-MMM-YYYY HH:mm a")));
+
+                        if (calEvent.end != null) {
+                            $description.append($('<p/>').html('<b>End: </b>' + calEvent.end.format("DD-MMM-YYYY HH:mm a")));
+                        }
+
+                        $description.append($('<p/>').html('<b>Description: </b>' + calEvent.description));
+                        $('#eventModal #pDetails').empty().html($description);
+
+                        //jQuery.noConflict();
+                        $("#eventModal").modal();
+                    }
+                })
+            }
+
+        })
+    </script>
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+

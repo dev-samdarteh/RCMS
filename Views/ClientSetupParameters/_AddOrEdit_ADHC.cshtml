@@ -1,0 +1,309 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.AdhocParameterModel
+
+@if (Model != null)
+{
+    <div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center w-75 " style="margin: 0 auto 0 auto ; padding: 0">
+        <form class="needs-validation bg-transparent p-2" novalidate id="currForm_ADHC" method="post" enctype="multipart/form-data" asp-action="AddOrEdit_ADHC">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*<input type="hidden" asp-for="oAppUtilityNVP.Id" id="_hdnCurrId_AGO" />*@
+            <input type="hidden" asp-for="oAppGloOwnId" />
+            <input type="hidden" asp-for="oChurchBodyId" />
+
+            <input type="hidden" asp-for="oChurchPeriodDefinitionModel.modNVPCode" />
+            <input type="hidden" asp-for="oMemberCustomCodeFormatModel.modNVPCode" />
+            <input type="hidden" asp-for="oChurchTransferSettingModel.modNVPCode" />
+
+            @*<input type="hidden" asp-for="modSharingStatus" />*@
+            @*<input type="hidden" asp-for="modOwnedByChurchBodyId" />*@
+
+            <input type="hidden" asp-for="@Model.setIndex" id="_setIndex" />
+            <input type="hidden" asp-for="@Model.tempSetIndex" id="_tempSetIndex" />
+
+            <input type="hidden" asp-for="@Model.oChurchBodyId_Logged" id="_oChurchBody_Logged" />
+            <input type="hidden" asp-for="@Model.oAppGloOwnId_Logged" id="_oAppGloOwnId_Logged" />
+            <input type="hidden" asp-for="@Model.oUserId_Logged" id="_oCurrUserId_Logged" />
+
+
+
+            @if (Model.oChurchPeriodDefinitionModel != null)
+            {
+                <div class="card">
+                    <div class="card-header bg-light col-md">
+                        <i class="fa fa-calendar text-danger mr-1"></i> <span class="text-bold">Church Period Definition</span>
+                    </div>
+                    <div class="card-body col-md">
+                        <div class="form-row mb-3">
+                            <div class="col-md-6 mb-3">
+                                <small class="font-weight-normal" asp-for="oChurchPeriodDefinitionModel.numPeriodInterval_CP"> Interval </small>
+                                <div class="input-group">
+                                    <input type="number" min="1" class="form-control text-sm" asp-for="oChurchPeriodDefinitionModel.numPeriodInterval_CP" placeholder="Interval">
+                                    <select class="form-control text-sm" asp-for="oChurchPeriodDefinitionModel.strIntervalFrequency_CP" asp-items="Model.lkpIntervalFreqs">
+                                        <option selected disabled value=""> Select </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <small class="font-weight-normal" asp-for="oChurchPeriodDefinitionModel.numPeriodInterval_CP"> Interval </small>
+                                <div class="input-group">
+                                    <input type="number" min="1" class="form-control text-sm" asp-for="oChurchPeriodDefinitionModel.numPeriodIntervalDays_CP" placeholder="Interval">
+                                    <input type="text" class="form-control text-sm" value="days" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row mb-3">
+                            <div class="col-md-6 mb-3">
+                                <small class="font-weight-normal" asp-for="oChurchPeriodDefinitionModel.PeriodStartDate_CP"> Starting Period </small>
+                                <input type="date" class="form-control text-sm" asp-for="oChurchPeriodDefinitionModel.PeriodStartDate_CP" placeholder="Starting Period">
+                            </div>
+                        </div>
+
+                        <hr style="border:1px inset #fff" />
+
+                        @if (Model.oChurchPeriodDefinitionModel.modOwnedByChurchBody_CP?.OrgType == "CH" && Model.oChurchPeriodDefinitionModel.modOwnedByChurchBodyId_CP == Model.oChurchBodyId_Logged)
+                        {
+                            <div class="form-row mb-3">
+                                <div class="col-md">
+                                    <div class="input-group mb-3">
+                                        <div class="col-md-4">
+                                            <small class="font-weight-normal" asp-for="strOwnershipStatus"> Scope </small>
+                                            <input type="text" class="form-control text-sm" asp-for="oChurchPeriodDefinitionModel.strOwnershipStatus_CP" placeholder="Scope" readonly>
+                                            <input type="hidden" asp-for="oChurchPeriodDefinitionModel.modOwnedByChurchBodyId_CP" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <small class="font-weight-normal" asp-for="modSharingStatus"> Sharing Status </small>
+                                            <select id="_modSharingStatus" class="form-control text-sm" asp-for="oChurchPeriodDefinitionModel.modSharingStatus_CP" asp-items="Model.lkpSharingStatuses" aria-describedby="fd_SharingStatus" required>
+                                                <option selected value="">Select </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-row mb-3">
+                                <div class="col-md">
+                                    <div class="input-group mb-3">
+                                        <div class="col-md-4">
+                                            <small class="font-weight-normal" asp-for="strOwnershipStatus"> Scope </small>
+                                            <input type="text" class="form-control text-sm" asp-for="oChurchPeriodDefinitionModel.strOwnershipStatus_CP" placeholder="Scope" readonly>
+                                            <input type="hidden" asp-for="oChurchPeriodDefinitionModel.modSharingStatus_CP" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            @{ var strOwnCB = "Owned by " + (!string.IsNullOrEmpty(Model.oChurchPeriodDefinitionModel.strChurchLevel_OwnedByCB_CP) ? "(" + Model.oChurchPeriodDefinitionModel.strChurchLevel_OwnedByCB_CP + ")" : "");}
+                                            <small class="font-weight-normal" asp-for="strOwnedByChurchBody"> @strOwnCB </small>
+                                            <input type="text" class="form-control text-sm" asp-for="oChurchPeriodDefinitionModel.strOwnedByChurchBody_CP" placeholder="Owned by" readonly>
+                                            <input type="hidden" asp-for="oChurchPeriodDefinitionModel.modOwnedByChurchBodyId_CP" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="form-row mt-3">
+                            <div class="col-md">
+                                <label class="chk_container font-weight-normal">
+                                    <label class="font-weight-normal" asp-for="oChurchPeriodDefinitionModel.bl_IsChuPeriodSameAsAccPeriod"> Calendar Period same as Accounting Period </label>
+                                    <input id="chk_IsChuPeriodSameAsAccPeriod" type="checkbox" asp-for="oChurchPeriodDefinitionModel.bl_IsChuPeriodSameAsAccPeriod" />
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="card " id="_divCPRD_AP" hidden>
+                    <div class="card-header bg-light col-md">
+                        <i class="fas fa-coins text-warning mr-1"></i> <span class="text-bold">Accounting Period Definition</span>
+                    </div>
+                    <div class="card-body col-md">
+                        <div class="form-row mb-3">
+                            <div class="col-md-6 mb-3">
+                                <small class="font-weight-normal" asp-for="oChurchPeriodDefinitionModel.numPeriodInterval_AP"> Period Interval </small>
+                                <div class="input-group">
+                                    <input type="number" min="1" class="form-control text-sm" asp-for="oChurchPeriodDefinitionModel.numPeriodInterval_AP" placeholder="Interval">
+                                    <select class="form-control text-sm" asp-for="oChurchPeriodDefinitionModel.strIntervalFrequency_AP" asp-items="Model.lkpIntervalFreqs">
+                                        <option selected disabled value=""> Select </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <small class="font-weight-normal" asp-for="oChurchPeriodDefinitionModel.numPeriodInterval_AP"> Interval in Days </small>
+                                <div class="input-group">
+                                    <input type="number" min="1" max="366" class="form-control text-sm" asp-for="oChurchPeriodDefinitionModel.numPeriodIntervalDays_AP" placeholder="Interval">
+                                    <input type="text" class="form-control text-sm" value="days" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row mb-3">
+                            <div class="col-md-6 mb-3">
+                                <small class="font-weight-normal" asp-for="oChurchPeriodDefinitionModel.PeriodStartDate_AP"> Starting Period </small>
+                                <input type="date" class="form-control text-sm" asp-for="oChurchPeriodDefinitionModel.PeriodStartDate_AP" placeholder="Starting Period">
+                            </div>
+                        </div>
+
+                        <hr style="border:1px inset #fff" />
+
+                        @if (Model.oChurchPeriodDefinitionModel.modOwnedByChurchBody_AP?.OrgType == "CH" && Model.oChurchPeriodDefinitionModel.modOwnedByChurchBodyId_AP == Model.oChurchBodyId_Logged)
+                        {
+                            <div class="form-row ">
+                                <div class="col-md">
+                                    <div class="input-group">
+                                        <div class="col-md-4">
+                                            <small class="font-weight-normal" asp-for="strOwnershipStatus"> Scope </small>
+                                            <input type="text" class="form-control text-sm" asp-for="oChurchPeriodDefinitionModel.strOwnershipStatus_AP" placeholder="Scope" readonly>
+                                            <input type="hidden" asp-for="oChurchPeriodDefinitionModel.modOwnedByChurchBodyId_AP" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <small class="font-weight-normal" asp-for="modSharingStatus"> Sharing Status </small>
+                                            <select id="_modSharingStatus" class="form-control text-sm" asp-for="oChurchPeriodDefinitionModel.modSharingStatus_AP" asp-items="Model.lkpSharingStatuses" aria-describedby="fd_SharingStatus" required>
+                                                <option selected value="">Select </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-row ">
+                                <div class="col-md">
+                                    <div class="input-group">
+                                        <div class="col-md-4">
+                                            <small class="font-weight-normal" asp-for="strOwnershipStatus"> Scope </small>
+                                            <input type="text" class="form-control text-sm" asp-for="oChurchPeriodDefinitionModel.strOwnershipStatus_AP" placeholder="Scope" readonly>
+                                            <input type="hidden" asp-for="oChurchPeriodDefinitionModel.modSharingStatus_AP" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            @{ var strOwnCB = "Owned by " + (!string.IsNullOrEmpty(Model.oChurchPeriodDefinitionModel.strChurchLevel_OwnedByCB_AP) ? "(" + Model.oChurchPeriodDefinitionModel.strChurchLevel_OwnedByCB_AP + ")" : "");}
+                                            <small class="font-weight-normal" asp-for="strOwnedByChurchBody"> @strOwnCB </small>
+                                            <input type="text" class="form-control text-sm" asp-for="oChurchPeriodDefinitionModel.strOwnedByChurchBody_AP" placeholder="Owned by" readonly>
+                                            <input type="hidden" asp-for="oChurchPeriodDefinitionModel.modOwnedByChurchBodyId_AP" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+                    </div>
+                </div>
+
+            }
+
+            @if (Model.oMemberCustomCodeFormatModel != null)
+            {
+                 <div class="card">
+                    <div class="card-header bg-light col-md">
+                        <i class="fas fa-user-cog text-primary mr-1"></i> <span class="text-bold">Member Custom Code Format</span>
+                    </div>
+                    <div class="card-body col-md">
+                        <div class="form-row mt-3">
+                            <div class="col-md">
+                                <label class="chk_container font-weight-normal">
+                                    <label class="font-weight-normal" asp-for="oMemberCustomCodeFormatModel.bl_IsAutogenMCCFCode"> Auto-generate Custom Member Code </label>
+                                    <input id="chk_IsAutogenMCCFCode" type="checkbox" asp-for="oMemberCustomCodeFormatModel.bl_IsAutogenMCCFCode" />
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="_divMCCFDetails">
+                            <div class="form-row mb-3">
+                                <div class="col-md">
+                                    <small class="font-weight-normal" asp-for="strPrefix"> Prefix </small>
+                                    <div class="input-group">
+                                        <input id="_strPrefix" type="text" class="form-control text-sm" asp-for="oMemberCustomCodeFormatModel.strPrefix" placeholder="Prefix">
+                                        @*<input id="_strPrefixDelim" type="text" class="form-control" asp-for="strPrefixDelim" placeholder="delimiter" style="width:30px">*@
+                                    </div>
+                                </div>
+                                <div class="col-md">
+                                    <small class="font-weight-normal" asp-for="strSuffix"> Suffix </small>
+                                    <div class="input-group">
+                                        @*<input id="_strSuffixDelim" type="text" class="form-control" asp-for="strSuffixDelim" placeholder="delimiter" style="width:50px">*@
+                                        <input id="_strSuffix" type="text" class="form-control text-sm" asp-for="oMemberCustomCodeFormatModel.strSuffix" placeholder="Suffix">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row mb-3 mt-1">
+                                <div class="col-md">
+                                    <label class="chk_container font-weight-normal">
+                                        <label class="font-weight-normal" asp-for="oMemberCustomCodeFormatModel.bl_IsLeadingZeros"> Leading Zeros [variable: min 3 digits] </label>
+                                        <input id="chk_IsLeadingZeros" type="checkbox" asp-for="oMemberCustomCodeFormatModel.bl_IsLeadingZeros" />
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-row mb-3">
+                                <div class="col-md-12 text-center">
+                                    <input id="_sampleLDZR" type="text" asp-for="oMemberCustomCodeFormatModel.strSampleTextLDZR" 
+                                           class="form-control text-sm bg-white text-info border-left border-light" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr style="border:1px inset #fff" />
+
+                        @if ((Model.oMemberCustomCodeFormatModel.modOwnedByChurchBody?.OrgType == "CR" || Model.oMemberCustomCodeFormatModel.modOwnedByChurchBody?.OrgType == "CH") && 
+                            Model.oMemberCustomCodeFormatModel.modOwnedByChurchBodyId == Model.oChurchBodyId_Logged)
+                        {
+                            <div class="form-row ">
+                                <div class="col-md">
+                                    <div class="input-group">
+                                        <div class="col-md-4">
+                                            <small class="font-weight-normal" asp-for="strOwnershipStatus"> Scope </small>
+                                            <input type="text" class="form-control text-sm" asp-for="oMemberCustomCodeFormatModel.strOwnershipStatus" placeholder="Scope" readonly>
+                                            <input type="hidden" asp-for="oMemberCustomCodeFormatModel.modOwnedByChurchBodyId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <small class="font-weight-normal" asp-for="modSharingStatus"> Sharing Status </small>
+                                            <select id="_modSharingStatus" class="form-control text-sm" asp-for="oMemberCustomCodeFormatModel.modSharingStatus" asp-items="Model.lkpSharingStatuses" aria-describedby="fd_SharingStatus" required>
+                                                <option selected value="">Select </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-row">
+                                <div class="col-md">
+                                    <div class="input-group">
+                                        <div class="col-md-4">
+                                            <small class="font-weight-normal" asp-for="strOwnershipStatus"> Scope </small>
+                                            <input type="text" class="form-control text-sm" asp-for="oMemberCustomCodeFormatModel.strOwnershipStatus" placeholder="Scope" readonly>
+                                            <input type="hidden" asp-for="oMemberCustomCodeFormatModel.modSharingStatus" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            @{ var strOwnCB = "Owned by " + (!string.IsNullOrEmpty(Model.oMemberCustomCodeFormatModel.strChurchLevel_OwnedByCB) ? "(" + Model.oMemberCustomCodeFormatModel.strChurchLevel_OwnedByCB + ")" : "");}
+                                            <small class="font-weight-normal" asp-for="strOwnedByChurchBody"> @strOwnCB </small>
+                                            <input type="text" class="form-control text-sm" asp-for="oMemberCustomCodeFormatModel.strOwnedByChurchBody" placeholder="Owned by" readonly>
+                                            <input type="hidden" asp-for="oMemberCustomCodeFormatModel.modOwnedByChurchBodyId" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+                 
+            }
+
+            @if (Model.oChurchTransferSettingModel != null)
+            {
+                <div class="card">
+                    <div class="card-header bg-light col-md-6">
+                        <i class="fas fa-user-cog text-info mr-1"></i><span class="text-bold"> Church Transfer Setting</span>
+                    </div>
+                    <div class="card-body col-md-6">
+
+                    </div>
+                </div>
+            }
+        </form>
+    </div>
+}

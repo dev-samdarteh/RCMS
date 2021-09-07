@@ -1,0 +1,215 @@
+﻿@model RhemaCMS.Models.Adhoc.TargetCBModel
+
+
+@if (Model != null)
+{
+   // @if (Model.oTargetCB != null)
+   // {
+        <div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center " style="width: 90%; margin: 5px auto 10px auto ; padding:0;">
+            <form class="needs-validation bg-transparent p-2" novalidate id="currForm_TCB" method="post" enctype="multipart/form-data" asp-action="GetTargetCB">
+
+                @*@{ var CBNameTag = Model.oChurchBody.OrgType == "CH" ? "Name of Congregation Head-unit" : Model.oChurchBody.OrgType == "CN" ? "Name of Congregation" : "Church Unit Name"; }*@
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <input type="hidden" asp-for="oAppGloOwnId" id="_oAppGloOwnId_TCB" />
+                <input type="hidden" asp-for="oChurchBodyId" id="_oChurchBodyId_TCB" />
+
+                @*<input type="hidden" asp-for="oTargetCBId" id="_oTargetCBId_TCB" />
+                <input type="hidden" asp-for="oTargetCLId" id="_oTargetCLId_TCB" />*@
+
+                <input type="hidden" asp-for="numChurchLevel_Index" id="_numCLIndex_TCB" />
+                <input type="hidden" asp-for="oCBLevelCount" id="_oCBLevelCount_TCB" />
+
+                <input type="hidden" asp-for="strTargetCB" />
+                @*<input type="hidden" asp-for="strTargetCL" />*@
+
+                <input type="hidden" asp-for="strId_TCB" id="_strId_TCB" />
+                <input type="hidden" asp-for="strName_TCB" id="_strName_TCB" />
+                <input type="hidden" asp-for="strCLId_TCB" id="_strCLId_TCB" />
+                <input type="hidden" asp-for="strCLName_TCB" id="_strCLName_TCB" />
+                <input type="hidden" asp-for="strCLTag_TCB" id="_strCLTag_TCB" />
+
+
+
+                <div id="_divAlertUser" class="alert alert-success alert-dismissible fade show" role="alert" hidden>
+                    <strong> Done! </strong> Church body inserted.
+                    @*<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>*@
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        @{ var strCBLevelTag = !string.IsNullOrEmpty(Model.strTargetCL) ? "Church Body (" + Model.strTargetCL + ")" : "Church Body"; }
+                        <p class="font-weight-normal" asp-for="strChurchBody">
+                            You have selected :- <small id="_lblTargetCB_TCB" class="font-weight-normal mb-3" asp-for="strChurchBody"> @strCBLevelTag </small>
+                        </p>
+                        @*<input id="_oTargetCLId_TCB" type="hidden" asp-for="oTargetCLId" />text-sm font-weight-bold*@
+                        <p class="title mb-0">
+                            <i class="fas fa-layer-group text-black-50 pr-2"></i>
+                            <span class="text-primary text-sm" id="_strTargetCB_TCB"> @Model.strTargetCB </span>
+                        </p>
+                        <input id="_oTargetCBId_TCB" type="hidden" asp-for="oTargetCBId" />
+                        <hr class="cus-div" style="width:100%; border: 1px solid #b7b5b5;" />
+                    </div>
+                </div>
+
+                @*<div class="form-row">
+            <div class="col-md-12">
+                @{ var strCBLevelTag = "Church Body (" + Model.strTargetCL + ")"; }
+                <small id="_lblTargetCB_TCB" class="font-weight-normal" asp-for="strChurchBody"> @strCBLevelTag </small>
+                <div class="card-header bg-white card-fuchsia card-outline border-top border-left border-right mb-3">
+                    <i class="fas fa-layer-group fa-secondary pr-2"></i>
+                    <span class="text-primary text-sm" id="_strTargetCB_TCB"> @Model.strTargetCB </span>
+                    <input id="_oTargetCBId_TCB" type="hidden" asp-for="oTargetCBId" />
+                </div>
+            </div>
+        </div>*@
+
+                @*<div class="card-body bg-white card-fuchsia card-outline border-left border-right border-bottom" id="collapse-collapsed-cb" aria-labelledby="heading-collapsed-cb">*@
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small class="font-weight-normal" asp-for="oTargetCLId"> Target Church Level </small>
+                        <div class="input-group">
+                            <select id="_oTargetCLId_TCB" class="form-control text-sm" asp-for="oTargetCLId" asp-items="Model.lkpChurchLevels" aria-describedby="fd_oTargetCLId_TCB" required>
+                            </select>
+                            <button id="_btnLoadTargetCLId_TCB" type="button" class="btn btn-light btn-sm border border-left-0 ">
+                                <i class="fa fa-refresh text-secondary"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                @*@{ var _desc_1 = "Select " + ViewBag.strChurchLevel_1;}*@
+
+                <div class="form-row mb-3" id="_div_ChurchBodyId_1_TCB" hidden>
+                    <div class="col-md-12">
+                        <small class="font-weight-normal" asp-for="ChurchBodyId_1"> @ViewBag.strChurchLevel_1 </small>
+                        <input id="_strChurchBody_1_TCB" class="form-control text-sm" type="text" asp-for="@Model.arrRootCBNames[0]" placeholder="@ViewBag.strChurchLevel_1" readonly>
+                        @*<input type="hidden" asp-for="ChurchBodyId_1" id="_ChurchBodyId_1_TCB" />*@
+                        <input type="hidden" asp-for="strChurchLevel_1" />
+                        <input id="_ChurchBodyId_1_TCB" type="hidden" value="@Model.arrRootCBIds[0]" />
+                        <input id="hdn_ChurchBodyId_1_TCB" type="hidden" value="@Model.arrRootCBIds[0]" />
+                    </div>
+                </div>
+
+                <div class="form-row mb-3" id="_div_ChurchBodyId_2_TCB" hidden>
+                    <div class="col-md">
+                        @{ var _desc_2 = "Select " + ViewBag.strChurchLevel_2;}
+                        <small class="font-weight-normal" asp-for="ChurchBodyId_2"> @ViewBag.strChurchLevel_2 </small>
+                        <select id="_ChurchBodyId_2_TCB" class="form-control text-sm" asp-for="@Model.arrRootCBIds[1]" aria-describedby="fd_ChurchBodyId_2_TCB">
+                            <option selected disabled value=""> @_desc_2 </option>
+                        </select>
+                        <input type="hidden" asp-for="strChurchLevel_2" />
+                        <input id="hdn_ChurchBodyId_2_TCB" type="hidden" value="@Model.arrRootCBIds[1]" />
+                    </div>
+                </div>
+
+                <div class="form-row mb-3" id="_div_ChurchBodyId_3_TCB" hidden>
+                    <div class="col-md">
+                        @{ var _desc_3 = "Select " + ViewBag.strChurchLevel_3;}
+                        <small class="font-weight-normal" asp-for="ChurchBodyId_3"> @ViewBag.strChurchLevel_3 </small>
+                        <select id="_ChurchBodyId_3_TCB" class="form-control text-sm" asp-for="@Model.arrRootCBIds[2]" aria-describedby="fd_ChurchBodyId_3_TCB">
+                            <option selected disabled value=""> @_desc_3 </option>
+                        </select>
+                        <input type="hidden" asp-for="strChurchLevel_3" />
+                        <input id="hdn_ChurchBodyId_3_TCB" type="hidden" value="@Model.arrRootCBIds[2]" />
+                    </div>
+                </div>
+
+                <div class="form-row mb-3" id="_div_ChurchBodyId_4_TCB" hidden>
+                    <div class="col-md">
+                        @{ var _desc_4 = "Select " + ViewBag.strChurchLevel_4; }
+                        <small class="font-weight-normal" asp-for="ChurchBodyId_4"> @ViewBag.strChurchLevel_4 </small>
+                        <select id="_ChurchBodyId_4_TCB" class="form-control text-sm" asp-for="@Model.arrRootCBIds[3]" aria-describedby="fd_ChurchBodyId_4_TCB">
+                            <option selected disabled value=""> @_desc_4 </option>
+                        </select>
+                        <input type="hidden" asp-for="strChurchLevel_4" />
+                        <input id="hdn_ChurchBodyId_4_TCB" type="hidden" value="@Model.arrRootCBIds[3]" />
+                    </div>
+                </div>
+
+                <div class="form-row" id="_div_ChurchBodyId_5_TCB" hidden>
+                    <div class="col-md">
+                        @{ var _desc_5 = "Select " + ViewBag.strChurchLevel_5; }
+                        <small class="font-weight-normal" asp-for="ChurchBodyId_5"> @ViewBag.strChurchLevel_5 </small>
+                        <select id="_ChurchBodyId_5_TCB" class="form-control text-sm" asp-for="@Model.arrRootCBIds[4]" aria-describedby="fd_ChurchBodyId_5_TCB">
+                            <option selected disabled value="">  @_desc_5 </option>
+                        </select>
+                        <input type="hidden" asp-for="strChurchLevel_5" />
+                        <input id="hdn_ChurchBodyId_5_TCB" type="hidden" value="@Model.arrRootCBIds[4]" />
+                    </div>
+                </div>
+
+                <div class="form-row" id="_div_ChurchBodyId_6_TCB" hidden>
+                    <div class="col-md">
+                        @{ var _desc_6 = "Select " + ViewBag.strChurchLevel_6; }
+                        <small class="font-weight-normal" asp-for="ChurchBodyId_6"> @ViewBag.strChurchLevel_6 </small>
+                        <select id="_ChurchBodyId_6_TCB" class="form-control text-sm" asp-for="@Model.arrRootCBIds[5]" aria-describedby="fd_ChurchBodyId_6_TCB">
+                            <option selected disabled value="">  @_desc_6 </option>
+                        </select>
+                        <input type="hidden" asp-for="strChurchLevel_6" />
+                        <input id="hdn_ChurchBodyId_6_TCB" type="hidden" value="@Model.arrRootCBIds[5]" />
+                    </div>
+                </div>
+
+                <div class="form-row" id="_div_ChurchBodyId_7_TCB" hidden>
+                    <div class="col-md">
+                        @{ var _desc_7 = "Select " + ViewBag.strChurchLevel_7; }
+                        <small class="font-weight-normal" asp-for="ChurchBodyId_7"> @ViewBag.strChurchLevel_7 </small>
+                        <select id="_ChurchBodyId_7_TCB" class="form-control text-sm" asp-for="@Model.arrRootCBIds[6]" aria-describedby="fd_ChurchBodyId_7_TCB">
+                            <option selected disabled value="">  @_desc_7 </option>
+                        </select>
+                        <input type="hidden" asp-for="strChurchLevel_7" />
+                        <input id="hdn_ChurchBodyId_7_TCB" type="hidden" value="@Model.arrRootCBIds[6]" />
+                    </div>
+                </div>
+
+                <div class="form-row" id="_div_ChurchBodyId_8_TCB" hidden>
+                    <div class="col-md">
+                        @{ var _desc_8 = "Select " + ViewBag.strChurchLevel_8; }
+                        <small class="font-weight-normal" asp-for="ChurchBodyId_8"> @ViewBag.strChurchLevel_8 </small>
+                        <select id="_ChurchBodyId_8_TCB" class="form-control text-sm" asp-for="@Model.arrRootCBIds[7]" aria-describedby="fd_ChurchBodyId_8_TCB">
+                            <option selected disabled value="">  @_desc_8 </option>
+                        </select>
+                        <input type="hidden" asp-for="strChurchLevel_8" />
+                        <input id="hdn_ChurchBodyId_8_TCB" type="hidden" value="@Model.arrRootCBIds[7]" />
+                    </div>
+                </div>
+
+                <div class="form-row" id="_div_ChurchBodyId_9_TCB" hidden>
+                    <div class="col-md">
+                        @{ var _desc_9 = "Select " + ViewBag.strChurchLevel_9; }
+                        <small class="font-weight-normal" asp-for="ChurchBodyId_9"> @ViewBag.strChurchLevel_9 </small>
+                        <select id="_ChurchBodyId_9_TCB" class="form-control text-sm" asp-for="@Model.arrRootCBIds[8]" aria-describedby="fd_ChurchBodyId_9_TCB">
+                            <option selected disabled value="">  @_desc_9 </option>
+                        </select>
+                        <input type="hidden" asp-for="strChurchLevel_9" />
+                        <input id="hdn_ChurchBodyId_9_TCB" type="hidden" value="@Model.arrRootCBIds[8]" />
+                    </div>
+                </div>
+
+                <div class="form-row" id="_div_ChurchBodyId_10_TCB" hidden>
+                    <div class="col-md">
+                        @{ var _desc_10 = "Select " + ViewBag.strChurchLevel_10; }
+                        <small class="font-weight-normal" asp-for="ChurchBodyId_10"> @ViewBag.strChurchLevel_10 </small>
+                        <select id="_ChurchBodyId_10_TCB" class="form-control text-sm" asp-for="@Model.arrRootCBIds[9]" aria-describedby="fd_ChurchBodyId_10_TCB">
+                            <option selected disabled value="">  @_desc_10 </option>
+                        </select>
+                        <input type="hidden" asp-for="strChurchLevel_10" />
+                        <input id="hdn_ChurchBodyId_10_TCB" type="hidden" value="@Model.arrRootCBIds[9]" />
+                    </div>
+                </div>
+
+
+                @*</div>*@
+                @*</div>*@
+
+
+
+            </form>
+        </div>
+   // }
+}
+
+

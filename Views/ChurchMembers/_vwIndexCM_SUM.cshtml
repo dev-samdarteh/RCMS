@@ -1,0 +1,24 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.ChurchMemberSummaryModel
+
+
+@if (Model != null)
+{
+
+    <div class="tab-content">
+        <div class="active tab-pane" id="item1">
+            <div id="divTabDataCM_SUMList" class="overlay-wrapper">
+                @*<div class="se-pre-con"></div>*@
+
+                @{ await Html.RenderPartialAsync("_vwIndexCM_SUMList", Model); }
+            </div>
+        </div>
+        <div class="tab-pane" id="item2">
+            <div id="divTabDataCM_SUMGrid" class="overlay-wrapper">
+                @*<div class="se-pre-con"></div>*@
+
+                @{ await Html.RenderPartialAsync("_vwIndexCM_SUMGrid", Model); }
+            </div>
+        </div>
+    </div>
+     
+}

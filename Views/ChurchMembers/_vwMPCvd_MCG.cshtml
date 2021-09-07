@@ -1,0 +1,227 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.MemberChurchGroupingModel
+
+@if (Model.taskIndex == 0)
+{
+    <table id="tabDataCM_MCG" class="table table-bordered table-striped text-sm">
+        <thead>
+            <tr>
+                <th style="vertical-align: middle"> Church Unit </th>
+                <th style="vertical-align: middle"> Unit Type  </th>
+                <th style="vertical-align: middle"> Date </th>
+                @*<th width="100px" style="vertical-align: middle"> Departed </th>*@
+                <th width="70px" style="vertical-align: middle"> Status </th>
+                <th class="justify-content-center" style="vertical-align: middle; text-align: center; width: 50px ">
+                    <button type="button" class="btn btn-default w-100 h-100 border-0" onclick="AddEditCurrDataCM_MPC(@Model.oChurchBodyId, @Model.oChurchMemberId, -1, 13, 0, true)">
+                        <i class="fa fa-refresh fa-secondary"></i>
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lsMemberChurchGroupingModels)
+            {
+                if (item.oMemberChurchUnit != null)
+                {
+            <tr>
+                <td style="vertical-align: middle">
+                    @item.strChurchUnit
+                </td>
+                <td style="vertical-align: middle">
+                    @item.strOrgType
+                </td>
+                <td style="vertical-align: middle">
+                    @item.strDateDesc
+                </td>
+                @*<td style="text-align: center; vertical-align: middle">
+                    @item.strDepartedDate
+                </td>*@
+                <td style="text-align: center; vertical-align: middle; ">
+                    @if (item.oMemberChurchUnit.IsCurrUnit == true)
+                    {<span class="badge badge-primary text-center text-light font-weight-normal border"> <i class="fas fa-check fa-sm text-light"></i> @item.strAvailStatus   </span> } 
+                    else
+                    { <span class="badge badge-light text-center text-dark font-weight-normal border"><i class="fas fa-times fa-sm text-light"></i>  @item.strAvailStatus </span>}
+                </td>
+                <td class="p-1" style="vertical-align: middle; text-align:center ">
+                    @{ var strDesc = '"' + @item.strChurchUnit + '"'; }
+                    <div class="btn-group ">
+                        <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-ellipsis-v text-gray text-lg"></i>
+                        </button>
+                        <div class="dropdown-menu  dropdown-menu-right p-1" role="menu">
+                            <ul class="m-0 p-0" style="list-style-type: none;">
+                                <li>
+                                    <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                       onclick="AddEditCurrDataCM_moMPC(@Model.oChurchBodyId, @Model.oChurchMemberId, @item.oMemberChurchUnit.Id, -1, @strDesc, 13, 0, -1)">
+                                        <span><i class="fa fa-eye" style="width:20px"></i></span><span class="text-md-left ml-1"> View </span>
+                                    </a>
+                                </li>
+
+                                @if (item.oChurchBodyId == Model.oChurchBodyId_Logged)
+                                {
+                                    <li>
+                                        <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                           onclick="AddEditCurrDataCM_moMPC(@Model.oChurchBodyId, @Model.oChurchMemberId, @item.oMemberChurchUnit.Id, -1, @strDesc, 13, 0, 2)">
+                                            <span><i class="fa fa-edit" style="width:20px"></i></span><span class="text-md-left ml-1"> Edit </span>
+                                        </a>
+                                    </li>
+                                    @if (item.isUserRoleAdmin_Logged ||
+                           (item.oChurchBodyId == Model.oChurchBodyId_Logged && item.oMemberChurchUnit.CreatedByUserId == Model.oUserId_Logged))
+                                    {
+                                        <li>
+                                            <a role="button" class="btn btn-light text-danger text-left w-100 border-0"
+                                               onclick="DeleteCurrDataCM_moMPC(@item.oChurchBodyId, @item.oChurchMemberId, false, '')">
+                                                <span><i class="fa fa-trash" style="width:20px"></i></span><span class="text-md-left ml-1" style="color:#000"> Delete </span>
+                                            </a>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+}
+else
+{
+    <div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center p-3" style="width: 90%; margin: 0 auto 0 auto ; padding: 0;  ">
+        <form needs-validation bg-transparent p-2" novalidate id="currFormCM_MCG" method="post" enctype="multipart/form-data" asp-action="AddModCM_MCG" class=" form-group bg-transparent">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @if (Model.oMemberChurchUnit != null)
+            {
+                <input type="hidden" asp-for="oAppGloOwnId" />
+                <input type="hidden" asp-for="oChurchBodyId" />
+                <input type="hidden" asp-for="oChurchMemberId" />
+
+                <input type="hidden" asp-for="oMemberChurchUnit.Id" />
+                <input type="hidden" asp-for="oMemberChurchUnit.ChurchBodyId" id="_ChurchBodyId" />
+                <input type="hidden" asp-for="oMemberChurchUnit.AppGlobalOwnerId" id="_AppGlobalOwnerId" />
+                <input type="hidden" asp-for="oMemberChurchUnit.ChurchMemberId" />
+
+                <input type="hidden" asp-for="strChurchBody" id="_strChurchBody" />
+
+                <input type="hidden" asp-for="oMemberChurchUnit.Created" />
+                <input type="hidden" asp-for="oMemberChurchUnit.LastMod" />
+                <input type="hidden" asp-for="oMemberChurchUnit.CreatedByUserId" />
+                <input type="hidden" asp-for="oMemberChurchUnit.LastModByUserId" />
+
+                <input type="hidden" asp-for="taskIndex" id="_taskIndex_MPC" />
+
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC" />
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC1" />
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC_MCG" /> 
+
+
+
+                <div class="form-row mb-3">
+                    <div class="col-md-4">
+                        <small asp-for="oMemberChurchUnit.strOrgType" class="control-label"> Unit Type </small>
+                        <select id="_strOrgType_moMCG" class="form-control text-sm" asp-for="strOrgType" asp-items="Model.lkpChurchOrgTypes">
+                            @*<option value="" selected disabled> Select ... </option>*@
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <small asp-for="oMemberChurchUnit.ChurchUnitId" class="control-label"> Church Unit </small>
+                        <select id="_ChurchUnitId_moMCG" class="form-control text-sm" asp-for="oMemberChurchUnit.ChurchUnitId" asp-items="Model.lkpChurchUnits">
+                            <option value="" selected disabled> Select ... </option>
+                        </select>
+                        <input id="hdn_ChurchUnitId_moMCG" type="hidden" asp-for="oMemberChurchUnit.ChurchUnitId" />
+                    </div>
+
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md pt-1">
+                        <small asp-for="oMemberChurchUnit.IsCurrUnit" class="control-label">&nbsp;</small>
+                        <label class="chk_container">
+                            <span class="text-sm font-weight-normal"> Current Unit  </span>
+                            <input id="chk_IsCurrUnit_moMCG" type="checkbox" asp-for="oMemberChurchUnit.IsCurrUnit" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="col-md pt-1">
+                        <small asp-for="oMemberChurchUnit.IsCoreArea" class="control-label">&nbsp;</small>
+                        <label class="chk_container">
+                            <span class="text-sm font-weight-normal"> Core unit of member  </span>
+                            <input id="chk_IsCoreArea_moMCG" type="checkbox" asp-for="oMemberChurchUnit.IsCoreArea" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="col-md pt-1">
+                        <small asp-for="oMemberChurchUnit.IsCurrentWork" class="control-label">&nbsp;</small>
+                        <label class="chk_container">
+                            <span class="text-sm font-weight-normal"> Pioneer (founding) member </span>
+                            <input id="chk_IsPioneer_moMCG" type="checkbox" asp-for="oMemberChurchUnit.IsPioneer" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberChurchUnit.FromDate" class="control-label"> Joined </small>
+                        <input type="date" class="form-control text-sm" asp-for="oMemberChurchUnit.FromDate">
+                    </div>
+                    <div class="col-md" id="_divToDate_moMCG">
+                        <small asp-for="oMemberChurchUnit.ToDate" class="control-label"> Departed </small>
+                        <input type="date" class="form-control text-sm" asp-for="oMemberChurchUnit.ToDate">
+                    </div>
+                </div>
+
+                <div class="form-row mb-3" id="_divDepartReason_moMCG">
+                    <div class="col-md">
+                        <small asp-for="oMemberChurchUnit.Reason" class="control-label"> Any Reasons for leaving ? </small>
+                        <textarea id="_DepartReason_moMCG" maxlength="300" asp-for="oMemberChurchUnit.DepartReason" class="form-control text-sm" rows="3"></textarea>
+                    </div>
+                </div>
+
+
+
+                <br />
+                <hr class="cus-div" style="width:100%; border: 1px solid #808080;" />
+
+                @if (Model.oChurchBody?.OrgType == "CN" && Model.oMemberChurchUnit.ChurchBodyId == Model.oChurchBodyId_Logged)
+                {
+                    <div class="form-row mb-3 mt-3">
+                        <div class="col-md-3">
+                            <small class="font-weight-normal" asp-for="strOwnedByStatus"> Scope </small>
+                            <input type="text" class="form-control text-xs" asp-for="strOwnStatus" placeholder="Scope" readonly>
+                            <input type="hidden" asp-for="oMemberChurchUnit.ChurchBodyId" />
+                        </div>
+                        <div class="col-md">
+                            <small class="font-weight-normal" asp-for="oMemberChurchUnit.SharingStatus"> Sharing Status </small>
+                            <select id="_CountryId" class="form-control text-xs" asp-for="oMemberChurchUnit.SharingStatus" asp-items="Model.lkpSharingStatuses_Any" aria-describedby="fd_SharingStatus" required>
+                                <option selected disabled value=""> Select scope </option>
+                            </select>
+                            <div class="invalid-feedback" id="fd_SharingStatus"> Select sharing status </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-row mb-3 mt-3">
+                        <div class="col-md-3">
+                            <small class="font-weight-normal" asp-for="strOwnershipStatus"> Scope </small>
+                            <input type="text" class="form-control text-xs" asp-for="strOwnStatus" placeholder="Scope" readonly>
+                            <input type="hidden" asp-for="oMemberChurchUnit.SharingStatus" />
+                        </div>
+                        <div class="col-md">
+                            @{ var strOwnCB = "Owned by " + (!string.IsNullOrEmpty(Model.strOwnedByCBLevel) ? "(" + Model.strOwnedByCBLevel + ")" : "");}
+                            <small class="font-weight-normal" asp-for="strOwnedByChurchBody"> @strOwnCB </small>
+                            <input type="text" class="form-control text-xs" asp-for="strOwnedByCB" placeholder="Owned by" readonly>
+                            <input type="hidden" asp-for="oMemberChurchUnit.ChurchBodyId" />
+                        </div>
+                    </div>
+                }
+
+            }
+
+        </form>
+    </div>
+}

@@ -1,0 +1,106 @@
+﻿@model RhemaCMS.Models.ViewModels.TitheModel
+
+@if (Model != null)
+{
+   
+     var _oCBId = Model.oChurchBodyId != null ? (int)Model.oChurchBodyId : -1;
+     var _oAGOId = Model.oAppGlolOwnId != null ? (int)Model.oAppGlolOwnId : -1;
+   
+    <table id="tabData_TT" class="table table-sm table-bordered table-striped table-responsive-sm table-hover p-0 w-100" cellspacing="0">
+        @*<table id="tabData_TT" class="display" style="width:100%">*@
+        <thead>
+            <tr>
+                <th style=" vertical-align: middle">
+                    Tithe Date
+                </th>
+                @*<th align="center" style=" vertical-align: middle">
+            Period
+        </th>*@
+                <th style="vertical-align: middle">
+                    Tithed By
+                </th>
+                <th class="text-center" style="vertical-align: middle; max-width: 100px ">
+                    Mode
+                </th>
+                <th class="text-right" style="vertical-align: middle; width: 50px">
+                    <i class="fa fa-ellipsis-h fa-sm text-dark"></i>
+                </th>
+                <th class="text-center" style="vertical-align: middle; width: 100px ">
+                    Amount
+                </th>
+                <th class="text-center" style="vertical-align: middle; width: 50px ">
+                    Posting
+                </th>
+                <th class="p-1 text-center" align="center" style="vertical-align: middle; width: 70px">
+                    <a class="btn btn-light btn-sm " asp-controller="FinanceOperations" asp-action="Index_TT" asp-route-oAppGloOwnId="@Model.oAppGlolOwnId" asp-route-oCurrChuBodyId="@Model.oChurchBodyId" asp-route-setIndex="1" data-backdrop="static" data-keyboard="false">
+                        <i class="fa fa-refresh fa-sm text-success"></i>
+                    </a>
+                    @*<a href="#" id="btnAddEdit" data-remote="false" class="btn btn-info btn-sm" data-backdrop="static" onclick="AddEditCurrData(0, @_oAGOId, @_oCBId, @Model.setIndex, '[New Tithe]')">
+                        <i class="fas fa-plus  fa-sm "></i>
+                        <span class="fas fa-plus fa-sm " aria-hidden="true"></span>
+                    </a>*@
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lsTitheModels)
+            {
+                var strDesc = "'" + item.strTitheDate + "-" + item.strTithedBy + "'";
+                <tr class="p-1">
+                    <td style="vertical-align: middle">
+                        @item.strTitheDate
+                    </td>
+                    @*<td style="vertical-align: middle">
+                        @item.strAccountPeriod
+                    </td>*@
+                         <td style="vertical-align: middle; ">
+                        @item.strTithedBy
+                    </td>
+                    <td style="vertical-align: middle;  ">
+                        @item.strTitheMode
+                    </td> 
+                    <td style="vertical-align: middle" align="right">
+                        @item.strCurrency
+                    </td>
+                    <td style="vertical-align: middle" align="right">
+                        @item.strAmount
+                    </td>
+                    <td style="vertical-align: middle" align="center">
+                        @if (item.oTitheTrans.PostStatus == "O")
+                        {<i class="fas fa-lock-open fa-sm text-primary"></i>}
+                        else if (item.oTitheTrans.PostStatus == "P")
+                        { <i class="fa fa-check fa-sm text-success"></i>}
+                        else if (item.oTitheTrans.PostStatus == "R")
+                        { <i class="fa fa-times fa-sm text-secondary"></i>}
+                    </td>
+                    <td class="p-1 text-center" align="center" style=" vertical-align: middle ; ">
+                        <div class="btn-group dropright">
+                            <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-ellipsis-v fa-sm"></i>
+                            </button>
+                            <div class="dropdown-menu p-1">
+                                @*  public IActionResult AddOrEdit_TT(int? oAppGloOwnId = null, int? oCurrChuBodyId = null, int? id = 0, int setIndex = 0,
+                                    int? oAGOId_Logged = null, int? oCBId_Logged = null, int? oUserId_Logged = null) *@
+
+                                @if (Model.oChurchBodyId_Logged == item.oChurchBodyId)
+                                {
+                                    <a href="#" id="btnAddEdit" data-remote="false" class="btn btn-light btn-sm text-primary" data-backdrop="static"
+                                       onclick="AddEditCurrData_TT(@item.oTitheTrans.Id, @_oAGOId, @_oCBId, @Model.setIndex, @strDesc)" >
+                                        <i class="fa fa-pencil fa-sm "></i> &nbsp; Edit
+                                    </a>
+
+                                    <a href="#" class="btn btn-light btn-sm text-danger small" >
+                                       @*onclick="DeleteCurrData_TITHE(@item.oTitheTrans.Id,  @_oAGOId, @_oCBId,  @Model.setIndex, @strDesc)"*@
+                                        <i class="fa fa-trash fa-sm"></i> &nbsp; Delete
+                                    </a>
+                                }
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}

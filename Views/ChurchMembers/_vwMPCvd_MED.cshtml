@@ -1,0 +1,247 @@
+﻿@model RhemaCMS.Models.ViewModels.vm_cl.MemberEducationModel
+
+@if (Model.taskIndex == 0)
+{
+    <table id="tabDataCM_MED" class="table table-bordered table-striped text-sm">
+        <thead>
+            <tr>
+                <th style="vertical-align: middle"> Institution  </th>
+                <th style="vertical-align: middle"> Education Level  </th>
+                <th style="vertical-align: middle"> Program /Discipline </th> 
+                <th style="vertical-align: middle"> Date </th>
+                <th width="70px" style="text-align:center; vertical-align: middle">Status</th>
+                <th class="justify-content-center" style="vertical-align: middle; text-align: center; width: 50px ">
+                    <button type="button" class="btn btn-default w-100 h-100 border-0" onclick="AddEditCurrDataCM_MPC(@Model.oChurchBodyId, @Model.oChurchMemberId, -1, 6, 0, true)">
+                        <i class="fa fa-refresh fa-secondary"></i>
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lsMemberEducationModels)
+            {
+                if (item.oMemberEducation != null)
+                {
+            <tr>
+                <td style="vertical-align: middle">
+                    @item.oMemberEducation.InstitutionName
+
+                    @if (!string.IsNullOrEmpty(item.strCountry))
+                    {
+                        <small class="badge badge-info text-center">
+                            <i class="fas fa-sm ml-1"></i> @item.strCountry
+                        </small>
+                    }
+                </td>
+                <td style="vertical-align: middle">
+                    @item.strInstitutionType
+                </td>
+                <td style="vertical-align: middle">
+                    @item.oMemberEducation.Discipline
+                    @if (!string.IsNullOrEmpty(item.strCertificateType))
+                    {
+                        <small class="badge badge-primary text-center ml-1">
+                            @item.strCertificateType
+                        </small>
+                    }
+                </td>
+                <td style="vertical-align: middle">
+                    @item.strDateDesc
+                </td>
+                <td style="text-align: center; vertical-align: middle">
+                    @if (item.oMemberEducation.IsCompleted == true)
+                    {<span class="badge badge-success text-center text-light font-weight-normal border"> <i class="fas fa-check fa-sm text-light"></i> @item.strStatus </span> }
+                else
+                { <span class="badge badge-warning text-center text-dark font-weight-normal border"> @item.strStatus </span>}
+                </td>
+                <td class="p-1" style="vertical-align: middle; text-align:center ">
+                    @{ var strDesc = '"' + @item.strEducation + '"'; }
+                    <div class="btn-group ">
+                        <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-ellipsis-v text-gray text-lg"></i>
+                        </button>
+                        <div class="dropdown-menu  dropdown-menu-right p-1" role="menu">
+                            <ul class="m-0 p-0" style="list-style-type: none;">
+                                <li>
+                                    <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                       onclick="AddEditCurrDataCM_moMPC(@Model.oChurchBodyId, @Model.oChurchMemberId, @item.oMemberEducation.Id, -1, @strDesc, 6, 0, -1)">
+                                        <span><i class="fa fa-eye" style="width:20px"></i></span><span class="text-md-left ml-1"> View </span>
+                                    </a>
+                                </li>
+
+                                @if (item.oChurchBodyId == Model.oChurchBodyId_Logged)
+                                {
+                                    <li>
+                                        <a role="button" id="btnAddEdit" data-remote="false" class="btn btn-light text-left w-100 border-0" data-backdrop="static"
+                                           onclick="AddEditCurrDataCM_moMPC(@Model.oChurchBodyId, @Model.oChurchMemberId, @item.oMemberEducation.Id, -1, @strDesc, 6, 0, 2)">
+                                            <span><i class="fa fa-edit" style="width:20px"></i></span><span class="text-md-left ml-1"> Edit </span>
+                                        </a>
+                                    </li>
+                                    @if (item.isUserRoleAdmin_Logged ||
+                                            (item.oChurchBodyId == Model.oChurchBodyId_Logged && item.oMemberEducation.CreatedByUserId == Model.oUserId_Logged))
+                                    {
+                                        <li>
+                                            <a role="button" class="btn btn-light text-danger text-left w-100 border-0"
+                                               onclick="DeleteCurrDataCM_moMPC(@item.oChurchBodyId, @item.oChurchMemberId, false, '')">
+                                                <span><i class="fa fa-trash" style="width:20px"></i></span><span class="text-md-left ml-1" style="color:#000"> Delete </span>
+                                            </a>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+}
+else
+{
+    <div id="divModalContainer" class="jumbotron-fluid shadow-none form-group justify-content-center p-3" style="width: 90%; margin: 0 auto 0 auto ; padding: 0;  ">
+        <form needs-validation bg-transparent p-2" novalidate id="currFormCM_MED" method="post" enctype="multipart/form-data" asp-action="AddModCM_MED" class=" form-group bg-transparent">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @if (Model.oMemberEducation != null)
+            {
+                <input type="hidden" asp-for="oAppGloOwnId" />
+                <input type="hidden" asp-for="oChurchBodyId" />
+                <input type="hidden" asp-for="oChurchMemberId" />
+
+                <input type="hidden" asp-for="oMemberEducation.Id" />
+                <input type="hidden" asp-for="oMemberEducation.ChurchBodyId" id="_ChurchBodyId" />
+                <input type="hidden" asp-for="oMemberEducation.AppGlobalOwnerId" id="_AppGlobalOwnerId" />
+                <input type="hidden" asp-for="oMemberEducation.ChurchMemberId" />
+
+                <input type="hidden" asp-for="strChurchBody" id="_strChurchBody" />
+
+                <input type="hidden" asp-for="oMemberEducation.Created" />
+                <input type="hidden" asp-for="oMemberEducation.LastMod" />
+                <input type="hidden" asp-for="oMemberEducation.CreatedByUserId" />
+                <input type="hidden" asp-for="oMemberEducation.LastModByUserId" />
+
+
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC" />
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC1" />
+                <input type="hidden" asp-for="setIndex" id="_setIndex_MPC_MED" />
+
+                <input type="hidden" asp-for="taskIndex" id="_taskIndex_MPC" />
+
+
+
+
+                @if (!string.IsNullOrEmpty(Model.oMemberEducation.CertificatePhotoUrl))
+                {
+                    var photoPath = "~/img_db/" + (Model.oMemberEducation.CertificatePhotoUrl ?? "df_user_p.png");
+
+                    <div class="col-md cus-rel-center mb-3">
+                        <div class="overlay-wrapper">
+                            <div class="btn-group float-right">
+                                <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle border-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-edit text-primary"></i>
+                                </button>
+                                <div class="dropdown-menu p-1">
+                                    <input type="file" class="form-control-file text-sm" value="Choose photo" asp-for="CertPhotoFile">
+
+                                    <input type="hidden" asp-for="oMemberEducation.CertificatePhotoUrl " />
+                                </div>
+                            </div>
+
+                            <div class="text-center mb-3">
+                                <img class="profile-user-img img-fluid img-circle" style="min-width: 150px; min-height:150px; max-width: 150px; max-height:150px;"
+                                     src="@Url.Content(photoPath)" alt=" Attached certificate /award">
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberEducation.InstitutionName" class="control-label"> Name of Institution</small>
+                        <input id="_InstitutionName_moMED" type="text" class="form-control text-sm" asp-for="oMemberEducation.InstitutionName">
+                    </div>
+                </div>
+
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberEducation.InstitutionTypeId" class="control-label"> Institution Type </small>
+                        <select id="_InstitutionTypeId_moMED" class="form-control text-sm" asp-for="oMemberEducation.InstitutionTypeId" asp-items="Model.lkpInstitutionTypes">
+                            <option value="" selected disabled> Select ... </option>
+                        </select>
+                    </div>
+                    <div class="col-md">
+                        <small asp-for="oMemberEducation.CertificateId" class="control-label"> Certificate /Award </small>
+                        <select id="_CertificateId_moMED" class="form-control text-sm" asp-for="oMemberEducation.CertificateId" asp-items="Model.lkpCertificateTypes">
+                            <option value="" selected disabled> Select ... </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberEducation.Discipline" class="control-label"> Discipline /Program of Study </small>
+                        <input id="_Discipline_moMED" type="text" class="form-control text-sm" asp-for="oMemberEducation.Discipline">
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md">
+                        <small asp-for="oMemberEducation.Location" class="control-label"> City (Location) </small>
+                        <input id="_Location_moMED" type="text" class="form-control text-sm" asp-for="oMemberEducation.Location">
+                    </div>
+                    <div class="col-md">
+                        <small asp-for="oMemberEducation.CtryAlpha3Code" class="control-label"> Country </small>
+                        <select id="_CtryAlpha3Code_moMED" class="form-control text-sm" asp-for="oMemberEducation.CtryAlpha3Code" asp-items="Model.lkpCountries">
+                            <option value="" selected disabled> Select ... </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row mb-3" id="_divFromDate">
+                    <div class="col-md pt-1" id="_divIsCompleted">
+                        <small asp-for="oMemberEducation.IsCompleted" class="control-label">&nbsp;</small>
+                        <label class="chk_container">
+                            <span class="text-sm"> Completed program  </span>
+                            <input id="chk_IsCompleted_moMED" type="checkbox" asp-for="oMemberEducation.IsCompleted" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="col-md">
+                        <small asp-for="oMemberEducation.FromDate" class="control-label"> Started </small>
+                        <input id="_FromDate_moMED" type="date" class="form-control text-sm" asp-for="oMemberEducation.FromDate">
+                    </div>
+                    <div class="col-md" id="_divToDate_moMED">
+                        <small asp-for="oMemberEducation.ToDate" class="control-label"> Completed </small>
+                        <input type="date" class="form-control text-sm" asp-for="oMemberEducation.ToDate">
+                    </div>
+                </div>
+
+
+
+
+                @if (string.IsNullOrEmpty(Model.oMemberEducation.CertificatePhotoUrl))
+                {
+                    <div class="form-row mb-3 mt-3 ">
+                        <div class="form-group">
+                            <small class="font-weight-normal" asp-for="oMemberEducation.CertificatePhotoUrl"> Attach certificate /award </small>
+                            <input type="file" class="form-control-file small" value="Choose photo" asp-for="CertPhotoFile">
+                            <input type="hidden" asp-for="oMemberEducation.CertificatePhotoUrl" />
+                        </div>
+                    </div>
+                }
+
+
+            }
+
+        </form>
+    </div>
+
+
+}

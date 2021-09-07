@@ -1,0 +1,97 @@
+﻿@model RhemaCMS.Models.ViewModels.HomeDashboardVM
+
+@{
+    var _strAppName = @ViewData["strAppName"] as string;
+    var _pageTitle = @_strAppName + " - Dashboard";
+    ViewData["Title"] = @_pageTitle;
+
+
+    var _strAppCurrUser_ModCodes = @ViewData["strModCodes"] as string;      // module level assign
+    bool _bl_AppCurrUser_ModAccessVAA0 = _strAppCurrUser_ModCodes != null ? (bool)@ViewData["bl_IsModAccessVAA0"] : false;  // as bool;
+    bool _bl_AppCurrUser_ModAccessDS00 = _strAppCurrUser_ModCodes != null ? (bool)@ViewData["bl_IsModAccessDS00"] : false;  // as bool;
+    bool _bl_AppCurrUser_ModAccessAC01 = _strAppCurrUser_ModCodes != null ? (bool)@ViewData["bl_IsModAccessAC01"] : false;  // as bool;
+    bool _bl_AppCurrUser_ModAccessMR02 = _strAppCurrUser_ModCodes != null ? (bool)@ViewData["bl_IsModAccessMR02"] : false;  // as bool;
+    bool _bl_AppCurrUser_ModAccessCL03 = _strAppCurrUser_ModCodes != null ? (bool)@ViewData["bl_IsModAccessCL03"] : false;  // as bool;
+    bool _bl_AppCurrUser_ModAccessCA04 = _strAppCurrUser_ModCodes != null ? (bool)@ViewData["bl_IsModAccessCA04"] : false;  // as bool;
+    bool _bl_AppCurrUser_ModAccessFM05 = _strAppCurrUser_ModCodes != null ? (bool)@ViewData["bl_IsModAccessFM05"] : false;  // as bool;
+    bool _bl_AppCurrUser_ModAccessRA06 = _strAppCurrUser_ModCodes != null ? (bool)@ViewData["bl_IsModAccessRA06"] : false;  // as bool;
+
+    bool _bl_AppCurrUser_ModAccessMin = _bl_AppCurrUser_ModAccessVAA0 || _bl_AppCurrUser_ModAccessDS00 || _bl_AppCurrUser_ModAccessAC01 || _bl_AppCurrUser_ModAccessMR02 ||
+                                _bl_AppCurrUser_ModAccessCL03 || _bl_AppCurrUser_ModAccessCA04 || _bl_AppCurrUser_ModAccessFM05 || _bl_AppCurrUser_ModAccessRA06;
+
+    var _strAppCurrUser_UR = @ViewData["strAssignedRoleNames"] as string;  //@ViewData["strAppCurrUser_ChRole"] as string;
+    var _strAppCurrUser_URCodes = @ViewData["strAssignedRoleCodes"] as string; // @ViewData["strAppCurrUser_RoleCateg"] as string;
+    var _strAppCurrUser_UG = @ViewData["strAssignedGroupNames"] as string;
+    // var _strAppCurrUser_UGCodes = @ViewData["strAssignedGroupNames"] as string;
+    var _strAppCurrUser_UPCodes = @ViewData["strAssignedPermCodes"] as string;
+
+    ///
+    /// dashboard values
+    var _CB_SubCongCount = @ViewData["CB_SubCongCount"] as string;
+    var _CB_MemListCount = @ViewData["CB_MemListCount"] as string;
+    var _CBWeek_NewMemListCount = @ViewData["CBWeek_NewMemListCount"] as string;
+    var _CBWeek_NewConvertsCount = @ViewData["CBWeek_NewConvertsCount"] as string;
+    var _CBWeek_VisitorsCount = @ViewData["CBWeek_VisitorsCount"] as string;
+    var _CBWeek_ReceiptsAmt = @ViewData["CBWeek_ReceiptsAmt"] as string;
+    var _CBWeek_PaymentsAmt = @ViewData["CBWeek_PaymentsAmt"] as string;
+    var _TodaysAuditCount = @ViewData["TodaysAuditCount"] as string;
+
+
+    var _strClientBranchName = @ViewData["strClientChurchName"] as string;
+    var _strClientBranchParentName = @ViewData["strClientBranchParentName"] as string;
+
+    ///
+    ViewData["Title"] = _pageTitle; // Model.strAppName + " - Dashboard";
+    Layout = "_Layout";
+}
+
+
+
+<body id="page-top" class="w-100 small">
+
+    <!-- /.row (main row) -->
+    <!-- solid sales graph -->
+
+    @if (_bl_AppCurrUser_ModAccessDS00 == true)
+    {
+        <div class="card bg-gradient-white">
+            <div class="card-header border-bottom-0">
+                @{
+                    var _strHeader = !string.IsNullOrEmpty(_strClientBranchName) ? "" + _strClientBranchName : "";
+                    var _strHeaderPar = !string.IsNullOrEmpty(_strClientBranchParentName) ? "" + _strClientBranchParentName + "" : "";  // !string.IsNullOrEmpty(Model.strChuBodyParLoggedDash) ? "" + Model.strChuBodyParLoggedDash + "" : "";
+                }
+                <h3 class="card-title">
+                    @*<i class="fas fa-th mr-1"></i>
+                        <span class="text-black-50 text-md"> D-A-S-H B O A R D </span>*@
+
+                    <span id="_strHeader" class="text-md"><i class="fas fa-map-marker-alt fa-sm text-success mr-1"></i> @_strHeader </span>
+                    @if (!string.IsNullOrEmpty(_strHeaderPar))
+                    {
+                        <span class="text-black-50 text-md ml-3 "> ( <i class="fas fa-umbrella fa-xs text-black-50 mr-1"></i> @_strHeaderPar ) </span>
+                    }
+
+                </h3>
+
+                <div class="card-tools">
+                    <span class="text-black-50 text-md mr-1"> A D M I N I S T R A T I O N </span><i class="fas fa-th mr-1"></i>
+
+                    @*<button type="button" class="btn btn-sm bg-light " data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn text-danger btn-sm bg-light" data-card-widget="remove">
+                            <i class="fas fa-times"></i>
+                        </button>*@
+                </div>
+            </div>
+            <div class="card-body">
+
+            </div>
+
+
+        </div>
+
+    }
+
+
+</body>
+

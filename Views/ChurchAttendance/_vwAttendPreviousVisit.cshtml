@@ -1,0 +1,46 @@
+﻿
+@model List<RhemaCMS.Models.ViewModels.vm_cl.ChurchAttendanceModel>
+ 
+
+<table id="tabData_MCAH" class="table-sm table-responsive-sm table-borderless table-striped w-100 ">
+    <tbody id="tblAttendFilter_Body" class="" style="color: #4f82fb">
+
+        @foreach (var item in Model)
+        {
+            if (item.oChurchAttendee != null)
+            {
+        <tr>
+            <td id="" name="_">
+                <a role="button" class="text-sm" onclick="AddEditCurr_Attendee(2, @item.oChurchBodyId, 'V' , @item.strAttnLongevity, @item.oChurchAttendee.Id, @item.oChurchAttendee.ChurchEventDetailId)">
+                    @item.strAttendeeName
+                </a>
+            </td>
+            <td></td>
+            <td>
+                @* AddEditCurr_Attendee = function (currTask, currChuBodyId, _strAttendee, _strLongevity, currId, evtId, evtDate, dbReload = false, isViewOnly = false) *@
+                <a role="button" class="btn-block btn-default btn-sm border text-sm"
+                   onclick="AddEditCurr_Attendee(2, @item.oChurchBodyId, 'V', @item.strAttnLongevity, @item.oChurchAttendee.Id, @item.oChurchAttendee.ChurchEventDetailId)">
+                    <i class="fa fa-plus fa-sm mr-1 text-sm" ></i> Populate...
+                </a>
+            </td>
+
+            @*<td id="" name="_">
+                <a class="btn btn-link" asp-controller="ChurchAttendance" asp-action="AddOrEdit_AttendeesItem" asp-route-currAttendVm="@Model" asp-route-id="1">
+                    Godsway Elemawusi Akikpa (Mr.)
+                </a>
+            </td>
+            <td id="" name="_"> Wedding between Joe and Clara:- 6 Aug, 2020 </td>
+            <td id="" name="_">0244123654</td>
+            <td id="" name="_">21 Dec, 2019</td>
+            <td id="" name="_">
+                <a class="btn btn-sm btn-outline-light" asp-controller="ChurchAttendance" asp-action="AddOrEdit_AttendeesItem" asp-route-currAttendVm="@Model" asp-route-id="0">
+                    <i class="fa fa-plus fa-sm " style="color: #000; width:30px"></i>
+                </a>
+            </td>*@
+
+        </tr>
+            }
+        }
+
+    </tbody>
+</table>
